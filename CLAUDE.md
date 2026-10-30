@@ -40,4 +40,5 @@
 - `video/` — проект Remotion этого стиля.
 - `.claude/skills/expert-reel-montage/` — утверждённый стиль «Экспертный монтаж рилс»; эталон — `reels/expert-radiesse/` (композиция `ExpertRadiesseV3`).
 - `library/` — общие шрифты, звуки и дизайн-токены для всех роликов.
+- HyperFrames (HTML → видео, скиллы `hyperframes*`, `media-use` и др.): запуск `npx hyperframes …`. Браузер для рендера задан в `.claude/settings.json` (`HYPERFRAMES_BROWSER_PATH`). Сайт `cdn.jsdelivr.net` из окружения закрыт: библиотеки вроде GSAP брать из npm (`npm pack gsap@<версия>`) и подключать локальным файлом.
 - Видео в git не кладём: репозиторий публичный.
