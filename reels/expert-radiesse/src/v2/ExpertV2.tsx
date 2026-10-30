@@ -48,19 +48,6 @@ const Footage: React.FC = () => {
   );
 };
 
-// Затемнение снизу под субтитрами, пока видео на весь кадр
-const BottomShade: React.FC = () => {
-  const split = useSplit();
-  return (
-    <AbsoluteFill
-      style={{
-        background: 'linear-gradient(to bottom, rgba(0,0,0,0) 45%, rgba(8,32,82,0.5) 100%)',
-        opacity: 1 - split,
-      }}
-    />
-  );
-};
-
 // Верх видео — только до сплита
 const TopBarLayer: React.FC = () => {
   const split = useSplit();
@@ -137,7 +124,6 @@ export const ExpertV2: React.FC = () => {
   return (
     <AbsoluteFill style={{backgroundColor: COLORS.navy}}>
       <Footage />
-      <BottomShade />
       <TopBarLayer />
       <Sequence name="Удар: доктор Кудряков" from={Math.round(HIT_AT * fps)} durationInFrames={Math.round((HIT_HOLD + 0.4) * fps)}>
         <LogoHit text="Доктор Кудряков" top={1050} holdUntil={HIT_HOLD} />
