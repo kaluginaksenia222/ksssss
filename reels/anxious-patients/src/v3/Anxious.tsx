@@ -12,7 +12,8 @@ import {
 } from 'remotion';
 import {fontsLoaded} from '../design/fonts';
 import {COLORS, EASE, FONTS} from '../design/tokens';
-import {BigRing, ChipRow, EchoWords, MetalTitle, RingMeter, RingReveal, TopTags} from './parts';
+import {ChipRow, MetalTitle, RingMeter, TopTags} from './parts';
+import {NumberRoll, PulseLine, SlatsReveal, StampTitle} from './fresh';
 import {PAGES} from './transcript';
 import {InstagramHandle} from './ui';
 
@@ -21,7 +22,7 @@ import {InstagramHandle} from './ui';
 
 const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
 
-// Лицо врача в кадре — отсюда раскрываются кольца и сюда же направлены наезды
+// Лицо врача в кадре — сюда направлены наезды
 const FACE = {cx: 512, cy: 700};
 
 // Стыки нарезки: на каждом плавно меняем крупность, чтобы скачок кадра не был заметен
@@ -31,14 +32,9 @@ const CUTS = [2.93, 4.66, 8.59, 10.97, 13.04, 16.29, 19.22, 25.34, 29.42, 30.39]
 const BLUE1 = {from: 10.9, to: 13.3};
 const BLUE2 = {from: 19.25, to: 25.0};
 
-// Хук: заголовок-вопрос, от него эхом разлетаются слова, на «действительно влияет» — удар
-const HOOK = {at: 0.15, until: 3.1, top: 960, slam: 0.95};
-const HOOK_ECHO = [
-  {text: 'тревога', at: 0.55, dx: -300, dy: -185},
-  {text: 'позитив', at: 0.85, dx: 300, dy: -185},
-  {text: 'страх', at: 1.4, dx: -290, dy: 300},
-  {text: 'осложнения', at: 1.7, dx: 270, dy: 310},
-];
+// Хук: «ЖДЁТЕ ОСЛОЖНЕНИЙ?» впечатывается по буквам на размытом кадре, затем резкая наводка
+// фокуса на врача и табло «80–90% ИХ ПОЛУЧАЮТ» (его же цифра) с дрожью кадра
+const HOOK = {at: 0.2, focus: 1.45, slam: 1.9, until: 3.1, top: 1000};
 
 // Заголовки на видео (субтитры с теми же словами на это время прячем)
 const TITLES = [
@@ -64,8 +60,9 @@ const Footage: React.FC = () => {
   const k = interpolate(frame, [cutAt * fps, cutAt * fps + 8], [0, 1], {...clamp, easing: EASE.inOut});
   const base = idx === 0 ? 1 : interpolate(k, [0, 1], [scaleOf(prevIdx), scaleOf(idx)]);
   const drift = interpolate(t - cutAt, [0, 6], [0, 0.025], {extrapolateRight: 'clamp'});
-  // Хук: влёт кадра из приближения с размытием, дрожь на ударе
-  const slamIn = interpolate(frame, [0, 9], [0.4, 0], {...clamp, easing: EASE.out});
+  // Хук: кадр «не в фокусе» до наводки, затем резкая наводка с лёгким отъездом; дрожь на табло
+  const f0 = Math.round(HOOK.focus * fps);
+  const focus = interpolate(frame, [f0, f0 + 7], [1, 0], {...clamp, easing: EASE.out});
   const s = frame - Math.round(HOOK.slam * fps);
   const shake = s >= 0 && s < 10 ? (1 - s / 10) * 14 : 0;
   return (
@@ -77,21 +74,22 @@ const Footage: React.FC = () => {
           width: 1080,
           height: 1920,
           transformOrigin: `${(FACE.cx / 1080) * 100}% ${(FACE.cy / 1920) * 100}%`,
-          scale: String(base + drift + slamIn),
+          scale: String(base + drift + focus * 0.08),
           translate: `${Math.sin(s * 2.7) * shake}px ${Math.cos(s * 3.1) * shake}px`,
-          filter: `blur(${slamIn * 22}px)`,
+          filter: `blur(${focus * 16}px)`,
         }}
       />
     </AbsoluteFill>
   );
 };
 
-// Вспышки: на первом кадре и на ударе хука
+// Вспышки: на наводке фокуса и на ударе табло
 const Flash: React.FC = () => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const s = frame - Math.round(HOOK.slam * fps);
-  const v = Math.max(interpolate(frame, [0, 6], [0.6, 0], clamp), s >= 0 ? interpolate(s, [0, 5], [0.3, 0], clamp) : 0);
+  const f = frame - Math.round(HOOK.focus * fps);
+  const v = Math.max(f >= 0 ? interpolate(f, [0, 5], [0.25, 0], clamp) : 0, s >= 0 ? interpolate(s, [0, 5], [0.3, 0], clamp) : 0);
   return <AbsoluteFill style={{backgroundColor: COLORS.beige, opacity: v}} />;
 };
 
@@ -148,15 +146,15 @@ const Captions: React.FC = () => {
   );
 };
 
-// Синий фон сцены: большой круг и моно-метка
-const BlueStage: React.FC<{label: string; children: React.ReactNode}> = ({label, children}) => (
+// Синий фон сцены: линия-«пульс» (спокойная или рваная) и моно-метка
+const BlueStage: React.FC<{label: string; mood: 'calm' | 'anxious'; children: React.ReactNode}> = ({label, mood, children}) => (
   <AbsoluteFill
     style={{
       backgroundColor: COLORS.navy,
       backgroundImage: 'radial-gradient(ellipse 70% 40% at 50% 34%, rgba(248,240,229,0.12), rgba(8,32,82,0) 70%)',
     }}
   >
-    <BigRing cx={540} cy={640} size={860} />
+    <PulseLine mood={mood} top={930} />
     <div
       style={{
         position: 'absolute',
@@ -182,7 +180,7 @@ const BluePositive: React.FC = () => {
   const local = (abs: number) => abs - BLUE1.from;
   const end = BLUE1.to - BLUE1.from;
   return (
-    <BlueStage label="НАСТРОЙ ПАЦИЕНТОВ">
+    <BlueStage label="НАСТРОЙ ПАЦИЕНТОВ" mood="calm">
       <MetalTitle at={local(11.1)} until={end} lines={['Большинство', 'позитивно']} size={68} top={500} />
       <ChipRow at={local(12.42)} until={end} top={700} chips={[{text: 'позитивный настрой', at: local(12.42), strong: true}]} />
     </BlueStage>
@@ -194,7 +192,7 @@ const BlueAnxiety: React.FC = () => {
   const local = (abs: number) => abs - BLUE2.from;
   const end = BLUE2.to - BLUE2.from;
   return (
-    <BlueStage label="ТРЕВОЖНОСТЬ">
+    <BlueStage label="ТРЕВОЖНОСТЬ" mood="anxious">
       <MetalTitle at={local(19.56)} until={end} lines={['Тревога', 'шире операций']} size={64} top={500} />
       <ChipRow
         at={local(21.4)}
@@ -219,11 +217,12 @@ const SoundEffects: React.FC = () => {
   );
   return (
     <>
-      {[0, HOOK.slam].map((at) => sfx('impact', at, 0.3))}
-      {sfx('whoosh', 0, 0.22, 0.6)}
+      {sfx('impact', HOOK.at, 0.2)}
+      {sfx('whoosh', HOOK.focus - 0.15, 0.25, 0.6)}
+      {sfx('impact', HOOK.slam, 0.32)}
+      {[0, 1, 2, 3].map((i) => sfx('tick', HOOK.focus + 0.05 + i * 0.08, 0.15, 0.2))}
       {[HOOK.slam, ...TITLES.map((x) => x.at), 11.1, 19.56].map((at) => sfx('shimmer', at, 0.45, 1.1))}
-      {[BLUE1, BLUE2].flatMap((b) => [b.from, b.to - 0.33]).map((at) => sfx('whoosh', at, 0.2, 0.6))}
-      {HOOK_ECHO.map((w) => sfx('tick', w.at, 0.2, 0.2))}
+      {[BLUE1, BLUE2].flatMap((b) => [b.from, b.to - 0.4]).map((at) => sfx('whoosh', at, 0.2, 0.6))}
       {[5.2, 9.44, 14.9, 21.66, 23.92, 29.66].map((at) => sfx('pop', at, 0.1, 0.2))}
     </>
   );
@@ -244,14 +243,8 @@ export const Anxious: React.FC = () => {
       <TopTags tags={['ЭКСПЕРТ', 'ПЛАСТИЧЕСКАЯ ХИРУРГИЯ', 'НАСТРОЙ']} />
 
       {/* Хук */}
-      <MetalTitle
-        at={HOOK.at}
-        until={HOOK.until}
-        lines={['Насколько настрой', 'действительно влияет', 'на восстановление', 'после операции?']}
-        size={60}
-        top={HOOK.top}
-      />
-      <EchoWords cx={540} cy={HOOK.top + 125} until={HOOK.until} words={HOOK_ECHO} />
+      <StampTitle at={HOOK.at} until={HOOK.until} text="Ждёте осложнений?" size={74} top={HOOK.top} />
+      <NumberRoll at={HOOK.focus + 0.05} until={HOOK.until} top={HOOK.top + 105} digits="80–90%" tail="их получают" size={96} />
 
       {/* 80–90 % тревожных пациентов действительно получали осложнения */}
       <RingMeter
@@ -269,18 +262,18 @@ export const Anxious: React.FC = () => {
       <ChipRow at={9.44} until={10.85} top={1230} chips={[{text: 'всё решаемо', at: 9.44, strong: true}]} />
 
       <Sequence name="Синяя сцена: позитив" {...seq(BLUE1)}>
-        <RingReveal until={BLUE1.to - BLUE1.from} {...FACE}>
+        <SlatsReveal until={BLUE1.to - BLUE1.from}>
           <BluePositive />
-        </RingReveal>
+        </SlatsReveal>
       </Sequence>
 
       <ChipRow at={14.9} until={17.6} top={1230} chips={[{text: 'тенденция ↑', at: 14.9}]} />
       <MetalTitle {...TITLES[0]} size={68} top={1000} />
 
       <Sequence name="Синяя сцена: тревожность" {...seq(BLUE2)}>
-        <RingReveal until={BLUE2.to - BLUE2.from} {...FACE}>
+        <SlatsReveal until={BLUE2.to - BLUE2.from}>
           <BlueAnxiety />
-        </RingReveal>
+        </SlatsReveal>
       </Sequence>
 
       <MetalTitle {...TITLES[1]} size={68} top={1000} />
