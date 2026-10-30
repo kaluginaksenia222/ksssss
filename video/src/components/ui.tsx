@@ -1,6 +1,24 @@
 import React from 'react';
 import {interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
-import {COLORS, EASE, FONTS} from '../design/tokens';
+import {COLORS, EASE, FONTS, LAYOUT} from '../design/tokens';
+
+// Белая панель с медленно дрейфующей точечной сеткой
+export const DotGrid: React.FC<{style?: React.CSSProperties}> = ({style}) => {
+  const frame = useCurrentFrame();
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        inset: 0,
+        backgroundColor: COLORS.white,
+        backgroundImage: `radial-gradient(circle, rgba(154, 164, 188, 0.5) 1.6px, transparent 1.8px)`,
+        backgroundSize: `${LAYOUT.gridStep}px ${LAYOUT.gridStep}px`,
+        backgroundPosition: `${(frame / 15) % LAYOUT.gridStep}px 0px`,
+        ...style,
+      }}
+    />
+  );
+};
 
 // Появление снизу из размытия в секунду at; если задан until — уход в размытие.
 // Время — секунды от начала сцены.

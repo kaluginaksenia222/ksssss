@@ -1,12 +1,14 @@
 import React from 'react';
 import {interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
 import {PAGES, Word} from '../data/transcript';
-import {COLORS, DUR, EASE, FONTS, LAYOUT, TYPE} from '../design/tokens';
+import {COLORS, DUR, EASE, FONTS, LAYOUT, PANEL_HEIGHT, TYPE} from '../design/tokens';
+import {useSplit} from '../timeline';
 
 // Пословные субтитры: белые, тонкие, без плашек и фона, не больше двух слов.
-// Всегда стоят на видео в нижней трети (и в полноэкранном режиме, и под панелью).
+// Всегда стоят на видео: в нижней трети, а при сплите — сразу под панелью, над головой.
 
 const CAPTION_TOP = 1400;
+const CAPTION_TOP_SPLIT = PANEL_HEIGHT + 60;
 const PAGE_TAIL = 0.6; // сколько держим страницу после последнего слова, если дальше пауза
 
 const WordView: React.FC<{word: Word}> = ({word}) => {
@@ -34,6 +36,7 @@ const WordView: React.FC<{word: Word}> = ({word}) => {
 export const Captions: React.FC = () => {
   const frame = useCurrentFrame();
   const {fps, durationInFrames} = useVideoConfig();
+  const split = useSplit();
   const t = frame / fps;
 
   const index = PAGES.findIndex((page, i) => {
@@ -52,7 +55,7 @@ export const Captions: React.FC = () => {
     <div
       style={{
         position: 'absolute',
-        top: CAPTION_TOP,
+        top: interpolate(split, [0, 1], [CAPTION_TOP, CAPTION_TOP_SPLIT]),
         left: LAYOUT.sidePadding,
         right: LAYOUT.sidePadding,
         textAlign: 'center',

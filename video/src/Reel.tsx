@@ -13,7 +13,8 @@ import {
 import {Captions} from './components/Captions';
 import {fontsLoaded} from './design/fonts';
 import {COLORS, LAYOUT, PANEL_HEIGHT, SPLIT_SOURCE_Y} from './design/tokens';
-import {Hook, PanelTitle, VideoTitle} from './scenes/Sections';
+import {DotGrid} from './components/ui';
+import {CompressInsert, Hook, TherapyInsert, VideoTitle} from './scenes/Sections';
 import {SECTIONS, SPLITS, SPLIT_EDGES, useSplit} from './timeline';
 
 // Хук держится до перехода к первому совету
@@ -60,7 +61,7 @@ const BottomShade: React.FC = () => (
   <AbsoluteFill style={{background: 'linear-gradient(to bottom, rgba(0,0,0,0) 55%, rgba(0,0,0,0.35) 100%)'}} />
 );
 
-// Белая панель съезжает сверху и уезжает обратно; шов растушёван в видео
+// Белая панель с точечной сеткой съезжает сверху и уезжает обратно; шов растушёван в видео
 const Panel: React.FC<{children: React.ReactNode}> = ({children}) => {
   const split = useSplit();
   if (split <= 0) {
@@ -74,7 +75,7 @@ const Panel: React.FC<{children: React.ReactNode}> = ({children}) => {
         translate: `0px ${(split - 1) * (PANEL_HEIGHT + LAYOUT.seamFade)}px`,
       }}
     >
-      <div style={{position: 'absolute', inset: 0, bottom: LAYOUT.seamFade, backgroundColor: COLORS.white}} />
+      <DotGrid style={{bottom: LAYOUT.seamFade}} />
       <div
         style={{
           position: 'absolute',
@@ -134,14 +135,10 @@ export const Reel: React.FC = () => {
       ))}
       <Panel>
         <Sequence name="Холодные компрессы" from={Math.round(SPLITS[0].in * fps)}>
-          <PanelTitle at={0.3} until={SPLITS[0].out - SPLITS[0].in}>
-            Холодные компрессы
-          </PanelTitle>
+          <CompressInsert until={SPLITS[0].out - SPLITS[0].in} />
         </Sequence>
         <Sequence name="Фотодинамическая терапия" from={Math.round(SPLITS[1].in * fps)}>
-          <PanelTitle at={0.3} until={SPLITS[1].out - SPLITS[1].in}>
-            Фотодинамическая терапия
-          </PanelTitle>
+          <TherapyInsert until={SPLITS[1].out - SPLITS[1].in} />
         </Sequence>
       </Panel>
       <Captions />
