@@ -232,24 +232,13 @@ const BlueRadiesse: React.FC = () => {
   );
 };
 
-// Синяя сцена 3: восстановление дольше
+// Синяя сцена 3: восстановление дольше (только заголовок)
 const BlueRehab: React.FC = () => {
   const local = (abs: number) => abs - BLUE3.from;
   const end = BLUE3.to - BLUE3.from;
   return (
     <BlueStage label="РЕАБИЛИТАЦИЯ">
       <MetalTitle at={local(44.32)} until={end} lines={['Дольше', 'восстановление']} size={64} top={490} />
-      <RingMeter
-        at={local(44.62)}
-        until={end}
-        top={650}
-        title="Срок восстановления"
-        note="чуть дольше обычного"
-        from={40}
-        to={75}
-        moveAt={local(44.92)}
-        moveUntil={local(46.08)}
-      />
     </BlueStage>
   );
 };
@@ -271,7 +260,7 @@ const SoundEffects: React.FC = () => {
       {[0, SLAM_AT].map((at) => sfx('impact', at, 0.3))}
       {sfx('whoosh', 0, 0.22, 0.6)}
       {HOOK_WORDS.map((w) => sfx('tick', w.at, 0.22, 0.2))}
-      {[7.22, 8.34, 14.56, 16.3, 25.84, 32.66, 37.26, 40.06, 47.1, 57.24, 57.98].map((at) => sfx('pop', at, 0.1, 0.2))}
+      {[7.22, 8.34, 14.56, 25.84, 33.1, 40.06, 47.1, 57.24, 57.98].map((at) => sfx('pop', at, 0.1, 0.2))}
       {sfx('tick', 9.42, 0.25, 0.2)}
     </>
   );
@@ -302,18 +291,7 @@ export const ExpertV3: React.FC = () => {
       </Sequence>
 
       <MetalTitle at={12.82} until={13.84} lines={['Аппаратные', 'методики']} size={64} top={1000} />
-      <ChipRow at={14.5} until={16.3} top={1230} chips={[{text: 'SMAS-лифтинг', at: 14.56, strong: true}]} />
-      <RingMeter
-        at={16.3}
-        until={19.95}
-        top={1190}
-        title="Сеансы SMAS-лифтинга"
-        note="если их было очень много"
-        from={15}
-        to={92}
-        moveAt={16.76}
-        moveUntil={17.9}
-      />
+      <ChipRow at={14.5} until={18.0} top={1230} chips={[{text: 'SMAS-лифтинг', at: 14.56, strong: true}]} />
       <MetalTitle at={20.06} until={22.95} lines={['Больше всего', 'мешает']} size={64} top={1000} />
 
       <Sequence name="Синяя сцена: Радиесс" from={Math.round(BLUE2.from * fps)} durationInFrames={Math.round((BLUE2.to - BLUE2.from) * fps)}>
@@ -321,18 +299,6 @@ export const ExpertV3: React.FC = () => {
           <BlueRadiesse />
         </RingReveal>
       </Sequence>
-
-      <RingMeter
-        at={37.26}
-        until={40.0}
-        top={1190}
-        title="Проникает в ткани"
-        note="очень глубоко"
-        from={15}
-        to={88}
-        moveAt={37.48}
-        moveUntil={39.34}
-      />
       <MetalTitle at={32.04} until={33.25} lines={['Достаю', 'ложкой']} size={64} top={1000} />
       <RingMeter
         at={33.1}
