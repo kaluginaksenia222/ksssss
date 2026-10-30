@@ -1,12 +1,13 @@
 import React from 'react';
 import {interpolate, spring, useCurrentFrame, useVideoConfig} from 'remotion';
 import {PAGES, Word} from '../data/transcript';
+import {useSplit} from '../timeline';
 import {COLORS, DUR, EASE, FONTS, LAYOUT, PANEL_HEIGHT, SPRING, TYPE} from '../design/tokens';
 
 // Пословные субтитры. Две подачи:
 //  onVideo — по центру поверх видео (режим A), выделение: плашка beige / текст navy;
 //  onPanel — слева на бежевой панели (режим B), выделение: плашка navy / текст beige.
-// Режим переключается в момент splitAt (секунды), к концу ролика блок гаснет.
+// Подача следует за режимом кадра (см. timeline.ts), к концу ролика блок гаснет.
 
 const PAGE_TAIL = 0.6; // сколько держим страницу после последнего слова, если дальше пауза
 
@@ -76,9 +77,10 @@ const WordView: React.FC<{word: Word; onVideo: boolean}> = ({word, onVideo}) => 
   );
 };
 
-export const Captions: React.FC<{splitAt: number}> = ({splitAt}) => {
+export const Captions: React.FC = () => {
   const frame = useCurrentFrame();
   const {fps, durationInFrames} = useVideoConfig();
+  const split = useSplit();
   const t = frame / fps;
 
   const index = PAGES.findIndex((page, i) => {
@@ -92,18 +94,11 @@ export const Captions: React.FC<{splitAt: number}> = ({splitAt}) => {
     return null;
   }
   const page = PAGES[index];
-  const onVideo = t < splitAt;
-  const splitFrame = Math.round(splitAt * fps);
+  const onVideo = split < 0.5;
 
-  // Блок гаснет с размытием перед сменой режима и в самом конце
+  // Во время смены режима блок гаснет и проявляется уже в новом месте; в конце ролика — гаснет
   const out = Math.min(
-    onVideo
-      ? interpolate(frame, [splitFrame - DUR.out, splitFrame], [1, 0], {
-          extrapolateLeft: 'clamp',
-          extrapolateRight: 'clamp',
-          easing: EASE.in,
-        })
-      : 1,
+    Math.abs(split * 2 - 1),
     interpolate(frame, [durationInFrames - 10, durationInFrames - 2], [1, 0], {
       extrapolateLeft: 'clamp',
       extrapolateRight: 'clamp',

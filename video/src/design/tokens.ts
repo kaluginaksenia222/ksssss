@@ -73,4 +73,4 @@ export const PANEL_HEIGHT = Math.round(LAYOUT.height * LAYOUT.splitAt);
 
 // Координата исходника, которая оказывается на шве в режиме B:
 // так в нижней половине видно лицо и руки хирурга.
-export const SPLIT_SOURCE_Y = 250;
+export const SPLIT_SOURCE_Y = 190;
