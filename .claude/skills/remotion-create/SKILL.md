@@ -5,7 +5,7 @@ version: 4.0.539
 ---
 
 These are instructions for making a new Remotion project and composition.  
-If this is not the next task, see [Remotion Best Practices](../remotion-best-practices/SKILL.md)
+If this is not the next task, see Remotion Best Practices
 
 ## Scaffold a project
 
@@ -40,30 +40,30 @@ npm i
 
 ## Open the preview before building the video
 
-As soon as the project can run, open [Remotion Studio](../remotion-studio/SKILL.md) in the browser before writing or changing the composition. For a new project, do this immediately after scaffolding and installing dependencies. For an existing project, do it before editing the video. Keep Studio running while you work so the user can see changes as they appear and steer the result.
+As soon as the project can run, open Remotion Studio in the browser before writing or changing the composition. For a new project, do this immediately after scaffolding and installing dependencies. For an existing project, do it before editing the video. Keep Studio running while you work so the user can see changes as they appear and steer the result.
 
 ## Designing a video
 
 Keep the scaffold and add React Markup.
-Follow [Remotion React Markup Best Practices](../remotion-markup/SKILL.md) and [Video Layout Rules](video-layout.md) for video-first layout and text sizing guidance.
+Follow Remotion React Markup Best Practices and [Video Layout Rules](video-layout.md) for video-first layout and text sizing guidance.
 
 Before writing the root that registers `<Composition>` or `<Still>` elements,
-follow [Compositions and stills](../remotion-markup/compositions.md).
+follow Compositions and stills.
 
 ## Is this a timeline of clips?
 
 If the video arranges multiple video or audio clips on a timeline, follow
-[Video editing](../remotion-markup/video-editing.md) before writing the
+Video editing before writing the
 timeline. Give every clip that should be edited independently its own authored
 JSX node.
 
 ## Is this a multi-scene video?
 
-If this is a video with multiple subsequent scenes, follow guidance at [Multi-scene videos](../remotion-markup/multi-scene-video.md).
+If this is a video with multiple subsequent scenes, follow guidance at Multi-scene videos.
 
 ## Interactivity Best Practices
 
-By structuring the React Markup following [Remotion Interactivity Best Practices](../remotion-interactivity/SKILL.md), you allow the user to make edits in the Studio which write back to code.
+By structuring the React Markup following Remotion Interactivity Best Practices, you allow the user to make edits in the Studio which write back to code.
 
 ## TailwindCSS
 
@@ -72,4 +72,4 @@ If Tailwind is requested, see [tailwind.md](tailwind.md) for using TailwindCSS i
 ## Follow-up
 
 The video creation process has finished.
-For follow-up prompts, use [Remotion Best Practices](../remotion-best-practices/SKILL.md)
+For follow-up prompts, use Remotion Best Practices

@@ -12,9 +12,9 @@ Before writing a scene or refactoring its layers, read
 [editable timeline structure](timeline-structure.md). It covers editing units,
 tracks, shared timing, plain layout containers, and a complete component-to-root
 example. For a timeline built from footage, also read
-[editable video timelines](../remotion-markup/video-editing.md).
+editable video timelines.
 
-Use [connected compositions](../remotion-markup/connected-compositions.md) when
+Use connected compositions when
 a scene or reusable group needs its own timeline. Validate both its standalone
 view and the full parent timeline; a connection alone does not guarantee fewer
 visible rows.
@@ -329,4 +329,4 @@ To make a custom userland component interactive, use:
 
 ## Video editing
 
-If a Remotion component mainly consists of video and audio clips, see [Video editing](../remotion-markup/video-editing.md) for best practices on how to structure Remotion markup so the clips are interactively editable in the timeline.
+If a Remotion component mainly consists of video and audio clips, see Video editing for best practices on how to structure Remotion markup so the clips are interactively editable in the timeline.

@@ -37,6 +37,6 @@ To import captions from a .srt file, load the [import-srt-captions.md](import-sr
 
 ## Post-creation
 
-After you're done, load this skill: [Remotion Best Practices](../remotion-best-practices/SKILL.md)
+After you're done, load this skill: Remotion Best Practices
 
 If not alreay done, open the Remotion Studio, unless instructed otherwise.

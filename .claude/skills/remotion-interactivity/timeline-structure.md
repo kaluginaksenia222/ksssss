@@ -32,7 +32,7 @@ provide shared timing, dimensions, or `TransitionSeries` behavior. Use
 `layout="none"` on a `Sequence` when it should not introduce a layout element.
 
 For captioned footage and overlays spanning cuts, read
-[editable video timelines](../remotion-markup/video-editing.md).
+editable video timelines.
 
 ## Give substantial groups their own timelines
 
@@ -211,5 +211,5 @@ export const RemotionRoot = () => (
 ```
 
 Keep metadata and defaults inline on each registration. See
-[connected compositions](../remotion-markup/connected-compositions.md) for
+connected compositions for
 extracting existing groups and checking both the parent and standalone views.
