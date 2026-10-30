@@ -100,7 +100,7 @@ export const Pill: React.FC<{children: React.ReactNode}> = ({children}) => (
     style={{
       padding: '8px 18px',
       borderRadius: LAYOUT.pillRadius,
-      backgroundColor: COLORS.white,
+      backgroundColor: COLORS.card,
       border: `1px solid ${COLORS.beigeLine}`,
       boxShadow: `0 4px 14px ${COLORS.shadow}`,
       fontFamily: FONTS.body,
@@ -137,7 +137,7 @@ export const Window: React.FC<{
   <div
     style={{
       width: 820,
-      backgroundColor: COLORS.white,
+      backgroundColor: COLORS.card,
       borderRadius: 24,
       border: `1px solid ${COLORS.beigeLine}`,
       boxShadow: `0 10px 30px ${COLORS.shadow}`,

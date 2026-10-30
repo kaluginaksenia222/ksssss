@@ -10,6 +10,7 @@ export const COLORS = {
   beigeDark: '#EDE2D1',
   beigeLine: '#DCCDB6',
   white: '#FFFFFF',
+  card: '#FCF7EF', // окна и карточки на бежевой панели — чуть светлее фона
   shadow: 'rgba(8, 32, 82, 0.10)',
 } as const;
 

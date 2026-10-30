@@ -5,10 +5,10 @@ import {COLORS, DUR, EASE, FONTS, LAYOUT, PANEL_HEIGHT, TYPE} from '../design/to
 import {useSplit} from '../timeline';
 
 // Пословные субтитры: белые, тонкие, без плашек и фона, не больше двух слов.
-// Всегда стоят на видео: в нижней трети, а при сплите — сразу под панелью, над головой.
+// На обычном кадре — белые, чуть ниже середины; при сплите — синие, на бежевой панели под окном.
 
-const CAPTION_TOP = 1400;
-const CAPTION_TOP_SPLIT = PANEL_HEIGHT + 60;
+const CAPTION_TOP = 1090;
+const CAPTION_TOP_SPLIT = PANEL_HEIGHT - 130;
 const PAGE_TAIL = 0.6; // сколько держим страницу после последнего слова, если дальше пауза
 
 const WordView: React.FC<{word: Word}> = ({word}) => {
@@ -50,12 +50,13 @@ export const Captions: React.FC = () => {
     return null;
   }
   const page = PAGES[index];
+  const onPanel = split >= 0.5;
 
   return (
     <div
       style={{
         position: 'absolute',
-        top: interpolate(split, [0, 1], [CAPTION_TOP, CAPTION_TOP_SPLIT]),
+        top: split < 0.5 ? CAPTION_TOP : CAPTION_TOP_SPLIT,
         left: LAYOUT.sidePadding,
         right: LAYOUT.sidePadding,
         textAlign: 'center',
@@ -63,12 +64,16 @@ export const Captions: React.FC = () => {
         fontWeight: 400,
         fontSize: TYPE.caption,
         lineHeight: 1.2,
-        color: COLORS.white,
-        textShadow: '0 2px 14px rgba(0, 0, 0, 0.45)',
-        opacity: interpolate(frame, [durationInFrames - 10, durationInFrames - 2], [1, 0], {
-          extrapolateLeft: 'clamp',
-          extrapolateRight: 'clamp',
-        }),
+        color: onPanel ? COLORS.navy : COLORS.white,
+        textShadow: onPanel ? 'none' : '0 2px 14px rgba(0, 0, 0, 0.45)',
+        // При смене кадра гаснут и проявляются уже на новом месте; в конце ролика — гаснут
+        opacity: Math.min(
+          Math.abs(split * 2 - 1),
+          interpolate(frame, [durationInFrames - 10, durationInFrames - 2], [1, 0], {
+            extrapolateLeft: 'clamp',
+            extrapolateRight: 'clamp',
+          }),
+        ),
       }}
     >
       {page.words.map((word) => (

@@ -46,7 +46,7 @@ export const Hook: React.FC<{until: number}> = ({until}) => {
       <div
         style={{
           position: 'absolute',
-          top: 1110,
+          top: 850,
           left: LAYOUT.sidePadding,
           right: LAYOUT.sidePadding,
           display: 'flex',
@@ -194,7 +194,7 @@ const PanelScene: React.FC<{label: string; until: number; children: React.ReactN
           top: 150,
           left: 0,
           right: 0,
-          bottom: 40,
+          bottom: 170,
           justifyContent: 'center',
           opacity: v,
           filter: `blur(${(1 - v) * 8}px)`,
@@ -451,7 +451,7 @@ const Item: React.FC<{at: number; icon: React.ReactNode; title: string; right?: 
       borderRadius: 18,
       border: `1px solid ${COLORS.beigeDark}`,
       boxShadow: `0 4px 14px ${COLORS.shadow}`,
-      backgroundColor: COLORS.white,
+      backgroundColor: COLORS.card,
     }}
   >
     <div style={{width: 96, display: 'flex', justifyContent: 'center'}}>{icon}</div>
