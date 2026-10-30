@@ -14,7 +14,7 @@ import {Captions} from './components/Captions';
 import {DotGrid} from './components/ui';
 import {fontsLoaded} from './design/fonts';
 import {COLORS, LAYOUT, PANEL_HEIGHT, SPLIT_SOURCE_Y} from './design/tokens';
-import {Coffee, Compress, FirstDays, Hook, IntroBar, Stitches, Therapy} from './scenes/Sections';
+import {Coffee, Compress, FirstDays, Hook, IntroBar, POP_TIMES, Stitches, Therapy, TYPING} from './scenes/Sections';
 import {SCENES, SECTIONS, TRANSITIONS, useSplit} from './timeline';
 
 const HOOK_UNTIL = 7.0;
@@ -90,9 +90,20 @@ const Panel: React.FC<{children: React.ReactNode}> = ({children}) => {
   );
 };
 
-// Звуки: только свуш на хуке и на сменах вставок
+// Звуки: свуш на хуке и сменах вставок, тихий «поп» на главных появлениях, клавиши при печати
 const SoundEffects: React.FC = () => {
   const {fps} = useVideoConfig();
+  const pops = [
+    ...POP_TIMES.firstDays.map((t) => SCENES.firstDays + t),
+    ...POP_TIMES.coffee.map((t) => SCENES.coffee + t),
+    ...POP_TIMES.compress.map((t) => SCENES.compress + t),
+    ...POP_TIMES.stitches.map((t) => SCENES.stitches + t),
+    ...POP_TIMES.therapy.map((t) => SCENES.therapy + t),
+  ];
+  const keys = new Array(TYPING.chars)
+    .fill(0)
+    .map((_, i) => SCENES.therapy + TYPING.at + i / TYPING.cps)
+    .filter((_, i) => i % 2 === 0);
   return (
     <>
       <Sequence name="SFX хук" from={Math.round(HOOK_IN * fps)} durationInFrames={Math.round(1.2 * fps)}>
@@ -102,6 +113,16 @@ const SoundEffects: React.FC = () => {
       {TRANSITIONS.map((at) => (
         <Sequence key={`w${at}`} name="SFX свуш" from={Math.round(at * fps)} durationInFrames={Math.round(0.6 * fps)}>
           <Audio src={staticFile('sfx/whoosh.wav')} volume={0.18} />
+        </Sequence>
+      ))}
+      {pops.map((at) => (
+        <Sequence key={`p${at}`} name="SFX поп" from={Math.round(at * fps)} durationInFrames={Math.round(0.2 * fps)}>
+          <Audio src={staticFile('sfx/pop.wav')} volume={0.1} />
+        </Sequence>
+      ))}
+      {keys.map((at) => (
+        <Sequence key={`k${at}`} name="SFX клавиша" from={Math.round(at * fps)} durationInFrames={3}>
+          <Audio src={staticFile('sfx/key.wav')} volume={0.12} />
         </Sequence>
       ))}
     </>

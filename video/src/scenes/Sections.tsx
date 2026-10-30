@@ -622,3 +622,15 @@ export const Therapy: React.FC<{until: number}> = ({until}) => (
     </Window>
   </PanelScene>
 );
+
+// Главные появления (секунды от начала сцены) — под них тихий «поп»
+export const POP_TIMES = {
+  firstDays: [2.25, 3.55, 5.67, 7.97],
+  coffee: [0.61, 4.95],
+  compress: [2.63, 6.3, 8.27],
+  stitches: [2.11, 2.67],
+  therapy: [6.7, 7.94, 8.88],
+};
+
+// Печать текста в терапии — для звука клавиш
+export const TYPING = {at: 1.96, chars: 'Фотодинамическая терапия'.length, cps: 22};
