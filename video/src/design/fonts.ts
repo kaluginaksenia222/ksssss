@@ -16,6 +16,8 @@ const files: {family: string; file: string; weight: string}[] = [
   {family: 'InterLat', file: 'inter-latin-500-normal.woff2', weight: '500'},
   {family: 'InterCyr', file: 'inter-cyrillic-700-normal.woff2', weight: '700'},
   {family: 'InterLat', file: 'inter-latin-700-normal.woff2', weight: '700'},
+  {family: 'MonoCyr', file: 'jetbrains-mono-cyrillic-500-normal.woff2', weight: '500'},
+  {family: 'MonoLat', file: 'jetbrains-mono-latin-500-normal.woff2', weight: '500'},
   {family: 'GreatVibesCyr', file: 'great-vibes-cyrillic-400-normal.woff2', weight: '400'},
   {family: 'GreatVibesLat', file: 'great-vibes-latin-400-normal.woff2', weight: '400'},
 ];

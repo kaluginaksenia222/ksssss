@@ -11,26 +11,17 @@ import {
   useVideoConfig,
 } from 'remotion';
 import {Captions} from './components/Captions';
+import {DotGrid} from './components/ui';
 import {fontsLoaded} from './design/fonts';
 import {COLORS, LAYOUT, PANEL_HEIGHT, SPLIT_SOURCE_Y} from './design/tokens';
-import {DotGrid} from './components/ui';
-import {CompressInsert, Hook, TherapyInsert, VideoTitle} from './scenes/Sections';
-import {SECTIONS, SPLITS, SPLIT_EDGES, useSplit} from './timeline';
+import {Coffee, Compress, FirstDays, Hook, POP_TIMES, Stitches, Therapy, TYPING} from './scenes/Sections';
+import {SCENES, SECTIONS, TRANSITIONS, useSplit} from './timeline';
 
-// Хук держится до перехода к первому совету
 const HOOK_UNTIL = 7.0;
 const HOOK_IN = 0.5;
 
-// Белые заголовки поверх видео (секунды, по расшифровке голоса)
-const VIDEO_TITLES = [
-  {from: 7.68, until: 11.9, text: 'Первые 2–3 дня'},
-  {from: 12.0, until: 16.35, text: '2 недели\nбез нагрузок'},
-  {from: 16.58, until: 22.3, text: 'Без кофе'},
-  {from: 33.56, until: 38.2, text: 'Швы — на 6–7 сутки'},
-];
-
 // Видео: на весь кадр или съезжает в нижнюю половину; на каждом разделе — резкая
-// смена крупности (крупнее на панели), внутри раздела — медленный наезд.
+// смена крупности, внутри раздела — медленный наезд.
 const Footage: React.FC = () => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
@@ -56,12 +47,20 @@ const Footage: React.FC = () => {
   );
 };
 
-// Затемнение снизу, чтобы белые субтитры читались
-const BottomShade: React.FC = () => (
-  <AbsoluteFill style={{background: 'linear-gradient(to bottom, rgba(0,0,0,0) 55%, rgba(0,0,0,0.35) 100%)'}} />
-);
+// Затемнение снизу, чтобы белые субтитры читались на полноэкранном видео
+const BottomShade: React.FC = () => {
+  const split = useSplit();
+  return (
+    <AbsoluteFill
+      style={{
+        background: 'linear-gradient(to bottom, rgba(0,0,0,0) 55%, rgba(0,0,0,0.35) 100%)',
+        opacity: 1 - split,
+      }}
+    />
+  );
+};
 
-// Белая панель с точечной сеткой съезжает сверху и уезжает обратно; шов растушёван в видео
+// Белая панель с точечной сеткой съезжает сверху; шов растушёван в видео
 const Panel: React.FC<{children: React.ReactNode}> = ({children}) => {
   const split = useSplit();
   if (split <= 0) {
@@ -91,23 +90,39 @@ const Panel: React.FC<{children: React.ReactNode}> = ({children}) => {
   );
 };
 
-// Звуки эффектов: блеск на хуке, свуш на смене режима, щелчок на заголовках
+// Звуки: свуш на хуке и сменах вставок, «поп» на появлениях, клавиши при печати
 const SoundEffects: React.FC = () => {
   const {fps} = useVideoConfig();
+  const pops = [
+    ...POP_TIMES.firstDays.map((t) => SCENES.firstDays + t),
+    ...POP_TIMES.coffee.map((t) => SCENES.coffee + t),
+    ...POP_TIMES.compress.map((t) => SCENES.compress + t),
+    ...POP_TIMES.stitches.map((t) => SCENES.stitches + t),
+    ...POP_TIMES.therapy.map((t) => SCENES.therapy + t),
+  ];
+  const keys = new Array(TYPING.chars)
+    .fill(0)
+    .map((_, i) => SCENES.therapy + TYPING.at + i / TYPING.cps)
+    .filter((_, i) => i % 2 === 0);
   return (
     <>
       <Sequence name="SFX хук" from={Math.round(HOOK_IN * fps)} durationInFrames={Math.round(1.2 * fps)}>
-        <Audio src={staticFile('sfx/whoosh.wav')} volume={0.2} />
-        <Audio src={staticFile('sfx/shimmer.wav')} volume={0.7} />
+        <Audio src={staticFile('sfx/whoosh.wav')} volume={0.18} />
+        <Audio src={staticFile('sfx/shimmer.wav')} volume={0.6} />
       </Sequence>
-      {SPLIT_EDGES.map((at) => (
+      {TRANSITIONS.map((at) => (
         <Sequence key={`w${at}`} name="SFX свуш" from={Math.round(at * fps)} durationInFrames={Math.round(0.6 * fps)}>
-          <Audio src={staticFile('sfx/whoosh.wav')} volume={0.22} />
+          <Audio src={staticFile('sfx/whoosh.wav')} volume={0.18} />
         </Sequence>
       ))}
-      {VIDEO_TITLES.map(({from}) => (
-        <Sequence key={`t${from}`} name="SFX щелчок" from={Math.round(from * fps)} durationInFrames={Math.round(0.2 * fps)}>
-          <Audio src={staticFile('sfx/tick.wav')} volume={0.18} />
+      {pops.map((at) => (
+        <Sequence key={`p${at}`} name="SFX поп" from={Math.round(at * fps)} durationInFrames={Math.round(0.2 * fps)}>
+          <Audio src={staticFile('sfx/pop.wav')} volume={0.14} />
+        </Sequence>
+      ))}
+      {keys.map((at) => (
+        <Sequence key={`k${at}`} name="SFX клавиша" from={Math.round(at * fps)} durationInFrames={3}>
+          <Audio src={staticFile('sfx/key.wav')} volume={0.12} />
         </Sequence>
       ))}
     </>
@@ -121,6 +136,11 @@ export const Reel: React.FC = () => {
     fontsLoaded.then(() => continueRender(handle));
   }, [handle]);
 
+  const scene = (from: number, to: number) => ({
+    from: Math.round(from * fps),
+    durationInFrames: Math.round((to - from) * fps),
+  });
+
   return (
     <AbsoluteFill style={{backgroundColor: COLORS.navy}}>
       <Footage />
@@ -128,17 +148,21 @@ export const Reel: React.FC = () => {
       <Sequence name="Хук" durationInFrames={Math.round(HOOK_UNTIL * fps)}>
         <Hook until={HOOK_UNTIL} />
       </Sequence>
-      {VIDEO_TITLES.map(({from, until, text}) => (
-        <Sequence key={from} name={text.replace('\n', ' ')} from={Math.round(from * fps)} durationInFrames={Math.round((until - from) * fps)}>
-          <VideoTitle until={until - from}>{text}</VideoTitle>
-        </Sequence>
-      ))}
       <Panel>
-        <Sequence name="Холодные компрессы" from={Math.round(SPLITS[0].in * fps)}>
-          <CompressInsert until={SPLITS[0].out - SPLITS[0].in} />
+        <Sequence name="01 Первые дни" {...scene(SCENES.firstDays, SCENES.coffee)}>
+          <FirstDays until={SCENES.coffee - SCENES.firstDays} />
         </Sequence>
-        <Sequence name="Фотодинамическая терапия" from={Math.round(SPLITS[1].in * fps)}>
-          <TherapyInsert until={SPLITS[1].out - SPLITS[1].in} />
+        <Sequence name="02 Питание" {...scene(SCENES.coffee, SCENES.compress)}>
+          <Coffee until={SCENES.compress - SCENES.coffee} />
+        </Sequence>
+        <Sequence name="03 Уход" {...scene(SCENES.compress, SCENES.stitches)}>
+          <Compress until={SCENES.stitches - SCENES.compress} />
+        </Sequence>
+        <Sequence name="04 Швы" {...scene(SCENES.stitches, SCENES.therapy)}>
+          <Stitches until={SCENES.therapy - SCENES.stitches} />
+        </Sequence>
+        <Sequence name="05 Восстановление" {...scene(SCENES.therapy, SCENES.end)}>
+          <Therapy until={SCENES.end - SCENES.therapy + 1} />
         </Sequence>
       </Panel>
       <Captions />

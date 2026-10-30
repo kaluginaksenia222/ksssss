@@ -19,13 +19,14 @@ export const FONTS = {
   heading: 'Coolvetica, InterTightCyr, InterTightLat, sans-serif',
   body: '"Helvetica Neue", InterCyr, InterLat, sans-serif',
   accent: '"Gloria Script", GreatVibesCyr, GreatVibesLat, cursive',
+  mono: '"SF Mono", MonoCyr, MonoLat, monospace',
 } as const;
 
 export const TYPE = {
   hit: 140,
   title: 88,
   blockTitle: 48,
-  caption: 56,
+  caption: 44,
   captionLead: 30,
   accent: 120,
   label: 24,

@@ -11,15 +11,22 @@ export const SECTIONS = [
   {start: 38.3, end: 50.37},
 ];
 
-// Когда кадр делится на белую панель + видео. Только на двух ключевых советах,
-// всё остальное время — видео на весь экран.
-export const SPLITS = [
-  {in: 23.5, out: 30.2},
-  {in: 40.0, out: 45.3},
-];
+// Когда кадр делится на белую панель + видео. Как в референсе: после хука
+// панель со вставками держится до конца.
+export const SPLITS = [{in: 7.05, out: Infinity}];
 
-// Все моменты переходов — для свушей
-export const SPLIT_EDGES = SPLITS.flatMap((s) => [s.in, s.out]);
+// Начала вставок на панели (секунды) — по расшифровке голоса
+export const SCENES = {
+  firstDays: 7.05,
+  coffee: 16.45,
+  compress: 22.45,
+  stitches: 33.25,
+  therapy: 38.3,
+  end: 50.37,
+};
+
+// Моменты переходов — для свушей
+export const TRANSITIONS = [SCENES.firstDays, SCENES.coffee, SCENES.compress, SCENES.stitches, SCENES.therapy];
 
 // Прогресс сплита: 0 — видео на весь экран, 1 — панель + видео
 export const useSplit = () => {
@@ -29,11 +36,12 @@ export const useSplit = () => {
   return Math.max(
     ...SPLITS.map((s) => {
       const a = Math.round(s.in * fps);
+      const inn = interpolate(frame, [a, a + DUR.modeSwitch], [0, 1], clamp);
+      if (!Number.isFinite(s.out)) {
+        return inn;
+      }
       const b = Math.round(s.out * fps);
-      return Math.min(
-        interpolate(frame, [a, a + DUR.modeSwitch], [0, 1], clamp),
-        interpolate(frame, [b, b + DUR.modeSwitch], [1, 0], clamp),
-      );
+      return Math.min(inn, interpolate(frame, [b, b + DUR.modeSwitch], [1, 0], clamp));
     }),
   );
 };
