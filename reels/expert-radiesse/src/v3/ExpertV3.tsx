@@ -13,7 +13,7 @@ import {
 import {fontsLoaded} from '../design/fonts';
 import {COLORS, EASE, FONTS} from '../design/tokens';
 import {InstagramHandle} from '../v2/ui';
-import {BigRing, ChipRow, EchoWords, MeterCard, MetalTitle, RingReveal, ToggleCard, TopTags} from './parts';
+import {BigRing, ChipRow, EchoWords, MetalTitle, RingMeter, RingReveal, ToggleCard, TopTags} from './parts';
 import {PAGES} from './transcript';
 
 // Экспертный рилс, версия 3 — приёмы тёмного референса по-своему, без вырезки человека:
@@ -217,10 +217,10 @@ const BlueRadiesse: React.FC = () => {
   return (
     <BlueStage label="ГЛАВНАЯ ПРОБЛЕМА">
       <MetalTitle at={local(23.58)} until={end} lines={['Радиесс']} size={80} top={500} />
-      <MeterCard
+      <RingMeter
         at={local(25.84)}
         until={end}
-        top={700}
+        top={650}
         title="Выводится из тканей"
         note="практически не выводится"
         from={45}
@@ -239,10 +239,10 @@ const BlueRehab: React.FC = () => {
   return (
     <BlueStage label="РЕАБИЛИТАЦИЯ">
       <MetalTitle at={local(44.32)} until={end} lines={['Дольше', 'восстановление']} size={64} top={490} />
-      <MeterCard
+      <RingMeter
         at={local(44.62)}
         until={end}
-        top={660}
+        top={650}
         title="Срок восстановления"
         note="чуть дольше обычного"
         from={40}
@@ -303,10 +303,10 @@ export const ExpertV3: React.FC = () => {
 
       <MetalTitle at={12.82} until={13.84} lines={['Аппаратные', 'методики']} size={64} top={1000} />
       <ChipRow at={14.5} until={16.3} top={1230} chips={[{text: 'SMAS-лифтинг', at: 14.56, strong: true}]} />
-      <MeterCard
+      <RingMeter
         at={16.3}
         until={19.95}
-        top={1220}
+        top={1190}
         title="Сеансы SMAS-лифтинга"
         note="если их было очень много"
         from={15}
@@ -322,10 +322,10 @@ export const ExpertV3: React.FC = () => {
         </RingReveal>
       </Sequence>
 
-      <MeterCard
+      <RingMeter
         at={37.26}
         until={40.0}
-        top={1220}
+        top={1190}
         title="Проникает в ткани"
         note="очень глубоко"
         from={15}
@@ -334,10 +334,10 @@ export const ExpertV3: React.FC = () => {
         moveUntil={39.34}
       />
       <MetalTitle at={32.04} until={33.25} lines={['Достаю', 'ложкой']} size={64} top={1000} />
-      <MeterCard
+      <RingMeter
         at={33.1}
         until={35.55}
-        top={1220}
+        top={1190}
         title="Остатки препарата"
         note="то, что можно достать"
         from={100}
@@ -354,10 +354,10 @@ export const ExpertV3: React.FC = () => {
         </RingReveal>
       </Sequence>
 
-      <MeterCard
+      <RingMeter
         at={47.1}
         until={50.4}
-        top={1220}
+        top={1190}
         title="Кровоснабжение тканей"
         note="немножко нарушено"
         from={100}

@@ -449,3 +449,91 @@ export const EchoWords: React.FC<{
     </div>
   );
 };
+
+// Круглая стеклянная шкала: кольцо-прогресс едет от from к to между moveAt и moveUntil,
+// в центре — процент, под кругом — подпись
+export const RingMeter: React.FC<{
+  at: number;
+  until: number;
+  top: number;
+  title: string;
+  note: string;
+  from: number;
+  to: number;
+  moveAt: number;
+  moveUntil: number;
+  size?: number;
+}> = ({at, until, top, title, note, from, to, moveAt, moveUntil, size = 280}) => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const v = useInOut(at, until);
+  const p = usePop(at);
+  const value = interpolate(frame, [moveAt * fps, moveUntil * fps], [from, to], {...clamp, easing: EASE.inOut});
+  if (v <= 0) {
+    return null;
+  }
+  const r = size / 2 - 16;
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        top,
+        left: 0,
+        right: 0,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: 14,
+        opacity: v,
+        filter: `blur(${(1 - v) * 8}px)`,
+      }}
+    >
+      <div
+        style={{
+          position: 'relative',
+          width: size,
+          height: size,
+          borderRadius: '50%',
+          backgroundColor: 'rgba(255, 255, 255, 0.12)',
+          border: '1.5px solid rgba(255, 255, 255, 0.28)',
+          backdropFilter: 'blur(18px)',
+          boxShadow: '0 12px 40px rgba(0,0,0,0.25)',
+          scale: String(interpolate(p, [0, 1], [0.7, 1])),
+        }}
+      >
+        <svg width={size} height={size} viewBox={`${-size / 2} ${-size / 2} ${size} ${size}`} style={{position: 'absolute', inset: 0}}>
+          <circle r={r} fill="none" stroke="rgba(255,255,255,0.16)" strokeWidth={10} />
+          <circle
+            r={r}
+            fill="none"
+            stroke={COLORS.beige}
+            strokeWidth={10}
+            strokeLinecap="round"
+            pathLength={100}
+            strokeDasharray={`${value} 100`}
+            transform="rotate(-90)"
+          />
+        </svg>
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontFamily: FONTS.mono,
+            fontWeight: 500,
+            fontSize: 52,
+            color: COLORS.white,
+          }}
+        >
+          {Math.round(value)}%
+        </div>
+      </div>
+      <div style={{textAlign: 'center', textShadow: '0 2px 12px rgba(0,0,0,0.5)'}}>
+        <div style={{fontFamily: FONTS.body, fontWeight: 500, fontSize: 30, color: COLORS.white}}>{title}</div>
+        <div style={{fontFamily: FONTS.mono, fontWeight: 500, fontSize: 20, color: 'rgba(255,255,255,0.7)', marginTop: 4}}>{note}</div>
+      </div>
+    </div>
+  );
+};
