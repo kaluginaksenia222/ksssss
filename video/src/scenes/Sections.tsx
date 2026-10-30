@@ -46,7 +46,7 @@ export const Hook: React.FC<{until: number}> = ({until}) => {
       <div
         style={{
           position: 'absolute',
-          top: 900,
+          top: 980,
           left: LAYOUT.sidePadding,
           right: LAYOUT.sidePadding,
           display: 'flex',
