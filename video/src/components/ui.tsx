@@ -35,9 +35,6 @@ export const Sparkle: React.FC<{size: number; color: string; style?: React.CSSPr
 export const TopicPill: React.FC<{onVideo?: boolean}> = ({onVideo}) => (
   <div
     style={{
-      display: 'flex',
-      alignItems: 'center',
-      gap: 10,
       padding: '10px 22px',
       borderRadius: LAYOUT.pillRadius,
       backgroundColor: onVideo ? 'rgba(8, 32, 82, 0.6)' : COLORS.beigeDark,
@@ -47,7 +44,6 @@ export const TopicPill: React.FC<{onVideo?: boolean}> = ({onVideo}) => (
       fontSize: TYPE.pill,
     }}
   >
-    <Sparkle size={20} color={onVideo ? COLORS.beige : COLORS.navy} />
     после блефаропластики
   </div>
 );

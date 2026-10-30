@@ -269,9 +269,9 @@ export const Stitches: React.FC<{duration: number}> = ({duration}) => (
 
 // 05 — фотодинамическая терапия
 const CheckRow: React.FC<{at: number; children: React.ReactNode}> = ({at, children}) => (
-  <Card at={at} style={{display: 'flex', alignItems: 'center', gap: 22, padding: '18px 24px'}}>
-    <CheckBadge at={at + 0.15} />
-    <div style={{fontFamily: FONTS.body, fontWeight: 700, fontSize: 36, color: COLORS.navy}}>{children}</div>
+  <Card at={at} style={{display: 'flex', alignItems: 'center', gap: 20, padding: '12px 22px'}}>
+    <CheckBadge at={at + 0.15} size={46} />
+    <div style={{fontFamily: FONTS.body, fontWeight: 700, fontSize: 32, color: COLORS.navy}}>{children}</div>
   </Card>
 );
 
@@ -304,15 +304,14 @@ const AccentWord: React.FC<{at: number; children: React.ReactNode}> = ({at, chil
 
 export const Therapy: React.FC<{duration: number}> = ({duration}) => (
   <PanelScene num="05" label="Восстановление" duration={duration}>
-    <SceneTitle at={1.86} size={66}>
+    <SceneTitle at={1.86} size={56}>
       Фотодинамическая терапия
     </SceneTitle>
-    <SceneTitle at={3.64} size={34}>
+    <SceneTitle at={3.64} size={30}>
       <span style={{fontFamily: FONTS.body, fontWeight: 500, textTransform: 'none', color: COLORS.navy80}}>
         после блефаропластики — чтобы быстрее:
       </span>
     </SceneTitle>
-    <div style={{height: 4}} />
     <CheckRow at={6.6}>сошли отёки</CheckRow>
     <CheckRow at={7.84}>ушли синяки</CheckRow>
     <CheckRow at={8.78}>

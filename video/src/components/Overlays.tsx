@@ -2,7 +2,7 @@ import React from 'react';
 import {interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
 import {VOICE_LEVELS} from '../data/levels';
 import {COLORS, DUR, EASE, FONTS, LAYOUT} from '../design/tokens';
-import {Sparkle, TopicPill} from './ui';
+import {TopicPill} from './ui';
 
 const pad = (n: number) => String(Math.floor(n)).padStart(2, '0');
 
@@ -20,13 +20,13 @@ export const TimelineBar: React.FC<{sections: {start: number; end: number}[]}> =
     <div
       style={{
         position: 'absolute',
-        top: 220,
+        top: 96,
         left: 0,
         right: 0,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        gap: 16,
+        gap: 12,
       }}
     >
       <TopicPill onVideo />
@@ -142,7 +142,7 @@ export const LogoHit: React.FC<{text: string; holdUntil: number}> = ({text, hold
       <div
         style={{
           position: 'absolute',
-          top: 760,
+          top: 1150,
           left: 0,
           right: 0,
           height: 0,
@@ -155,8 +155,8 @@ export const LogoHit: React.FC<{text: string; holdUntil: number}> = ({text, hold
         <div
           style={{
             position: 'absolute',
-            width: 560,
-            height: 560,
+            width: 420,
+            height: 420,
             borderRadius: '50%',
             border: `3px solid ${COLORS.beige}`,
             scale: String(interpolate(frame, [0, 20], [0.5, 1.35], {...clamp, easing: EASE.out})),
@@ -172,16 +172,11 @@ export const LogoHit: React.FC<{text: string; holdUntil: number}> = ({text, hold
             filter: `blur(${(1 - Math.min(textIn, textOut)) * 10}px)`,
           }}
         >
-          <Sparkle
-            size={56}
-            color={COLORS.beige}
-            style={{rotate: `${interpolate(frame, [0, 24], [-90, 0], {...clamp, easing: EASE.out})}deg`}}
-          />
           <div
             style={{
               fontFamily: FONTS.heading,
               fontWeight: 900,
-              fontSize: 66,
+              fontSize: 60,
               color: COLORS.beige,
               textTransform: 'uppercase',
               letterSpacing: `${interpolate(frame, [0, DUR.logoIn + 4], [0.5, 0.01], {...clamp, easing: EASE.out})}em`,
