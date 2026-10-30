@@ -46,7 +46,7 @@ export const Hook: React.FC<{until: number}> = ({until}) => {
       <div
         style={{
           position: 'absolute',
-          top: 850,
+          top: 900,
           left: LAYOUT.sidePadding,
           right: LAYOUT.sidePadding,
           display: 'flex',
@@ -622,15 +622,3 @@ export const Therapy: React.FC<{until: number}> = ({until}) => (
     </Window>
   </PanelScene>
 );
-
-// Моменты, когда что-то выскакивает (секунды от начала сцены), — для звука «поп»
-export const POP_TIMES = {
-  firstDays: [0.89, 2.25, 3.55, 5.67, 6.87, 7.97],
-  coffee: [0.13, 0.61, 2.37, 4.95],
-  compress: [2.63, 5.21, 6.3, 8.27, 9.39],
-  stitches: [0.31, 0.71, 2.11, 2.67],
-  therapy: [3.4, 6.7, 7.94, 8.88],
-};
-
-// Печать текста в терапии — для звука клавиш
-export const TYPING = {at: 1.96, chars: 'Фотодинамическая терапия'.length, cps: 22};
