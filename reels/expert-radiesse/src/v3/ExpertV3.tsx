@@ -13,7 +13,7 @@ import {
 import {fontsLoaded} from '../design/fonts';
 import {COLORS, EASE, FONTS} from '../design/tokens';
 import {InstagramHandle} from '../v2/ui';
-import {BigRing, ChipRow, MeterCard, MetalTitle, RingReveal, ToggleCard, TopTags} from './parts';
+import {BigRing, ChipRow, EchoWords, MeterCard, MetalTitle, RingReveal, ToggleCard, TopTags} from './parts';
 import {PAGES} from './transcript';
 
 // Экспертный рилс, версия 3 — приёмы тёмного референса по-своему, без вырезки человека:
@@ -28,13 +28,15 @@ const BLUE1 = {from: 4.95, to: 10.5};
 const BLUE2 = {from: 22.95, to: 35.6};
 const RING_CENTER = {cx: 712, cy: 690};
 
-// Хук: процедуры мелькают по одной с наездом камеры, затем удар с дрожью кадра
+// Хук: заголовок, от него эхом разлетаются процедуры, затем удар с дрожью кадра
+// Эхо от заголовка: мелкие слова-процедуры разлетаются из его центра
 const HOOK_WORDS = [
-  {text: 'Филлеры', at: 0.2},
-  {text: 'Нити', at: 0.62},
-  {text: 'SMAS', at: 1.04},
-  {text: 'Радиесс', at: 1.4},
+  {text: 'филлеры', at: 0.55, dx: -290, dy: -120},
+  {text: 'SMAS', at: 0.9, dx: 300, dy: -110},
+  {text: 'нити', at: 1.25, dx: -250, dy: 125},
+  {text: 'радиесс', at: 1.55, dx: 270, dy: 120},
 ];
+const HOOK_TITLE = {at: 0.15, top: 1060, cy: 1092};
 const SLAM_AT = 1.76;
 
 // Когда субтитры прячем: их заменяет заголовок с теми же словами
@@ -66,7 +68,7 @@ const Footage: React.FC = () => {
   const drift = interpolate(t - z.at, [0, 8], [0, 0.03], {extrapolateRight: 'clamp'});
   // Хук: влёт кадра из приближения с размытием, ступеньки наезда на каждом слове, дрожь на ударе
   const slamIn = interpolate(frame, [0, 8], [0.45, 0], {...clamp, easing: EASE.out});
-  const steps = t < SLAM_AT ? HOOK_WORDS.filter((w) => t >= w.at).length * 0.05 : 0;
+  const steps = t < SLAM_AT ? HOOK_WORDS.filter((w) => t >= w.at).length * 0.02 : 0;
   const k = frame - Math.round(SLAM_AT * fps);
   const shake = k >= 0 && k < 10 ? (1 - k / 10) * 16 : 0;
   return (
@@ -95,41 +97,11 @@ const HookFlash: React.FC = () => {
   const v = Math.max(
     ...hits.map((at, i) => {
       const k = frame - Math.round(at * fps);
-      const peak = i === 0 ? 0.7 : at === SLAM_AT ? 0.4 : 0.18;
+      const peak = i === 0 ? 0.7 : at === SLAM_AT ? 0.4 : 0.08;
       return k >= 0 ? interpolate(k, [0, 5], [peak, 0], clamp) : 0;
     }),
   );
   return <AbsoluteFill style={{backgroundColor: COLORS.beige, opacity: v}} />;
-};
-
-// Моно-метка над словами хука
-const HookLabel: React.FC = () => {
-  const frame = useCurrentFrame();
-  const {fps} = useVideoConfig();
-  const v = Math.min(
-    interpolate(frame, [3, 10], [0, 1], clamp),
-    interpolate(frame, [Math.round(3.0 * fps), Math.round(3.2 * fps)], [1, 0], clamp),
-  );
-  return (
-    <div
-      style={{
-        position: 'absolute',
-        top: 950,
-        left: 0,
-        right: 0,
-        textAlign: 'center',
-        fontFamily: FONTS.mono,
-        fontWeight: 500,
-        fontSize: 24,
-        letterSpacing: '0.18em',
-        color: 'rgba(255,255,255,0.85)',
-        textShadow: '0 2px 12px rgba(0,0,0,0.5)',
-        opacity: v,
-      }}
-    >
-      КАКИЕ ПРОЦЕДУРЫ
-    </div>
-  );
 };
 
 // Субтитры: белые, тонкие, по 2 слова, чуть ниже середины
@@ -219,9 +191,9 @@ const BlueFears: React.FC = () => {
   const local = (abs: number) => abs - BLUE1.from;
   return (
     <BlueStage label="СТРАХИ ПАЦИЕНТОВ">
-      <MetalTitle at={local(5.76)} until={local(7.2)} lines={['Чего боятся']} size={100} top={500} />
-      <MetalTitle at={local(7.22)} until={local(8.32)} lines={['Филлеры']} size={110} top={500} />
-      <MetalTitle at={local(8.34)} until={9} lines={['Нити']} size={110} top={500} />
+      <MetalTitle at={local(5.76)} until={local(7.2)} lines={['Чего боятся']} size={72} top={500} />
+      <MetalTitle at={local(7.22)} until={local(8.32)} lines={['Филлеры']} size={72} top={500} />
+      <MetalTitle at={local(8.34)} until={9} lines={['Нити']} size={72} top={500} />
       <ToggleCard at={local(7.22)} until={9} offAt={local(9.42)} top={700} />
     </BlueStage>
   );
@@ -233,7 +205,7 @@ const BlueRadiesse: React.FC = () => {
   const end = BLUE2.to - BLUE2.from;
   return (
     <BlueStage label="ГЛАВНАЯ ПРОБЛЕМА">
-      <MetalTitle at={local(23.58)} until={local(31.9)} lines={['Радиесс']} size={120} top={500} />
+      <MetalTitle at={local(23.58)} until={local(31.9)} lines={['Радиесс']} size={80} top={500} />
       <MeterCard
         at={local(25.84)}
         until={local(31.9)}
@@ -245,7 +217,7 @@ const BlueRadiesse: React.FC = () => {
         moveAt={local(26.68)}
         moveUntil={local(28.82)}
       />
-      <MetalTitle at={local(32.04)} until={end} lines={['Достаю', 'ложкой']} size={104} top={480} />
+      <MetalTitle at={local(32.04)} until={end} lines={['Достаю', 'ложкой']} size={64} top={480} />
       <MeterCard
         at={local(32.66)}
         until={end}
@@ -296,13 +268,10 @@ export const ExpertV3: React.FC = () => {
       <Footage />
       <TopTags tags={['ЭКСПЕРТ', 'ПЛАСТИЧЕСКАЯ ХИРУРГИЯ', '01 / 05']} />
 
-      {/* Хук: кадр влетает, процедуры мелькают с наездами, затем удар «МЕШАЮТ ХИРУРГУ?» */}
+      {/* Хук: кадр влетает, «МЕШАЮТ ХИРУРГУ?», процедуры разлетаются эхом, удар на «мешают» */}
       <HookFlash />
-      <HookLabel />
-      {HOOK_WORDS.map((w, i) => (
-        <MetalTitle key={w.text} at={w.at} until={HOOK_WORDS[i + 1]?.at ?? SLAM_AT} lines={[w.text]} size={130} top={1020} />
-      ))}
-      <MetalTitle at={SLAM_AT} until={3.15} lines={['Мешают', 'хирургу?']} size={112} top={1000} />
+      <MetalTitle at={HOOK_TITLE.at} until={3.15} lines={['Мешают хирургу?']} size={64} top={HOOK_TITLE.top} />
+      <EchoWords cx={540} cy={HOOK_TITLE.cy} until={3.15} words={HOOK_WORDS} />
 
 
       <Sequence name="Синяя сцена: страхи пациентов" from={Math.round(BLUE1.from * fps)} durationInFrames={Math.round((BLUE1.to - BLUE1.from) * fps)}>
@@ -311,7 +280,7 @@ export const ExpertV3: React.FC = () => {
         </RingReveal>
       </Sequence>
 
-      <MetalTitle at={12.82} until={13.84} lines={['Аппаратные', 'методики']} size={100} top={1000} />
+      <MetalTitle at={12.82} until={13.84} lines={['Аппаратные', 'методики']} size={64} top={1000} />
       <ChipRow at={14.5} until={16.3} top={1230} chips={[{text: 'SMAS-лифтинг', at: 14.56, strong: true}]} />
       <MeterCard
         at={16.3}
@@ -324,7 +293,7 @@ export const ExpertV3: React.FC = () => {
         moveAt={16.76}
         moveUntil={17.9}
       />
-      <MetalTitle at={20.06} until={22.95} lines={['Больше всего', 'мешает']} size={100} top={1000} />
+      <MetalTitle at={20.06} until={22.95} lines={['Больше всего', 'мешает']} size={64} top={1000} />
 
       <Sequence name="Синяя сцена: Радиесс" from={Math.round(BLUE2.from * fps)} durationInFrames={Math.round((BLUE2.to - BLUE2.from) * fps)}>
         <RingReveal until={BLUE2.to - BLUE2.from} {...RING_CENTER}>

@@ -400,3 +400,52 @@ const Chip: React.FC<{text: string; at: number; strong?: boolean}> = ({text, at,
     </div>
   );
 };
+
+// Эхо-слова: мелкие слова вылетают из центра заголовка в свои точки,
+// за каждым тянутся затухающие копии-следы
+export const EchoWords: React.FC<{
+  cx: number;
+  cy: number;
+  until: number;
+  words: {text: string; at: number; dx: number; dy: number}[];
+}> = ({cx, cy, until, words}) => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const out = interpolate(frame, [until * fps - 8, until * fps], [1, 0], clamp);
+  return (
+    <div style={{position: 'absolute', inset: 0, opacity: out}}>
+      {words.map((w) => {
+        const s = Math.round(w.at * fps);
+        const prog = (lag: number) => interpolate(frame - lag, [s, s + 14], [0, 1], {...clamp, easing: EASE.out});
+        return [3, 2, 1, 0].map((j) => {
+          const p = prog(j * 2);
+          if (p <= 0) {
+            return null;
+          }
+          return (
+            <div
+              key={`${w.text}${j}`}
+              style={{
+                position: 'absolute',
+                left: cx + w.dx * p,
+                top: cy + w.dy * p,
+                translate: '-50% -50%',
+                fontFamily: FONTS.body,
+                fontWeight: 500,
+                fontSize: 32,
+                letterSpacing: '0.04em',
+                color: j === 0 ? COLORS.white : COLORS.beige,
+                opacity: j === 0 ? interpolate(p, [0, 0.3], [0, 1], clamp) : 0.35 / j,
+                filter: j === 0 ? 'none' : `blur(${j}px)`,
+                textShadow: j === 0 ? '0 2px 12px rgba(0,0,0,0.5)' : 'none',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {w.text}
+            </div>
+          );
+        });
+      })}
+    </div>
+  );
+};
