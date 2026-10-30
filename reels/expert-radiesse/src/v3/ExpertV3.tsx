@@ -23,10 +23,10 @@ import {PAGES} from './transcript';
 
 const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
 
-// Синие сцены (открываются кольцом из лица врача и закрываются обратно)
-const BLUE1 = {from: 4.95, to: 10.5};
-const BLUE2 = {from: 22.95, to: 35.6};
-const BLUE3 = {from: 44.0, to: 50.5};
+// Синие сцены — короткие, чтобы хирург был в кадре дольше (кольцом из лица и обратно)
+const BLUE1 = {from: 5.6, to: 9.75};
+const BLUE2 = {from: 22.95, to: 29.2};
+const BLUE3 = {from: 44.0, to: 47.0};
 const RING_CENTER = {cx: 712, cy: 690};
 
 // Заглушить слово-мат за кадром
@@ -46,11 +46,11 @@ const SLAM_AT = 1.76;
 // Когда субтитры прячем: их заменяет заголовок с теми же словами
 const CAPTION_OFF = [
   [0, 3.2],
-  [5.05, 9.1],
+  [5.6, 9.1],
   [12.82, 13.84],
   [20.06, 22.95],
   [23.2, 24.1],
-  [31.9, 32.66],
+  [31.9, 33.25],
   [42.36, 43.16],
   [45.3, 46.08],
   [47.1, 48.54],
@@ -210,16 +210,16 @@ const BlueFears: React.FC = () => {
   );
 };
 
-// Синяя сцена 2: Радиесс почти не выводится, остатки достают ложкой
+// Синяя сцена 2: Радиесс почти не выводится
 const BlueRadiesse: React.FC = () => {
   const local = (abs: number) => abs - BLUE2.from;
   const end = BLUE2.to - BLUE2.from;
   return (
     <BlueStage label="ГЛАВНАЯ ПРОБЛЕМА">
-      <MetalTitle at={local(23.58)} until={local(31.9)} lines={['Радиесс']} size={80} top={500} />
+      <MetalTitle at={local(23.58)} until={end} lines={['Радиесс']} size={80} top={500} />
       <MeterCard
         at={local(25.84)}
-        until={local(31.9)}
+        until={end}
         top={700}
         title="Выводится из тканей"
         note="практически не выводится"
@@ -228,23 +228,11 @@ const BlueRadiesse: React.FC = () => {
         moveAt={local(26.68)}
         moveUntil={local(28.82)}
       />
-      <MetalTitle at={local(32.04)} until={end} lines={['Достаю', 'ложкой']} size={64} top={480} />
-      <MeterCard
-        at={local(32.66)}
-        until={end}
-        top={740}
-        title="Остатки препарата"
-        note="то, что можно достать"
-        from={100}
-        to={35}
-        moveAt={local(33.28)}
-        moveUntil={local(35.0)}
-      />
     </BlueStage>
   );
 };
 
-// Синяя сцена 3: реабилитация дольше, кровоснабжение нарушено
+// Синяя сцена 3: восстановление дольше
 const BlueRehab: React.FC = () => {
   const local = (abs: number) => abs - BLUE3.from;
   const end = BLUE3.to - BLUE3.from;
@@ -261,17 +249,6 @@ const BlueRehab: React.FC = () => {
         to={75}
         moveAt={local(44.92)}
         moveUntil={local(46.08)}
-      />
-      <MeterCard
-        at={local(47.1)}
-        until={end}
-        top={860}
-        title="Кровоснабжение тканей"
-        note="немножко нарушено"
-        from={100}
-        to={68}
-        moveAt={local(48.54)}
-        moveUntil={local(49.62)}
       />
     </BlueStage>
   );
@@ -356,6 +333,18 @@ export const ExpertV3: React.FC = () => {
         moveAt={37.48}
         moveUntil={39.34}
       />
+      <MetalTitle at={32.04} until={33.25} lines={['Достаю', 'ложкой']} size={64} top={1000} />
+      <MeterCard
+        at={33.1}
+        until={35.55}
+        top={1220}
+        title="Остатки препарата"
+        note="то, что можно достать"
+        from={100}
+        to={35}
+        moveAt={33.28}
+        moveUntil={35.0}
+      />
       <ChipRow at={40.06} until={42.3} top={1230} chips={[{text: 'часть остаётся', at: 40.06, strong: true}]} />
       <MetalTitle at={42.36} until={43.9} lines={['Создаются', 'проблемы']} size={64} top={1000} />
 
@@ -365,6 +354,17 @@ export const ExpertV3: React.FC = () => {
         </RingReveal>
       </Sequence>
 
+      <MeterCard
+        at={47.1}
+        until={50.4}
+        top={1220}
+        title="Кровоснабжение тканей"
+        note="немножко нарушено"
+        from={100}
+        to={68}
+        moveAt={48.54}
+        moveUntil={49.62}
+      />
       <MetalTitle at={54.94} until={57.1} lines={['Хирургическая', 'ложка']} size={64} top={1000} />
       <ChipRow
         at={57.2}
