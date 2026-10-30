@@ -16,8 +16,9 @@ import {Big, DrawPath, PillWord, Small, Stack, ink} from './kinetic';
 
 // Экспертный рилс: врач в своём кадре на весь экран (без вырезки из фона).
 // Ключевые фразы — кинетической типографикой чуть ниже середины, на груди, не на лице.
-// На ключевых словах — резкий наезд. Предмет речи показываем рисунком на карточке,
-// которая выезжает поверх видео. Время — секунды по расшифровке голоса.
+// Сильный хук: кадр влетает из сильного приближения, «МЕШАЮТ» падает с ударом и дрожью кадра.
+// На ключевых словах — резкий наезд. Предмет речи рисуется прямо поверх кадра, без карточек.
+// Время — секунды по расшифровке голоса.
 
 const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
 
@@ -33,18 +34,33 @@ const ZOOMS = [
 // Текст на видео стоит отсюда — чуть ниже середины кадра
 const TEXT_TOP = 1010;
 
+// Хук: удар «МЕШАЮТ» — дрожь кадра и вспышка
+const SLAM_AT = 1.76;
+
 const Footage: React.FC = () => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const t = frame / fps;
   const z = ZOOMS.reduce((acc, item) => (t >= item.at ? item : acc), ZOOMS[0]);
   const drift = interpolate(t - z.at, [0, 6], [0, 0.03], {extrapolateRight: 'clamp'});
+  // Хук: первые 8 кадров кадр влетает из приближения 1.4 с размытием движения
+  const slamIn = interpolate(frame, [0, 8], [0.4, 0], {...clamp, easing: EASE.out});
+  // Дрожь кадра на ударе «МЕШАЮТ», затухает за 10 кадров
+  const k = frame - Math.round(SLAM_AT * fps);
+  const shake = k >= 0 && k < 10 ? (1 - k / 10) * 14 : 0;
   return (
     <AbsoluteFill>
       <Video
         src={staticFile('source.mp4')}
         muted
-        style={{width: 1080, height: 1920, transformOrigin: '50% 28%', scale: String(z.scale + drift)}}
+        style={{
+          width: 1080,
+          height: 1920,
+          transformOrigin: '50% 28%',
+          scale: String(z.scale + drift + slamIn),
+          translate: `${Math.sin(k * 2.7) * shake}px ${Math.cos(k * 3.1) * shake}px`,
+          filter: `blur(${slamIn * 25}px)`,
+        }}
       />
       {/* Затемнение снизу, чтобы бежевый текст читался на груди */}
       <AbsoluteFill
@@ -54,29 +70,48 @@ const Footage: React.FC = () => {
   );
 };
 
-// Бежевая карточка выезжает снизу поверх видео и уезжает вверх
-const Card: React.FC<{until: number; children: React.ReactNode}> = ({until, children}) => {
+// Вспышки хука: на первом кадре и на ударе «МЕШАЮТ»
+const Flash: React.FC = () => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const end = Math.round(until * fps);
-  const inn = interpolate(frame, [0, 10], [1, 0], {...clamp, easing: EASE.out});
-  const out = interpolate(frame, [end - 9, end], [0, 1], {...clamp, easing: EASE.in});
+  const k = frame - Math.round(SLAM_AT * fps);
+  const v = Math.max(
+    interpolate(frame, [0, 6], [0.7, 0], clamp),
+    k >= 0 ? interpolate(k, [0, 5], [0.35, 0], clamp) : 0,
+  );
+  return <AbsoluteFill style={{backgroundColor: COLORS.beige, opacity: v}} />;
+};
+
+// Слово-удар: падает крупной плашкой из масштаба 2.2, под ним прорисовывается линия
+const Slam: React.FC<{at: number; children: string}> = ({at, children}) => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const k = frame - Math.round(at * fps);
+  const p = interpolate(k, [0, 6], [0, 1], {...clamp, easing: EASE.out});
   return (
-    <AbsoluteFill
-      style={{
-        top: 60,
-        left: 24,
-        right: 24,
-        bottom: 60,
-        borderRadius: 48,
-        backgroundColor: COLORS.beige,
-        boxShadow: '0 20px 60px rgba(0,0,0,0.35)',
-        translate: `0px ${inn * 1900 - out * 1900}px`,
-        rotate: `${inn * 4 - out * 3}deg`,
-      }}
-    >
-      {children}
-    </AbsoluteFill>
+    <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+      <div
+        style={{
+          padding: '4px 30px 12px',
+          borderRadius: 999,
+          backgroundColor: COLORS.beige,
+          color: COLORS.navy,
+          fontFamily: FONTS.heading,
+          fontWeight: 900,
+          fontSize: 92,
+          letterSpacing: '-0.02em',
+          textTransform: 'uppercase',
+          scale: String(interpolate(p, [0, 1], [2.2, 1])),
+          rotate: `${interpolate(p, [0, 1], [-10, -2])}deg`,
+          opacity: interpolate(k, [0, 2], [0, 1], clamp),
+        }}
+      >
+        {children}
+      </div>
+      <svg width={440} height={40} viewBox="0 0 440 40" style={{marginTop: -4}}>
+        <DrawPath d="M10 24 C110 8 230 36 330 18 C370 12 405 16 430 22" at={at + 0.25} dur={0.4} color={COLORS.beige} width={6} />
+      </svg>
+    </div>
   );
 };
 
@@ -142,13 +177,19 @@ const InstagramHandle: React.FC<{handle: string}> = ({handle}) => (
 
 const SoundEffects: React.FC = () => {
   const {fps} = useVideoConfig();
-  const whooshes = [6.95, 9.0];
-  const pops = [1.76, 7.6, 8.7, 10.1];
+  const whooshes = [0];
+  const impacts = [0, SLAM_AT];
+  const pops = [7.6, 8.7, 10.1];
   return (
     <>
       {whooshes.map((at) => (
         <Sequence key={`w${at}`} name="SFX свуш" from={Math.round(at * fps)} durationInFrames={Math.round(0.6 * fps)}>
           <Audio src={staticFile('sfx/whoosh.wav')} volume={0.2} />
+        </Sequence>
+      ))}
+      {impacts.map((at) => (
+        <Sequence key={`i${at}`} name="SFX удар" from={Math.round(at * fps)} durationInFrames={Math.round(0.7 * fps)}>
+          <Audio src={staticFile('sfx/impact.wav')} volume={0.35} />
         </Sequence>
       ))}
       {pops.map((at) => (
@@ -172,6 +213,7 @@ export const Expert: React.FC = () => {
   return (
     <AbsoluteFill style={{backgroundColor: COLORS.navy}}>
       <Footage />
+      <Flash />
 
       <Sequence name="01 Вопрос" {...seq(0, 3.2)}>
         <Stack until={3.2} top={TEXT_TOP}>
@@ -180,10 +222,8 @@ export const Expert: React.FC = () => {
             Косметологические
           </Big>
           <Small at={1.12} tone="dark">процедуры</Small>
-          <PillWord at={1.76} tone="dark">
-            мешают
-          </PillWord>
-          <Small at={2.08} tone="dark">пластическому хирургу</Small>
+          <Slam at={SLAM_AT}>мешают</Slam>
+          <Small at={2.08} tone="dark">пластическому хирургу?</Small>
         </Stack>
       </Sequence>
 
@@ -210,30 +250,19 @@ export const Expert: React.FC = () => {
       </Sequence>
 
       <Sequence name="04 Филлеры и нити" {...seq(6.95, 9.05)}>
-        <Card until={2.1}>
-          <div
-            style={{
-              position: 'absolute',
-              top: 820,
-              left: 0,
-              right: 0,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: 14,
-            }}
-          >
-            <Syringe at={0.27} color={ink('light')} />
-            <PillWord at={0.65} tone="light">
+        <Stack until={2.1} top={TEXT_TOP - 60}>
+          <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6}}>
+            <Syringe at={0.27} color={ink('dark')} />
+            <PillWord at={0.65} tone="dark">
               филлеры
             </PillWord>
-            <div style={{height: 50}} />
-            <Thread at={1.39} color={ink('light')} />
-            <PillWord at={1.75} tone="light">
+            <div style={{height: 24}} />
+            <Thread at={1.39} color={ink('dark')} />
+            <PillWord at={1.75} tone="dark">
               нити
             </PillWord>
           </div>
-        </Card>
+        </Stack>
       </Sequence>
 
       <Sequence name="05 Не всегда мешает" {...seq(9.05, 11.7)}>
