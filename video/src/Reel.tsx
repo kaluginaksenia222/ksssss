@@ -11,7 +11,7 @@ import {
   useVideoConfig,
 } from 'remotion';
 import {Captions} from './components/Captions';
-import {DotGrid} from './components/ui';
+import {DotGrid, InstagramHandle} from './components/ui';
 import {fontsLoaded} from './design/fonts';
 import {COLORS, LAYOUT, PANEL_HEIGHT, SPLIT_SOURCE_Y} from './design/tokens';
 import {Coffee, Compress, FirstDays, Hook, IntroBar, POP_TIMES, Stitches, Therapy, TYPING} from './scenes/Sections';
@@ -169,6 +169,9 @@ export const Reel: React.FC = () => {
         </Sequence>
       </Panel>
       <Captions />
+      <AbsoluteFill style={{top: 'auto', bottom: 170, height: 'auto', alignItems: 'center'}}>
+        <InstagramHandle handle="dr_kudryakov" />
+      </AbsoluteFill>
       <SoundEffects />
     </AbsoluteFill>
   );

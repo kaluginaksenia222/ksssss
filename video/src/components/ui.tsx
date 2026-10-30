@@ -257,3 +257,28 @@ export const Cross: React.FC<{at: number; size?: number}> = ({at, size = 34}) =>
     </svg>
   );
 };
+
+// Плашка с ником в Instagram внизу кадра
+export const InstagramHandle: React.FC<{handle: string}> = ({handle}) => (
+  <div
+    style={{
+      display: 'flex',
+      alignItems: 'center',
+      gap: 10,
+      padding: '8px 16px 8px 12px',
+      borderRadius: LAYOUT.pillRadius,
+      backgroundColor: 'rgba(8, 32, 82, 0.55)',
+      color: COLORS.white,
+      fontFamily: FONTS.body,
+      fontWeight: 500,
+      fontSize: 24,
+    }}
+  >
+    <svg width={24} height={24} viewBox="0 0 24 24">
+      <rect x={2} y={2} width={20} height={20} rx={6} fill="none" stroke={COLORS.white} strokeWidth={2} />
+      <circle cx={12} cy={12} r={4.5} fill="none" stroke={COLORS.white} strokeWidth={2} />
+      <circle cx={17.3} cy={6.7} r={1.3} fill={COLORS.white} />
+    </svg>
+    @{handle}
+  </div>
+);
