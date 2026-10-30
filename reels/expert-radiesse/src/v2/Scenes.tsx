@@ -1,12 +1,12 @@
 import React from 'react';
 import {Img, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
 import {COLORS, EASE, FONTS, PANEL_HEIGHT, SPRING} from '../design/tokens';
-import {Check, MonoLabel, Pill, Pop, Window, usePop} from './ui';
+import {Check, MonoLabel, Pop, Window, usePop} from './ui';
 
 // Вставки на бежевой панели. Время — секунды от начала своего <Sequence>.
 const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
 
-// Обёртка вставки: плашка темы, метка раздела, окно по центру панели; вход и выход
+// Обёртка вставки: метка раздела и окно по центру панели; вход и выход
 export const PanelScene: React.FC<{label: string; until: number; children: React.ReactNode}> = ({
   label,
   until,
@@ -20,13 +20,10 @@ export const PanelScene: React.FC<{label: string; until: number; children: React
   const v = Math.min(inn, out);
   return (
     <div style={{position: 'absolute', inset: 0, height: PANEL_HEIGHT}}>
-      <div style={{position: 'absolute', top: 92, left: 0, right: 0, display: 'flex', justifyContent: 'center'}}>
-        <Pill>пластическая хирургия</Pill>
-      </div>
       <div
         style={{
           position: 'absolute',
-          top: 150,
+          top: 90,
           left: 0,
           right: 0,
           bottom: 190,
