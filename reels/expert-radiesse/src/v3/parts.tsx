@@ -275,3 +275,128 @@ export const RingReveal: React.FC<{until: number; cx: number; cy: number; childr
     </>
   );
 };
+
+// Большой круг на синем фоне: прорисовывается, внутри медленно вращается пунктир
+export const BigRing: React.FC<{cx: number; cy: number; size: number}> = ({cx, cy, size}) => {
+  const frame = useCurrentFrame();
+  const draw = interpolate(frame, [4, 26], [1, 0], {...clamp, easing: EASE.out});
+  const r = size / 2;
+  return (
+    <svg
+      width={size + 20}
+      height={size + 20}
+      viewBox={`${-r - 10} ${-r - 10} ${size + 20} ${size + 20}`}
+      style={{position: 'absolute', left: cx - r - 10, top: cy - r - 10}}
+    >
+      <circle
+        r={r}
+        fill="none"
+        stroke="rgba(255,255,255,0.45)"
+        strokeWidth={2.5}
+        pathLength={1}
+        strokeDasharray={1}
+        strokeDashoffset={draw}
+        transform="rotate(-90)"
+      />
+      <circle
+        r={r - 34}
+        fill="none"
+        stroke="rgba(248,240,229,0.22)"
+        strokeWidth={2}
+        strokeDasharray="4 14"
+        transform={`rotate(${frame * 0.3})`}
+        opacity={1 - draw}
+      />
+      <circle r={9} cx={0} cy={-r} fill={COLORS.beige} transform={`rotate(${frame * 0.8})`} opacity={1 - draw} />
+    </svg>
+  );
+};
+
+// Стеклянная карточка со шкалой: значение плавно едет от from к to между moveAt и moveUntil
+export const MeterCard: React.FC<{
+  at: number;
+  until: number;
+  top: number;
+  title: string;
+  note: string;
+  from: number;
+  to: number;
+  moveAt: number;
+  moveUntil: number;
+}> = ({at, until, top, title, note, from, to, moveAt, moveUntil}) => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const v = useInOut(at, until);
+  const value = interpolate(frame, [moveAt * fps, moveUntil * fps], [from, to], {...clamp, easing: EASE.inOut});
+  if (v <= 0) {
+    return null;
+  }
+  return (
+    <div style={{position: 'absolute', top, left: 140, right: 140, opacity: v, filter: `blur(${(1 - v) * 8}px)`}}>
+      <Glass style={{padding: '22px 26px'}}>
+        <div style={{display: 'flex', alignItems: 'baseline', justifyContent: 'space-between'}}>
+          <div style={{fontFamily: FONTS.body, fontWeight: 500, fontSize: 30, color: COLORS.white}}>{title}</div>
+          <div style={{fontFamily: FONTS.mono, fontWeight: 500, fontSize: 24, color: COLORS.beige}}>{Math.round(value)}%</div>
+        </div>
+        <div style={{height: 12, borderRadius: 6, backgroundColor: 'rgba(255,255,255,0.16)', marginTop: 16, overflow: 'hidden'}}>
+          <div style={{width: `${value}%`, height: '100%', borderRadius: 6, backgroundColor: COLORS.beige}} />
+        </div>
+        <div style={{fontFamily: FONTS.mono, fontWeight: 500, fontSize: 20, color: 'rgba(255,255,255,0.6)', marginTop: 12}}>
+          {note}
+        </div>
+      </Glass>
+    </div>
+  );
+};
+
+// Стеклянные метки в ряд, выскакивают по очереди
+export const ChipRow: React.FC<{at: number; until: number; top: number; chips: {text: string; at: number; strong?: boolean}[]}> = ({
+  at,
+  until,
+  top,
+  chips,
+}) => {
+  const v = useInOut(at, until);
+  if (v <= 0) {
+    return null;
+  }
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        top,
+        left: 60,
+        right: 60,
+        display: 'flex',
+        justifyContent: 'center',
+        flexWrap: 'wrap',
+        gap: 14,
+        opacity: v,
+        filter: `blur(${(1 - v) * 8}px)`,
+      }}
+    >
+      {chips.map((chip) => (
+        <Chip key={chip.text} {...chip} />
+      ))}
+    </div>
+  );
+};
+
+const Chip: React.FC<{text: string; at: number; strong?: boolean}> = ({text, at, strong}) => {
+  const p = usePop(at);
+  return (
+    <div style={{scale: String(p), opacity: interpolate(p, [0, 0.4], [0, 1], clamp)}}>
+      <Glass
+        style={{
+          padding: '12px 22px',
+          borderRadius: 999,
+          backgroundColor: strong ? COLORS.beige : 'rgba(255, 255, 255, 0.12)',
+        }}
+      >
+        <div style={{fontFamily: FONTS.body, fontWeight: 500, fontSize: 28, color: strong ? COLORS.navy : COLORS.white}}>
+          {text}
+        </div>
+      </Glass>
+    </div>
+  );
+};
