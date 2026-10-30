@@ -11,15 +11,15 @@ export const SECTIONS = [
   {start: 38.3, end: 50.37},
 ];
 
-// Когда кадр делится на панель + видео (режим B). Между окнами — видео на весь экран.
+// Когда кадр делится на белую панель + видео. Только на двух ключевых советах,
+// всё остальное время — видео на весь экран.
 export const SPLITS = [
-  {in: 7.05, out: 16.4},
-  {in: 22.45, out: 33.2},
-  {in: 38.3, out: Infinity},
+  {in: 23.5, out: 28.5},
+  {in: 40.0, out: 45.3},
 ];
 
 // Все моменты переходов — для свушей
-export const SPLIT_EDGES = SPLITS.flatMap((s) => [s.in, s.out]).filter(Number.isFinite);
+export const SPLIT_EDGES = SPLITS.flatMap((s) => [s.in, s.out]);
 
 // Прогресс сплита: 0 — видео на весь экран, 1 — панель + видео
 export const useSplit = () => {
@@ -29,12 +29,11 @@ export const useSplit = () => {
   return Math.max(
     ...SPLITS.map((s) => {
       const a = Math.round(s.in * fps);
-      const inn = interpolate(frame, [a, a + DUR.modeSwitch], [0, 1], clamp);
-      if (!Number.isFinite(s.out)) {
-        return inn;
-      }
       const b = Math.round(s.out * fps);
-      return Math.min(inn, interpolate(frame, [b, b + DUR.modeSwitch], [1, 0], clamp));
+      return Math.min(
+        interpolate(frame, [a, a + DUR.modeSwitch], [0, 1], clamp),
+        interpolate(frame, [b, b + DUR.modeSwitch], [1, 0], clamp),
+      );
     }),
   );
 };

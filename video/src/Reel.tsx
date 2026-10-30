@@ -11,19 +11,22 @@ import {
   useVideoConfig,
 } from 'remotion';
 import {Captions} from './components/Captions';
-import {LogoHit, VoiceWave} from './components/Overlays';
-import {DotGrid, Reveal, TopicPill} from './components/ui';
 import {fontsLoaded} from './design/fonts';
 import {COLORS, LAYOUT, PANEL_HEIGHT, SPLIT_SOURCE_Y} from './design/tokens';
-import {Coffee, Compress, FirstDays, Stitches, Therapy} from './scenes/Sections';
-import {SECTIONS, SPLIT_EDGES, useSplit} from './timeline';
+import {Hook, PanelTitle, VideoTitle} from './scenes/Sections';
+import {SECTIONS, SPLITS, SPLIT_EDGES, useSplit} from './timeline';
 
-// Удар с названием операции — на слове «блефаропластику»
-const HIT_AT = 2.7;
-const HIT_HOLD = 1.3;
+// Хук держится до перехода к первому совету
+const HOOK_UNTIL = 7.0;
+const HOOK_IN = 0.5;
 
-// Моменты появления заголовков — под них щелчок
-const TITLE_TICKS = [7.68, 12.0, 16.58, 23.82, 33.56, 40.26];
+// Белые заголовки поверх видео (секунды, по расшифровке голоса)
+const VIDEO_TITLES = [
+  {from: 7.68, until: 11.9, text: 'Первые 2–3 дня'},
+  {from: 12.0, until: 16.35, text: '2 недели\nбез нагрузок'},
+  {from: 16.58, until: 22.3, text: 'Без кофе'},
+  {from: 33.56, until: 38.2, text: 'Швы — на 6–7 сутки'},
+];
 
 // Видео: на весь кадр или съезжает в нижнюю половину; на каждом разделе — резкая
 // смена крупности (крупнее на панели), внутри раздела — медленный наезд.
@@ -34,7 +37,6 @@ const Footage: React.FC = () => {
   const split = useSplit();
   const section = SECTIONS.findIndex((s) => t >= s.start && t < s.end);
   const sectionStart = SECTIONS[Math.max(0, section)].start;
-  const punch = t >= HIT_AT && t < HIT_AT + 1.66 ? 0.08 : 0;
   const baseScale = section % 2 === 1 ? 1.1 : 1;
   const drift = interpolate(t - sectionStart, [0, 12], [0, 0.04], {extrapolateRight: 'clamp'});
 
@@ -46,27 +48,19 @@ const Footage: React.FC = () => {
           width: LAYOUT.width,
           height: LAYOUT.height,
           transformOrigin: '50% 40%',
-          scale: String(baseScale + punch + drift),
+          scale: String(baseScale + drift),
         }}
       />
     </AbsoluteFill>
   );
 };
 
-// Затемнение снизу под субтитрами, когда видео на весь кадр
-const BottomShade: React.FC = () => {
-  const split = useSplit();
-  return (
-    <AbsoluteFill
-      style={{
-        background: 'linear-gradient(to bottom, rgba(0,0,0,0) 50%, rgba(0,0,0,0.4) 100%)',
-        opacity: 1 - split,
-      }}
-    />
-  );
-};
+// Затемнение снизу, чтобы белые субтитры читались
+const BottomShade: React.FC = () => (
+  <AbsoluteFill style={{background: 'linear-gradient(to bottom, rgba(0,0,0,0) 55%, rgba(0,0,0,0.35) 100%)'}} />
+);
 
-// Бежевая панель съезжает сверху и уезжает обратно; шов растушёван в видео
+// Белая панель съезжает сверху и уезжает обратно; шов растушёван в видео
 const Panel: React.FC<{children: React.ReactNode}> = ({children}) => {
   const split = useSplit();
   if (split <= 0) {
@@ -80,7 +74,7 @@ const Panel: React.FC<{children: React.ReactNode}> = ({children}) => {
         translate: `0px ${(split - 1) * (PANEL_HEIGHT + LAYOUT.seamFade)}px`,
       }}
     >
-      <DotGrid style={{bottom: LAYOUT.seamFade}} />
+      <div style={{position: 'absolute', inset: 0, bottom: LAYOUT.seamFade, backgroundColor: COLORS.white}} />
       <div
         style={{
           position: 'absolute',
@@ -88,34 +82,30 @@ const Panel: React.FC<{children: React.ReactNode}> = ({children}) => {
           left: 0,
           right: 0,
           height: LAYOUT.seamFade,
-          background: `linear-gradient(to bottom, ${COLORS.beige}, rgba(248, 240, 229, 0))`,
+          background: `linear-gradient(to bottom, ${COLORS.white}, rgba(255, 255, 255, 0))`,
         }}
       />
-      <div style={{position: 'absolute', top: 96, left: 0, right: 0, display: 'flex', justifyContent: 'center'}}>
-        <TopicPill />
-      </div>
       {children}
-      <VoiceWave top={PANEL_HEIGHT - 100} />
     </AbsoluteFill>
   );
 };
 
-// Звуки эффектов: свуш на смене режима, удар + блеск на названии, щелчок на заголовках
+// Звуки эффектов: блеск на хуке, свуш на смене режима, щелчок на заголовках
 const SoundEffects: React.FC = () => {
   const {fps} = useVideoConfig();
   return (
     <>
-      <Sequence name="SFX удар" from={Math.round(HIT_AT * fps)} durationInFrames={Math.round(1.2 * fps)}>
-        <Audio src={staticFile('sfx/impact.wav')} volume={0.3} />
-        <Audio src={staticFile('sfx/shimmer.wav')} volume={0.8} />
+      <Sequence name="SFX хук" from={Math.round(HOOK_IN * fps)} durationInFrames={Math.round(1.2 * fps)}>
+        <Audio src={staticFile('sfx/whoosh.wav')} volume={0.2} />
+        <Audio src={staticFile('sfx/shimmer.wav')} volume={0.7} />
       </Sequence>
       {SPLIT_EDGES.map((at) => (
         <Sequence key={`w${at}`} name="SFX свуш" from={Math.round(at * fps)} durationInFrames={Math.round(0.6 * fps)}>
           <Audio src={staticFile('sfx/whoosh.wav')} volume={0.22} />
         </Sequence>
       ))}
-      {TITLE_TICKS.map((at) => (
-        <Sequence key={`t${at}`} name="SFX щелчок" from={Math.round(at * fps)} durationInFrames={Math.round(0.2 * fps)}>
+      {VIDEO_TITLES.map(({from}) => (
+        <Sequence key={`t${from}`} name="SFX щелчок" from={Math.round(from * fps)} durationInFrames={Math.round(0.2 * fps)}>
           <Audio src={staticFile('sfx/tick.wav')} volume={0.18} />
         </Sequence>
       ))}
@@ -134,31 +124,24 @@ export const Reel: React.FC = () => {
     <AbsoluteFill style={{backgroundColor: COLORS.navy}}>
       <Footage />
       <BottomShade />
-      <Sequence name="Плашка темы" durationInFrames={Math.round(7.05 * fps)}>
-        <AbsoluteFill style={{top: 96, display: 'flex', alignItems: 'center', justifyContent: 'flex-start'}}>
-          <Reveal at={0.1} until={7.05}>
-            <TopicPill onVideo />
-          </Reveal>
-        </AbsoluteFill>
+      <Sequence name="Хук" durationInFrames={Math.round(HOOK_UNTIL * fps)}>
+        <Hook until={HOOK_UNTIL} />
       </Sequence>
-      <Sequence name="Удар: блефаропластика" from={Math.round(HIT_AT * fps)} durationInFrames={Math.round((HIT_HOLD + 0.5) * fps)}>
-        <LogoHit text="Блефаропластика" holdUntil={HIT_HOLD} />
-      </Sequence>
-      <Sequence name="02 Кофе" from={Math.round(16.5 * fps)} durationInFrames={Math.round(5.95 * fps)}>
-        <Coffee duration={5.95} />
-      </Sequence>
-      <Sequence name="04 Швы" from={Math.round(33.3 * fps)} durationInFrames={Math.round(5 * fps)}>
-        <Stitches duration={5} />
-      </Sequence>
+      {VIDEO_TITLES.map(({from, until, text}) => (
+        <Sequence key={from} name={text.replace('\n', ' ')} from={Math.round(from * fps)} durationInFrames={Math.round((until - from) * fps)}>
+          <VideoTitle until={until - from}>{text}</VideoTitle>
+        </Sequence>
+      ))}
       <Panel>
-        <Sequence name="01 Первые дни" from={Math.round(7.44 * fps)} durationInFrames={Math.round(9.06 * fps)}>
-          <FirstDays duration={9.06} />
+        <Sequence name="Холодные компрессы" from={Math.round(SPLITS[0].in * fps)}>
+          <PanelTitle at={0.3} until={SPLITS[0].out - SPLITS[0].in}>
+            Холодные компрессы
+          </PanelTitle>
         </Sequence>
-        <Sequence name="03 Компрессы" from={Math.round(22.45 * fps)} durationInFrames={Math.round(10.85 * fps)}>
-          <Compress duration={10.85} />
-        </Sequence>
-        <Sequence name="05 Терапия" from={Math.round(38.3 * fps)} durationInFrames={Math.round(12.07 * fps)}>
-          <Therapy duration={13} />
+        <Sequence name="Фотодинамическая терапия" from={Math.round(SPLITS[1].in * fps)}>
+          <PanelTitle at={0.3} until={SPLITS[1].out - SPLITS[1].in}>
+            Фотодинамическая терапия
+          </PanelTitle>
         </Sequence>
       </Panel>
       <Captions />

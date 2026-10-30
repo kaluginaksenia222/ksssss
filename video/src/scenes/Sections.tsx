@@ -1,137 +1,103 @@
 import React from 'react';
 import {interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
-import {COLORS, EASE, LAYOUT} from '../design/tokens';
-import {Accent, Reveal, SectionLabel, Sub, Title} from '../components/ui';
+import {COLORS, EASE, LAYOUT, PANEL_HEIGHT} from '../design/tokens';
+import {Reveal, Title} from '../components/ui';
 
-// Минимальная графика: метка раздела + крупный заголовок + одна строка пояснения.
-// Все времена внутри сцен — секунды от начала сцены.
+// Все времена — секунды от начала своего <Sequence>.
 
-const fadeOut = (frame: number, end: number) =>
-  interpolate(frame, [end - 8, end], [1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: EASE.in});
+// Лёгкое затемнение сверху, чтобы белый заголовок читался на видео
+const TopShade: React.FC = () => (
+  <div
+    style={{
+      position: 'absolute',
+      inset: 0,
+      height: 520,
+      background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0))',
+    }}
+  />
+);
 
-// Сцена на бежевой панели (режим B)
-const PanelScene: React.FC<{num: string; label: string; duration: number; children: React.ReactNode}> = ({
-  num,
-  label,
-  duration,
-  children,
-}) => {
+// Хук: сначала идёт чистое видео, затем строки заголовка выезжают из-под маски
+const HookLine: React.FC<{at: number; size: number; children: React.ReactNode}> = ({at, size, children}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const out = fadeOut(frame, Math.round(duration * fps));
+  const s = Math.round(at * fps);
+  const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
   return (
-    <div style={{position: 'absolute', inset: 0, opacity: out, filter: `blur(${(1 - out) * 8}px)`}}>
-      <div style={{position: 'absolute', top: 168, left: 0, right: 0, textAlign: 'center'}}>
-        <SectionLabel num={num} text={label} />
-      </div>
-      <div style={{position: 'absolute', top: 290, left: LAYOUT.sidePadding, right: LAYOUT.sidePadding}}>
-        {children}
-      </div>
-    </div>
-  );
-};
-
-// Сцена поверх видео (режим A): заголовок в верхней части кадра, над головой
-const VideoScene: React.FC<{num: string; label: string; duration: number; children: React.ReactNode}> = ({
-  num,
-  label,
-  duration,
-  children,
-}) => {
-  const frame = useCurrentFrame();
-  const {fps} = useVideoConfig();
-  const out = fadeOut(frame, Math.round(duration * fps));
-  return (
-    <div style={{position: 'absolute', inset: 0, opacity: out, filter: `blur(${(1 - out) * 8}px)`}}>
+    <div style={{overflow: 'hidden', paddingBottom: 6}}>
       <div
         style={{
-          position: 'absolute',
-          inset: 0,
-          height: 420,
-          background: 'linear-gradient(to bottom, rgba(8, 32, 82, 0.55), rgba(8, 32, 82, 0))',
+          translate: interpolate(frame, [s, s + 12], ['0px 110%', '0px 0%'], {...clamp, easing: EASE.out}),
+          filter: `blur(${interpolate(frame, [s, s + 10], [8, 0], clamp)}px)`,
         }}
-      />
-      <div style={{position: 'absolute', top: 96, left: LAYOUT.sidePadding, right: LAYOUT.sidePadding}}>
-        <SectionLabel num={num} text={label} color="rgba(248, 240, 229, 0.75)" />
-        <div style={{height: 14}} />
-        {children}
+      >
+        <Title size={size}>{children}</Title>
       </div>
     </div>
   );
 };
 
-// 01 — первые дни (панель)
-export const FirstDays: React.FC<{duration: number}> = ({duration}) => (
-  <PanelScene num="01" label="Первые дни" duration={duration}>
-    <div style={{position: 'absolute', inset: 0}}>
-      <Reveal at={0.24} until={4.4}>
-        <Title size={104}>Первые 2–3 дня</Title>
-        <Reveal at={1.86}>
-          <Sub>не наклонять голову и не спать на животе</Sub>
-        </Reveal>
-      </Reveal>
+export const Hook: React.FC<{until: number}> = ({until}) => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const end = Math.round(until * fps);
+  const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
+  const shade = interpolate(frame, [12, 24], [0, 1], clamp);
+  const out = interpolate(frame, [end - 8, end], [1, 0], {...clamp, easing: EASE.in});
+  return (
+    <div style={{position: 'absolute', inset: 0, opacity: out, filter: `blur(${(1 - out) * 10}px)`}}>
+      <div style={{position: 'absolute', inset: 0, opacity: shade}}>
+        <TopShade />
+      </div>
+      <div style={{position: 'absolute', top: 120, left: LAYOUT.sidePadding, right: LAYOUT.sidePadding}}>
+        <HookLine at={0.5} size={104}>
+          Рекомендации
+        </HookLine>
+        <HookLine at={0.68} size={64}>
+          после блефаропластики
+        </HookLine>
+      </div>
     </div>
-    <div style={{position: 'absolute', inset: 0}}>
-      <Reveal at={4.56}>
-        <Title size={104}>2 недели</Title>
-        <Reveal at={5.28}>
-          <Sub>без физических и эмоциональных нагрузок</Sub>
-        </Reveal>
-      </Reveal>
+  );
+};
+
+// Белый заголовок поверх видео, над головой
+export const VideoTitle: React.FC<{until: number; size?: number; children: React.ReactNode}> = ({
+  until,
+  size = 84,
+  children,
+}) => (
+  <Reveal at={0} until={until} style={{position: 'absolute', inset: 0}}>
+    <TopShade />
+    <div style={{position: 'absolute', top: 120, left: LAYOUT.sidePadding, right: LAYOUT.sidePadding}}>
+      <Title size={size}>{children}</Title>
     </div>
-  </PanelScene>
+  </Reveal>
 );
 
-// 02 — кофе (видео)
-export const Coffee: React.FC<{duration: number}> = ({duration}) => (
-  <VideoScene num="02" label="Питание" duration={duration}>
-    <Reveal at={0.08}>
-      <Title size={72} color={COLORS.beige}>
-        Без кофе
+// Синий заголовок на белой панели, по центру панели
+export const PanelTitle: React.FC<{at: number; until: number; children: React.ReactNode}> = ({
+  at,
+  until,
+  children,
+}) => (
+  <div
+    style={{
+      position: 'absolute',
+      top: 0,
+      left: LAYOUT.sidePadding,
+      right: LAYOUT.sidePadding,
+      height: PANEL_HEIGHT,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      textAlign: 'center',
+    }}
+  >
+    <Reveal at={at} until={until}>
+      <Title size={84} color={COLORS.navy}>
+        {children}
       </Title>
     </Reveal>
-    <Reveal at={1.34}>
-      <Sub color={COLORS.beige}>несколько дней — повышает давление</Sub>
-    </Reveal>
-  </VideoScene>
-);
-
-// 03 — холодные компрессы (панель)
-export const Compress: React.FC<{duration: number}> = ({duration}) => (
-  <PanelScene num="03" label="Уход" duration={duration}>
-    <Reveal at={1.37}>
-      <Title size={96}>Холодные компрессы</Title>
-    </Reveal>
-    <Reveal at={6.45}>
-      <Sub>хлоргексидин из холодильника — до 5 раз в день</Sub>
-    </Reveal>
-  </PanelScene>
-);
-
-// 04 — швы (видео)
-export const Stitches: React.FC<{duration: number}> = ({duration}) => (
-  <VideoScene num="04" label="Швы" duration={duration}>
-    <Reveal at={0.26}>
-      <Title size={72} color={COLORS.beige}>
-        Швы — на 6–7 сутки
-      </Title>
-    </Reveal>
-    <Reveal at={2.62}>
-      <Sub color={COLORS.beige}>потом наклейки ещё на неделю</Sub>
-    </Reveal>
-  </VideoScene>
-);
-
-// 05 — фотодинамическая терапия (панель)
-export const Therapy: React.FC<{duration: number}> = ({duration}) => (
-  <PanelScene num="05" label="Восстановление" duration={duration}>
-    <Reveal at={1.96}>
-      <Title size={84}>Фотодинамическая терапия</Title>
-    </Reveal>
-    <Reveal at={6.7}>
-      <Sub>
-        быстрее уходят отёки и синяки, а рубец становится <Accent at={9.8}>мягче</Accent>
-      </Sub>
-    </Reveal>
-  </PanelScene>
+  </div>
 );

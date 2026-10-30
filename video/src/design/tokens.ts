@@ -25,7 +25,7 @@ export const TYPE = {
   hit: 140,
   title: 88,
   blockTitle: 48,
-  caption: 40,
+  caption: 56,
   captionLead: 30,
   accent: 120,
   label: 24,
@@ -68,7 +68,7 @@ export const LAYOUT = {
   pillRadius: 999,
 } as const;
 
-// Высота бежевой панели в режиме B
+// Высота белой панели в режиме B
 export const PANEL_HEIGHT = Math.round(LAYOUT.height * LAYOUT.splitAt);
 
 // Координата исходника, которая оказывается на шве в режиме B:
