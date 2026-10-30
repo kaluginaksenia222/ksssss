@@ -7,7 +7,7 @@ import {COLORS, EASE, FONTS, LAYOUT, SPRING} from '../design/tokens';
 
 const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
 
-// Белая панель с медленно дрейфующей точечной сеткой
+// Бежевая панель с медленно дрейфующей точечной сеткой
 export const DotGrid: React.FC<{style?: React.CSSProperties}> = ({style}) => {
   const frame = useCurrentFrame();
   return (
@@ -15,7 +15,7 @@ export const DotGrid: React.FC<{style?: React.CSSProperties}> = ({style}) => {
       style={{
         position: 'absolute',
         inset: 0,
-        backgroundColor: COLORS.white,
+        backgroundColor: COLORS.beige,
         backgroundImage: `radial-gradient(circle, rgba(154, 164, 188, 0.5) 1.6px, transparent 1.8px)`,
         backgroundSize: `${LAYOUT.gridStep}px ${LAYOUT.gridStep}px`,
         backgroundPosition: `${(frame / 15) % LAYOUT.gridStep}px 0px`,
@@ -127,7 +127,7 @@ export const DocIcon: React.FC = () => (
   </svg>
 );
 
-// Окно-карточка: шапка с иконкой и названием, разделитель, содержимое
+// Окно-карточка: шапка с иконкой и названием раздела, разделитель, содержимое
 export const Window: React.FC<{
   title: string;
   icon?: React.ReactNode;
@@ -155,18 +155,15 @@ export const Window: React.FC<{
       }}
     >
       {icon}
-      <div style={{fontFamily: FONTS.mono, fontWeight: 500, fontSize: 26, color: COLORS.navy}}>{title}</div>
+      <div style={{fontFamily: FONTS.body, fontWeight: 700, fontSize: 28, color: COLORS.navy}}>{title}</div>
     </div>
     <div style={{padding: '26px 30px 30px'}}>{children}</div>
   </div>
 );
 
-// Заголовок блока внутри окна «## Голова»
+// Заголовок блока внутри окна
 export const Heading: React.FC<{children: React.ReactNode}> = ({children}) => (
-  <div style={{fontFamily: FONTS.body, fontWeight: 700, fontSize: 32, color: COLORS.navy}}>
-    <span style={{color: COLORS.navy40, marginRight: 10}}>##</span>
-    {children}
-  </div>
+  <div style={{fontFamily: FONTS.body, fontWeight: 700, fontSize: 32, color: COLORS.navy}}>{children}</div>
 );
 
 // Серая скелетон-строка, вытягивается слева направо

@@ -14,7 +14,7 @@ import {Captions} from './components/Captions';
 import {DotGrid} from './components/ui';
 import {fontsLoaded} from './design/fonts';
 import {COLORS, LAYOUT, PANEL_HEIGHT, SPLIT_SOURCE_Y} from './design/tokens';
-import {Coffee, Compress, FirstDays, Hook, POP_TIMES, Stitches, Therapy, TYPING} from './scenes/Sections';
+import {Coffee, Compress, FirstDays, Hook, IntroBar, POP_TIMES, Stitches, Therapy, TYPING} from './scenes/Sections';
 import {SCENES, SECTIONS, TRANSITIONS, useSplit} from './timeline';
 
 const HOOK_UNTIL = 7.0;
@@ -60,7 +60,7 @@ const BottomShade: React.FC = () => {
   );
 };
 
-// Белая панель с точечной сеткой съезжает сверху; шов растушёван в видео
+// Бежевая панель с точечной сеткой съезжает сверху; шов растушёван в видео
 const Panel: React.FC<{children: React.ReactNode}> = ({children}) => {
   const split = useSplit();
   if (split <= 0) {
@@ -82,7 +82,7 @@ const Panel: React.FC<{children: React.ReactNode}> = ({children}) => {
           left: 0,
           right: 0,
           height: LAYOUT.seamFade,
-          background: `linear-gradient(to bottom, ${COLORS.white}, rgba(255, 255, 255, 0))`,
+          background: `linear-gradient(to bottom, ${COLORS.beige}, rgba(248, 240, 229, 0))`,
         }}
       />
       {children}
@@ -145,6 +145,9 @@ export const Reel: React.FC = () => {
     <AbsoluteFill style={{backgroundColor: COLORS.navy}}>
       <Footage />
       <BottomShade />
+      <Sequence name="Верх видео" durationInFrames={Math.round(HOOK_UNTIL * fps)}>
+        <IntroBar segments={[0, ...TRANSITIONS]} total={SCENES.end} until={HOOK_UNTIL} />
+      </Sequence>
       <Sequence name="Хук" durationInFrames={Math.round(HOOK_UNTIL * fps)}>
         <Hook until={HOOK_UNTIL} />
       </Sequence>

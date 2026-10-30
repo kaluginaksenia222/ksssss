@@ -46,16 +46,7 @@ export const Hook: React.FC<{until: number}> = ({until}) => {
       <div
         style={{
           position: 'absolute',
-          inset: 0,
-          height: 460,
-          background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0))',
-          opacity: interpolate(frame, [10, 22], [0, 1], clamp),
-        }}
-      />
-      <div
-        style={{
-          position: 'absolute',
-          top: 120,
+          top: 1110,
           left: LAYOUT.sidePadding,
           right: LAYOUT.sidePadding,
           display: 'flex',
@@ -87,6 +78,93 @@ export const Hook: React.FC<{until: number}> = ({until}) => {
             <div style={title}>блефаропластики</div>
           </MaskLine>
         </div>
+      </div>
+    </div>
+  );
+};
+
+// ——— Верх видео в начале: плашка темы, таймкод и полоска подпунктов ———
+
+const pad2 = (n: number) => String(Math.floor(n)).padStart(2, '0');
+
+export const IntroBar: React.FC<{segments: number[]; total: number; until: number}> = ({segments, total, until}) => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const t = frame / fps;
+  const end = Math.round(until * fps);
+  const inn = interpolate(frame, [0, 10], [0, 1], {...clamp, easing: EASE.out});
+  const out = interpolate(frame, [end - 8, end], [1, 0], {...clamp, easing: EASE.in});
+  const width = 780;
+  const bounds = [...segments, total];
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        top: 96,
+        left: 0,
+        right: 0,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: 12,
+        opacity: Math.min(inn, out),
+        filter: `blur(${(1 - Math.min(inn, out)) * 6}px)`,
+      }}
+    >
+      <div
+        style={{
+          padding: '8px 18px',
+          borderRadius: 999,
+          backgroundColor: 'rgba(8, 32, 82, 0.55)',
+          color: COLORS.beige,
+          fontFamily: FONTS.body,
+          fontWeight: 500,
+          fontSize: 24,
+        }}
+      >
+        после блефаропластики
+      </div>
+      <div
+        style={{
+          padding: '4px 14px',
+          borderRadius: 999,
+          backgroundColor: 'rgba(8, 32, 82, 0.7)',
+          color: COLORS.beige,
+          fontFamily: FONTS.mono,
+          fontWeight: 500,
+          fontSize: 20,
+        }}
+      >
+        00:{pad2(t / 60)}:{pad2(t % 60)}:{pad2(frame % fps)}
+      </div>
+      <div style={{position: 'relative', width, height: 16, display: 'flex', gap: 8}}>
+        {bounds.slice(0, -1).map((start, i) => {
+          const stop = bounds[i + 1];
+          const active = t >= start && t < stop;
+          return (
+            <div
+              key={start}
+              style={{
+                flexGrow: stop - start,
+                flexBasis: 0,
+                borderRadius: 5,
+                backgroundColor: active ? COLORS.white : 'rgba(255, 255, 255, 0.35)',
+              }}
+            />
+          );
+        })}
+        <div
+          style={{
+            position: 'absolute',
+            top: -9,
+            left: (t / total) * width,
+            width: 3,
+            height: 34,
+            borderRadius: 2,
+            backgroundColor: COLORS.white,
+            boxShadow: '0 0 8px rgba(0, 0, 0, 0.35)',
+          }}
+        />
       </div>
     </div>
   );
@@ -160,8 +238,8 @@ export const FirstDays: React.FC<{until: number}> = ({until}) => {
   const sw = Math.round(6.87 * fps);
   const second = interpolate(frame, [sw, sw + 6], [0, 1], clamp);
   return (
-    <PanelScene label="01 · Первые дни" until={until}>
-      <Window title="памятка.md">
+    <PanelScene label="01 / 05" until={until}>
+      <Window title="Первые дни">
         <Pop at={0.89} style={{display: 'flex', gap: 14, marginBottom: 30}}>
           <Tab active={1 - second}>2–3 дня</Tab>
           <Tab active={second}>2 недели</Tab>
@@ -242,8 +320,8 @@ const Drop: React.FC<{at: number}> = ({at}) => {
 };
 
 export const Coffee: React.FC<{until: number}> = ({until}) => (
-  <PanelScene label="02 · Питание" until={until}>
-    <Window title="питание.md">
+  <PanelScene label="02 / 05" until={until}>
+    <Window title="Питание">
       <div style={{display: 'flex', gap: 30}}>
         <Pop at={0.13} style={{flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16}}>
           <CoffeeCup strikeAt={0.61} />
@@ -386,8 +464,8 @@ const Item: React.FC<{at: number; icon: React.ReactNode; title: string; right?: 
 );
 
 export const Compress: React.FC<{until: number}> = ({until}) => (
-  <PanelScene label="03 · Уход" until={until}>
-    <Window title="уход.md">
+  <PanelScene label="03 / 05" until={until}>
+    <Window title="Холодные компрессы">
       <div style={{display: 'flex', flexDirection: 'column', gap: 18}}>
         <Item at={2.63} icon={<Snowflake size={72} />} title="Хлоргексидин" right={<Thermometer dropAt={5.21} />} />
         <Item
@@ -442,8 +520,8 @@ export const Stitches: React.FC<{until: number}> = ({until}) => {
   const {fps} = useVideoConfig();
   const barAt = Math.round(2.67 * fps);
   return (
-    <PanelScene label="04 · Швы" until={until}>
-      <Window title="календарь">
+    <PanelScene label="04 / 05" until={until}>
+      <Window title="Снятие швов">
         <div style={{display: 'flex', justifyContent: 'space-between'}}>
           {[1, 2, 3, 4, 5, 6, 7].map((day) => (
             <Day
@@ -518,8 +596,8 @@ const Result: React.FC<{at: number; title: string}> = ({at, title}) => {
 };
 
 export const Therapy: React.FC<{until: number}> = ({until}) => (
-  <PanelScene label="05 · Восстановление" until={until}>
-    <Window title="терапия.md">
+  <PanelScene label="05 / 05" until={until}>
+    <Window title="Восстановление">
       <div
         style={{
           display: 'flex',
