@@ -26,7 +26,11 @@ const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
 // Синие сцены (открываются кольцом из лица врача и закрываются обратно)
 const BLUE1 = {from: 4.95, to: 10.5};
 const BLUE2 = {from: 22.95, to: 35.6};
+const BLUE3 = {from: 44.0, to: 50.5};
 const RING_CENTER = {cx: 712, cy: 690};
+
+// Заглушить слово-мат за кадром
+const MUTE = {from: 53.38, to: 53.88};
 
 // Хук: заголовок, от него эхом разлетаются процедуры, затем удар с дрожью кадра
 // Эхо от заголовка: мелкие слова-процедуры разлетаются из его центра
@@ -47,6 +51,10 @@ const CAPTION_OFF = [
   [20.06, 22.95],
   [23.2, 24.1],
   [31.9, 32.66],
+  [42.36, 43.16],
+  [45.3, 46.08],
+  [47.1, 48.54],
+  [54.94, 55.98],
 ];
 
 // Крупность: резкая смена по разделам, медленный наезд внутри
@@ -58,6 +66,9 @@ const ZOOMS = [
   {at: 16.0, scale: 1},
   {at: 20.06, scale: 1.12},
   {at: 35.6, scale: 1},
+  {at: 42.36, scale: 1.12},
+  {at: 50.5, scale: 1},
+  {at: 54.94, scale: 1.12},
 ];
 
 const Footage: React.FC = () => {
@@ -233,6 +244,39 @@ const BlueRadiesse: React.FC = () => {
   );
 };
 
+// Синяя сцена 3: реабилитация дольше, кровоснабжение нарушено
+const BlueRehab: React.FC = () => {
+  const local = (abs: number) => abs - BLUE3.from;
+  const end = BLUE3.to - BLUE3.from;
+  return (
+    <BlueStage label="РЕАБИЛИТАЦИЯ">
+      <MetalTitle at={local(44.32)} until={end} lines={['Дольше', 'восстановление']} size={64} top={490} />
+      <MeterCard
+        at={local(44.62)}
+        until={end}
+        top={660}
+        title="Срок восстановления"
+        note="чуть дольше обычного"
+        from={40}
+        to={75}
+        moveAt={local(44.92)}
+        moveUntil={local(46.08)}
+      />
+      <MeterCard
+        at={local(47.1)}
+        until={end}
+        top={860}
+        title="Кровоснабжение тканей"
+        note="немножко нарушено"
+        from={100}
+        to={68}
+        moveAt={local(48.54)}
+        moveUntil={local(49.62)}
+      />
+    </BlueStage>
+  );
+};
+
 // Звуки: свуш на переходах кольцом, удар с блеском на металлических заголовках,
 // тихий «поп» на появлениях, щелчок переключателя
 const SoundEffects: React.FC = () => {
@@ -244,13 +288,13 @@ const SoundEffects: React.FC = () => {
   );
   return (
     <>
-      {[SLAM_AT, 12.82, 20.06, 23.58, 32.04].map((at) => sfx('shimmer', at, 0.5, 1.1))}
-      {[12.82, 20.06, 23.58, 32.04].map((at) => sfx('impact', at, 0.22))}
-      {[BLUE1.from, BLUE1.to - 0.33, BLUE2.from, BLUE2.to - 0.33].map((at) => sfx('whoosh', at, 0.2, 0.6))}
+      {[SLAM_AT, 12.82, 20.06, 23.58, 32.04, 42.36, 44.32, 54.94].map((at) => sfx('shimmer', at, 0.5, 1.1))}
+      {[12.82, 20.06, 23.58, 32.04, 42.36, 54.94].map((at) => sfx('impact', at, 0.22))}
+      {[BLUE1, BLUE2, BLUE3].flatMap((b) => [b.from, b.to - 0.33]).map((at) => sfx('whoosh', at, 0.2, 0.6))}
       {[0, SLAM_AT].map((at) => sfx('impact', at, 0.3))}
       {sfx('whoosh', 0, 0.22, 0.6)}
       {HOOK_WORDS.map((w) => sfx('tick', w.at, 0.22, 0.2))}
-      {[7.22, 8.34, 14.56, 16.3, 25.84, 32.66].map((at) => sfx('pop', at, 0.1, 0.2))}
+      {[7.22, 8.34, 14.56, 16.3, 25.84, 32.66, 37.26, 40.06, 47.1, 57.24, 57.98].map((at) => sfx('pop', at, 0.1, 0.2))}
       {sfx('tick', 9.42, 0.25, 0.2)}
     </>
   );
@@ -301,11 +345,46 @@ export const ExpertV3: React.FC = () => {
         </RingReveal>
       </Sequence>
 
+      <MeterCard
+        at={37.26}
+        until={40.0}
+        top={1220}
+        title="Проникает в ткани"
+        note="очень глубоко"
+        from={15}
+        to={88}
+        moveAt={37.48}
+        moveUntil={39.34}
+      />
+      <ChipRow at={40.06} until={42.3} top={1230} chips={[{text: 'часть остаётся', at: 40.06, strong: true}]} />
+      <MetalTitle at={42.36} until={43.9} lines={['Создаются', 'проблемы']} size={64} top={1000} />
+
+      <Sequence name="Синяя сцена: реабилитация" from={Math.round(BLUE3.from * fps)} durationInFrames={Math.round((BLUE3.to - BLUE3.from) * fps)}>
+        <RingReveal until={BLUE3.to - BLUE3.from} {...RING_CENTER}>
+          <BlueRehab />
+        </RingReveal>
+      </Sequence>
+
+      <MetalTitle at={54.94} until={57.1} lines={['Хирургическая', 'ложка']} size={64} top={1000} />
+      <ChipRow
+        at={57.2}
+        until={59.6}
+        top={1230}
+        chips={[
+          {text: 'кругленькая', at: 57.24},
+          {text: 'с дырочкой', at: 57.98, strong: true},
+        ]}
+      />
+
       <Captions />
       <AbsoluteFill style={{top: 'auto', bottom: 170, height: 'auto', alignItems: 'center'}}>
         <InstagramHandle handle="dr_kudryakov" />
       </AbsoluteFill>
-      <Audio src={staticFile('source.mp4')} />
+      {/* Слово-мат за кадром (≈53.4 с) глушим */}
+      <Audio
+        src={staticFile('source.mp4')}
+        volume={(f) => (f >= Math.round(MUTE.from * fps) && f < Math.round(MUTE.to * fps) ? 0 : 1)}
+      />
       <SoundEffects />
     </AbsoluteFill>
   );
