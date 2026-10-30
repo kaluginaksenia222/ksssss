@@ -60,11 +60,9 @@ const Footage: React.FC = () => {
   const k = interpolate(frame, [cutAt * fps, cutAt * fps + 8], [0, 1], {...clamp, easing: EASE.inOut});
   const base = idx === 0 ? 1 : interpolate(k, [0, 1], [scaleOf(prevIdx), scaleOf(idx)]);
   const drift = interpolate(t - cutAt, [0, 6], [0, 0.025], {extrapolateRight: 'clamp'});
-  // Хук: кадр «не в фокусе» до наводки, затем резкая наводка с лёгким отъездом; дрожь на табло
+  // Хук: кадр «не в фокусе» до наводки, затем резкая наводка с лёгким отъездом (без тряски)
   const f0 = Math.round(HOOK.focus * fps);
   const focus = interpolate(frame, [f0, f0 + 7], [1, 0], {...clamp, easing: EASE.out});
-  const s = frame - Math.round(HOOK.slam * fps);
-  const shake = s >= 0 && s < 10 ? (1 - s / 10) * 14 : 0;
   return (
     <AbsoluteFill>
       <Video
@@ -75,7 +73,6 @@ const Footage: React.FC = () => {
           height: 1920,
           transformOrigin: `${(FACE.cx / 1080) * 100}% ${(FACE.cy / 1920) * 100}%`,
           scale: String(base + drift + focus * 0.08),
-          translate: `${Math.sin(s * 2.7) * shake}px ${Math.cos(s * 3.1) * shake}px`,
           filter: `blur(${focus * 16}px)`,
         }}
       />
