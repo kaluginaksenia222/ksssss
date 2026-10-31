@@ -1,0 +1,43 @@
+// Расшифровка голоса (Whisper small) с исправленными терминами.
+// По 2 слова на экране, без знаков препинания в конце.
+export type Word = {text: string; start: number; end: number};
+export type Page = {words: Word[]};
+
+export const PAGES: Page[] = [
+  {words: [{text: "Как", start: 0.00, end: 0.56}, {text: "выбираем", start: 0.56, end: 1.06}]},
+  {words: [{text: "размер", start: 1.06, end: 1.30}, {text: "грудных", start: 1.30, end: 1.76}]},
+  {words: [{text: "имплантов", start: 1.76, end: 2.32}]},
+  {words: [{text: "Вы", start: 2.60, end: 2.62}, {text: "хотите", start: 2.62, end: 2.86}]},
+  {words: [{text: "третий", start: 2.86, end: 3.26}, {text: "размер", start: 3.26, end: 3.46}]},
+  {words: [{text: "груди", start: 3.46, end: 4.02}]},
+  {words: [{text: "но", start: 4.22, end: 4.36}]},
+  {words: [{text: "к", start: 4.44, end: 4.46}, {text: "сожалению", start: 4.46, end: 4.72}]},
+  {words: [{text: "он", start: 5.04, end: 5.04}, {text: "не", start: 5.04, end: 5.18}]},
+  {words: [{text: "всем", start: 5.18, end: 5.34}, {text: "подходит", start: 5.34, end: 5.84}]},
+  {words: [{text: "Исходя", start: 6.10, end: 6.44}, {text: "из", start: 6.44, end: 6.56}]},
+  {words: [{text: "вашей", start: 6.56, end: 6.88}, {text: "анатомии", start: 6.88, end: 7.46}]},
+  {words: [{text: "грудной", start: 7.46, end: 7.86}, {text: "клетки", start: 7.86, end: 8.34}]},
+  {words: [{text: "положение", start: 8.44, end: 8.96}, {text: "пятна", start: 8.96, end: 9.40}]},
+  {words: [{text: "молочной", start: 9.40, end: 9.84}, {text: "железы", start: 9.84, end: 10.38}]},
+  {words: [{text: "а", start: 10.48, end: 10.50}, {text: "также", start: 10.50, end: 10.72}]},
+  {words: [{text: "покровных", start: 10.72, end: 11.26}, {text: "тканей", start: 11.26, end: 11.64}]},
+  {words: [{text: "мы", start: 11.80, end: 11.86}, {text: "подбираем", start: 11.86, end: 12.60}]},
+  {words: [{text: "имплант", start: 12.60, end: 13.16}]},
+  {words: [{text: "который", start: 13.20, end: 13.44}, {text: "будет", start: 13.44, end: 13.68}]},
+  {words: [{text: "подходить", start: 13.68, end: 14.10}, {text: "именно", start: 14.10, end: 14.30}]},
+  {words: [{text: "вам", start: 14.30, end: 14.64}]},
+  {words: [{text: "Тот", start: 14.92, end: 15.02}, {text: "же", start: 15.02, end: 15.14}]},
+  {words: [{text: "самый", start: 15.14, end: 15.36}, {text: "имплант", start: 15.36, end: 15.90}]},
+  {words: [{text: "300", start: 15.90, end: 16.10}, {text: "мл", start: 16.10, end: 16.54}]},
+  {words: [{text: "будет", start: 16.54, end: 16.90}, {text: "на", start: 16.90, end: 17.12}]},
+  {words: [{text: "двух", start: 17.12, end: 17.44}, {text: "разных", start: 17.44, end: 17.68}]},
+  {words: [{text: "девушках", start: 17.68, end: 18.20}, {text: "смотреться", start: 18.20, end: 18.68}]},
+  {words: [{text: "по-разному", start: 18.68, end: 19.34}]},
+  {words: [{text: "Поэтому", start: 19.66, end: 19.92}]},
+  {words: [{text: "исходя", start: 20.16, end: 20.50}, {text: "из", start: 20.50, end: 20.78}]},
+  {words: [{text: "вашей", start: 20.78, end: 21.20}, {text: "анатомии", start: 21.20, end: 22.02}]},
+  {words: [{text: "и", start: 22.02, end: 22.24}, {text: "ваших", start: 22.24, end: 22.58}]},
+  {words: [{text: "пожеланий", start: 22.58, end: 23.10}]},
+  {words: [{text: "мы", start: 23.20, end: 23.26}, {text: "будем", start: 23.26, end: 23.50}]},
+  {words: [{text: "подбирать", start: 23.50, end: 23.94}, {text: "имплант", start: 23.94, end: 24.32}]},
+];
