@@ -122,11 +122,11 @@ const Captions: React.FC = () => {
         textShadow: '0 2px 14px rgba(0, 0, 0, 0.5)',
       }}
     >
-      {PAGES[index].words.map((word) => {
+      {PAGES[index].words.map((word, wi) => {
         const st = Math.round(word.start * fps);
         return (
           <span
-            key={`${index}-${word.start}`}
+            key={`${index}-${wi}`}
             style={{
               display: 'inline-block',
               margin: '0 0.14em',

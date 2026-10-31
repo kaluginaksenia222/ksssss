@@ -12,7 +12,7 @@ export const PAGES: Page[] = [
   {words: [{text: "груди", start: 3.46, end: 4.02}]},
   {words: [{text: "но", start: 4.22, end: 4.36}]},
   {words: [{text: "к", start: 4.44, end: 4.46}, {text: "сожалению", start: 4.46, end: 4.72}]},
-  {words: [{text: "он", start: 5.04, end: 5.04}, {text: "не", start: 5.04, end: 5.18}]},
+  {words: [{text: "он", start: 4.96, end: 5.04}, {text: "не", start: 5.04, end: 5.18}]},
   {words: [{text: "всем", start: 5.18, end: 5.34}, {text: "подходит", start: 5.34, end: 5.84}]},
   {words: [{text: "Исходя", start: 6.10, end: 6.44}, {text: "из", start: 6.44, end: 6.56}]},
   {words: [{text: "вашей", start: 6.56, end: 6.88}, {text: "анатомии", start: 6.88, end: 7.46}]},
