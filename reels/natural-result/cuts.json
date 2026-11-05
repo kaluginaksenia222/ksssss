@@ -1,0 +1,11 @@
+{
+  "source": "video-3 / MVI_6835.mov (релиз-черновик на GitHub)",
+  "note": "Лучшие дубли трёх фраз, без запинок. Время — секунды исходника.",
+  "keep": [
+    {"from": 0.45, "to": 5.62, "text": "Самый частый страх перед пластической операцией — будет выглядеть переделанной."},
+    {"from": 17.72, "to": 22.52, "text": "Хорошая пластическая хирургия — это когда никто не понимает, что была операция."},
+    {"from": 50.05, "to": 55.78, "text": "Задача хирурга — сохранить естественные пропорции лица и тела, а не изменить человека до неузнаваемости."}
+  ],
+  "grade": "curves=master='0/0.015 0.25/0.235 0.5/0.505 0.8/0.81 1/0.965',eq=contrast=1.05:saturation=1.07,colorbalance=rs=0.015:bs=-0.015:rm=0.015:bm=-0.01:bh=-0.01,unsharp=5:5:0.3,vignette=angle=PI/8:mode=forward",
+  "audio": "highpass=f=80,afftdn=nr=14:nf=-46:tn=1,equalizer=f=250:t=q:w=1.2:g=-2.5,equalizer=f=3200:t=q:w=1.4:g=2.5,equalizer=f=9000:t=h:w=1:g=1.5,deesser=i=0.35,acompressor=threshold=-20dB:ratio=3:attack=8:release=120:makeup=2,loudnorm=I=-14:TP=-1.5:LRA=7"
+}
