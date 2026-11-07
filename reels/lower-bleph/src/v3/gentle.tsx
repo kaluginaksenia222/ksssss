@@ -257,44 +257,44 @@ export const TideReveal: React.FC<{until: number; children: React.ReactNode}> = 
   );
 };
 
-// Синяя сцена 2: два мягких круга «грыжи» и «избытки кожи» сходятся — у возрастных пациентов есть оба
-export const MergeCircles: React.FC<{mergeAt: number; until: number}> = ({mergeAt, until}) => {
+// Синяя сцена 2: глаз крупно; под нижним веком мягко «надувается» грыжевой мешок,
+// ниже прорисовываются складки лишней кожи — у возрастных пациентов есть и то и другое
+export const EyeBags: React.FC<{bagAt: number; skinAt: number; titleAt: number; until: number}> = ({bagAt, skinAt, titleAt, until}) => {
   const {frame, fps, t} = useT();
-  const inn = useFade(0.5, until, 0.5);
-  const m = spring({frame: frame - Math.round(mergeAt * fps), fps, config: SOFT});
-  const dx = interpolate(m, [0, 1], [230, 110]);
-  const both = useFade(mergeAt + 0.6, until, 0.5);
-  const breathe = 1 + Math.sin(t * 2) * 0.015;
-  const circle = (x: number, label: string) => (
-    <div
-      style={{
-        position: 'absolute',
-        left: 540 + x - 190,
-        top: 560,
-        width: 380,
-        height: 380,
-        borderRadius: '50%',
-        border: '2.5px solid rgba(255,255,255,0.55)',
-        backgroundColor: 'rgba(248,240,229,0.10)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: x < 0 ? 'flex-start' : 'flex-end',
-        padding: '0 52px',
-        scale: String(breathe),
-      }}
-    >
-      <div style={{fontFamily: FONTS.body, fontWeight: 500, fontSize: 30, color: COLORS.white}}>{label}</div>
-    </div>
+  const inn = useFade(0.2, until, 0.5);
+  const bag = spring({frame: frame - Math.round(bagAt * fps), fps, config: SOFT});
+  const breathe = 1 + Math.sin(t * 2.2) * 0.02 * bag;
+  const bagLabel = useFade(bagAt + 0.3, until, 0.4);
+  const skinLabel = useFade(skinAt + 0.4, until, 0.4);
+  const title = useFade(titleAt, until, 0.5);
+  const label = (text: string, v: number, top: number, left: number) => (
+    <div style={{position: 'absolute', top, left, opacity: v, fontFamily: FONTS.body, fontWeight: 500, fontSize: 30, color: COLORS.white}}>{text}</div>
   );
   return (
     <div style={{position: 'absolute', inset: 0, opacity: inn}}>
-      <div style={{position: 'absolute', top: 360, left: 0, right: 0, textAlign: 'center', fontFamily: FONTS.mono, fontWeight: 500, fontSize: 22, letterSpacing: '0.16em', color: 'rgba(255,255,255,0.7)'}}>
+      <div style={{position: 'absolute', top: 330, left: 0, right: 0, textAlign: 'center', fontFamily: FONTS.mono, fontWeight: 500, fontSize: 22, letterSpacing: '0.16em', color: 'rgba(255,255,255,0.7)'}}>
         ВОЗРАСТНЫЕ ПАЦИЕНТЫ
       </div>
-      {circle(-dx, 'грыжи')}
-      {circle(dx, 'кожа')}
-      <div style={{position: 'absolute', top: 1000, left: 0, right: 0, textAlign: 'center', opacity: both}}>
-        <div style={{fontFamily: FONTS.heading, fontWeight: 900, fontSize: 56, textTransform: 'uppercase', ...metal, filter: `drop-shadow(${shadow})`}}>Грыжи + избыток кожи</div>
+      <svg width={1080} height={760} viewBox="0 0 1080 760" style={{position: 'absolute', top: 380, left: 0}}>
+        {/* глаз */}
+        <Stroke d="M200 220 C350 90 730 90 880 220" at={0.3} dur={0.7} w={5} />
+        <Stroke d="M200 220 C350 320 730 320 880 220" at={0.4} dur={0.7} w={5} />
+        <circle cx={540} cy={212} r={interpolate(t, [0.6, 1.0], [0, 62], {...clamp, easing: EASE.out})} fill="none" stroke={COLORS.white} strokeWidth={5} />
+        {/* грыжевой мешок: мягкая выпуклость под веком */}
+        <g transform={`translate(540 330) scale(${bag * breathe} ${bag * breathe}) translate(-540 -330)`}>
+          <path d="M300 300 C380 420 700 420 780 300 C700 345 380 345 300 300 Z" fill="rgba(248,240,229,0.28)" stroke={COLORS.beige} strokeWidth={3} />
+        </g>
+        <Stroke d="M780 350 L860 410" at={bagAt + 0.3} dur={0.3} w={2} opacity={0.7} />
+        {/* избыток кожи: провисающие складки */}
+        <Stroke d="M290 440 C400 490 680 490 790 440" at={skinAt} dur={0.6} w={3} color={COLORS.beige} />
+        <Stroke d="M320 480 C420 525 660 525 760 480" at={skinAt + 0.15} dur={0.6} w={3} color={COLORS.beige} opacity={0.8} />
+        <Stroke d="M350 518 C440 556 640 556 730 518" at={skinAt + 0.3} dur={0.6} w={3} color={COLORS.beige} opacity={0.6} />
+        <Stroke d="M300 500 L210 560" at={skinAt + 0.4} dur={0.3} w={2} opacity={0.7} />
+      </svg>
+      {label('грыжевые мешки', bagLabel, 780, 760)}
+      {label('избыток кожи', skinLabel, 950, 70)}
+      <div style={{position: 'absolute', top: 1060, left: 0, right: 0, textAlign: 'center', opacity: title}}>
+        <div style={{fontFamily: FONTS.heading, fontWeight: 900, fontSize: 56, textTransform: 'uppercase', ...metal, filter: `drop-shadow(${shadow})`}}>Нужен разрез</div>
       </div>
     </div>
   );

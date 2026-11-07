@@ -13,7 +13,7 @@ import {
 import {fontsLoaded} from '../design/fonts';
 import {COLORS, EASE, FONTS} from '../design/tokens';
 import {ChipRow} from './parts';
-import {ChoicePair, EyeHook, HaveNot, HazeReveal, InnerLid, LashLine, MergeCircles, MistTitle, SoftClock, TermCard, TideReveal} from './gentle';
+import {ChoicePair, EyeHook, HaveNot, HazeReveal, InnerLid, LashLine, EyeBags, MistTitle, SoftClock, TermCard, TideReveal} from './gentle';
 import {PAGES} from './transcript';
 import {InstagramHandle} from './ui';
 
@@ -27,11 +27,11 @@ const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
 const FACE = {cx: 600, cy: 700};
 
 // Стыки нарезки: на каждом плавная смена крупности, чтобы скачок не был заметен
-const CUTS = [2.12, 11.44, 13.2, 20.96, 23.46, 24.83, 27.39, 36.79, 37.82, 42.36];
+const CUTS = [2.12, 11.44, 13.2, 20.96, 23.46, 24.83, 27.39, 36.79, 38.25, 38.83];
 
 const HOOK_END = 2.3;
 const BLUE1 = {from: 6.55, to: 9.9};
-const BLUE2 = {from: 30.6, to: 37.3};
+const BLUE2 = {from: 32.3, to: 36.95};
 const CAPTION_OFF = [
   [0, HOOK_END],
   [BLUE1.from + 0.2, BLUE1.to - 0.2],
@@ -140,7 +140,7 @@ const SoundTrack: React.FC = () => {
       />
       {sfx('shimmer', 0.15, 0.25, 1.1)}
       {[BLUE1.from, BLUE1.to - 0.5, BLUE2.from, BLUE2.to - 0.7].map((at) => sfx('whoosh', at, 0.08, 0.6))}
-      {[3.88, 15.7, 17.32, 21.06, 24.84, 26.32, 38.1].map((at) => sfx('pop', at, 0.05, 0.2))}
+      {[3.88, 15.7, 17.32, 21.06, 24.84, 26.32, 34.18, 35.62, 37.3].map((at) => sfx('pop', at, 0.05, 0.2))}
     </>
   );
 };
@@ -178,12 +178,12 @@ export const LowerBleph: React.FC = () => {
 
       <Sequence name="Синяя сцена: грыжи и кожа" {...seq(BLUE2)}>
         <TideReveal until={BLUE2.to - BLUE2.from}>
-          <MergeCircles mergeAt={35.4 - BLUE2.from} until={BLUE2.to - BLUE2.from} />
+          <EyeBags bagAt={34.18 - BLUE2.from} skinAt={35.62 - BLUE2.from} titleAt={36.1 - BLUE2.from} until={BLUE2.to - BLUE2.from} />
         </TideReveal>
       </Sequence>
 
-      <Sequence name="Финал: разрез по краю ресниц" from={Math.round(37.6 * fps)}>
-        <LashLine at={0.4} until={6} top={1200} />
+      <Sequence name="Финал: разрез по краю ресниц" from={Math.round(37.0 * fps)}>
+        <LashLine at={0.3} until={3.5} top={1200} />
       </Sequence>
 
       <Captions />
