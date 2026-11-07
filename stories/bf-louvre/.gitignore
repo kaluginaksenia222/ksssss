@@ -1,0 +1,7 @@
+renders/
+__pycache__/
+# материалы заказчика — не в публичный репозиторий
+assets/source-*
+assets/plan.png
+assets/logo-white.png
+assets/bg.png
