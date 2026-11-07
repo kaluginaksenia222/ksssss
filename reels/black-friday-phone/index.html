@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="ru" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Onest BF"; font-weight: 400; src: url("assets/fonts/onest-latin-400-normal.woff2") format("woff2"); unicode-range: U+0000-00FF; }
+      @font-face { font-family: "Onest BF"; font-weight: 400; src: url("assets/fonts/onest-cyrillic-400-normal.woff2") format("woff2"); unicode-range: U+0400-04FF; }
+      @font-face { font-family: "Onest BF"; font-weight: 500; src: url("assets/fonts/onest-latin-500-normal.woff2") format("woff2"); unicode-range: U+0000-00FF; }
+      @font-face { font-family: "Onest BF"; font-weight: 500; src: url("assets/fonts/onest-cyrillic-500-normal.woff2") format("woff2"); unicode-range: U+0400-04FF; }
+      @font-face { font-family: "Onest BF"; font-weight: 800; src: url("assets/fonts/onest-latin-800-normal.woff2") format("woff2"); unicode-range: U+0000-00FF; }
+      @font-face { font-family: "Onest BF"; font-weight: 800; src: url("assets/fonts/onest-cyrillic-800-normal.woff2") format("woff2"); unicode-range: U+0400-04FF; }
+
+      :root {
+        --ink: #ffffff;
+        --ink-2: #9c9ea4;
+        --underside-1: #7b7e85;
+        --underside-2: #3f4147;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+      #root { position: absolute; inset: 0; background: #000; }
+
+      #scene { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: hidden; }
+      #cam { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; transform-origin: 540px 960px; }
+      #fabric { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+
+      /* дыра под лоскутами (квадрат разреза 280..800 × 600..1120) */
+      #hole {
+        position: absolute; left: 280px; top: 600px; width: 520px; height: 520px;
+        background: radial-gradient(circle at 50% 50%, #0a0a0c 0%, #020203 70%);
+        box-shadow: inset 0 0 60px 20px #000;
+        opacity: 0;
+      }
+
+      #flaps { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; perspective: 1500px; perspective-origin: 540px 860px; z-index: 3; }
+      .flap { position: absolute; left: 280px; top: 600px; width: 520px; height: 520px; transform-style: preserve-3d; }
+      .face { position: absolute; inset: 0; backface-visibility: hidden; }
+      .front { background: url("assets/img/fabric.png") -280px -600px / 1080px 1920px no-repeat; }
+      .back { background: linear-gradient(160deg, var(--underside-1), var(--underside-2)); }
+      .shade { position: absolute; inset: 0; background: #000; opacity: 0; }
+
+      #slits { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; z-index: 4; }
+      #tip {
+        position: absolute; left: 0; top: 0; width: 26px; height: 5px; margin: -2.5px 0 0 -13px;
+        border-radius: 3px; background: linear-gradient(90deg, #d7d9de, #6d7076);
+        box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.8); opacity: 0; z-index: 5;
+      }
+
+      #phoneWrap { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; z-index: 6; }
+      #rig { position: absolute; left: 290px; top: 445px; width: 500px; height: 1030px; }
+      #palm { position: absolute; left: 0; top: 0; overflow: visible; }
+      #phone {
+        position: absolute; left: 0; top: 0; width: 500px; height: 1030px;
+        border-radius: 76px;
+        background: linear-gradient(135deg, #3a3c42 0%, #1a1b1f 30%, #0e0f12 70%, #2a2b30 100%);
+        box-shadow: 0 50px 90px rgba(0, 0, 0, 0.75), 0 0 0 2px #2e3036 inset;
+      }
+      #screen {
+        position: absolute; left: 14px; top: 14px; right: 14px; bottom: 14px; border-radius: 63px;
+        background: #000; overflow: hidden;
+      }
+      #glare {
+        position: absolute; inset: 0; border-radius: 63px;
+        background: linear-gradient(118deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.02) 35%, rgba(255,255,255,0) 36%);
+      }
+      #island { position: absolute; left: 50%; top: 22px; width: 120px; height: 34px; margin-left: -60px; border-radius: 17px; background: #050505; box-shadow: 0 0 0 1px #111 inset; }
+      .btn { position: absolute; width: 5px; border-radius: 3px; background: #2b2d33; }
+
+      /* текст на экране телефона: после наезда ×2.3 */
+      #text {
+        position: absolute; left: 0; right: 0; top: 520px;
+        display: flex; flex-direction: column; align-items: center;
+        font-family: "Onest BF", sans-serif; color: var(--ink);
+      }
+      .line { position: relative; white-space: pre; line-height: 1; }
+      #l1 { font-weight: 800; font-size: 32px; letter-spacing: 0.005em; }
+      #l2 { font-weight: 500; font-size: 13px; letter-spacing: 0.22em; color: var(--ink-2); margin-top: 14px; }
+      #l3 { font-weight: 500; font-size: 20px; margin-top: 30px; }
+      .ch { position: relative; color: transparent; }
+      .cursor { position: absolute; top: -2px; width: 3px; height: calc(100% + 4px); background: var(--ink); opacity: 0; }
+      #c2 { width: 1.5px; background: var(--ink-2); }
+      #c3 { width: 2px; }
+
+      #hand { position: absolute; left: 0; top: 0; overflow: visible; }
+      #fade { position: absolute; inset: 0; background: #000; opacity: 0; z-index: 10; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="10.6" data-width="1080" data-height="1920">
+      <div id="scene" class="clip" data-start="0" data-duration="10.6" data-track-index="0" data-track-kind="graphics" data-layout-ignore>
+        <div id="cam">
+          <img id="fabric" src="assets/img/fabric.png" alt="" />
+          <div id="hole"></div>
+          <div id="flaps">
+            <div class="flap" id="f-top"><div class="face front"><div class="shade"></div></div><div class="face back"></div></div>
+            <div class="flap" id="f-right"><div class="face front"><div class="shade"></div></div><div class="face back"></div></div>
+            <div class="flap" id="f-bottom"><div class="face front"><div class="shade"></div></div><div class="face back"></div></div>
+            <div class="flap" id="f-left"><div class="face front"><div class="shade"></div></div><div class="face back"></div></div>
+          </div>
+          <svg id="slits" viewBox="0 0 1080 1920" width="1080" height="1920">
+            <g id="slitA"><path class="cut" /><path class="edge" /></g>
+            <g id="slitB"><path class="cut" /><path class="edge" /></g>
+          </svg>
+          <div id="tip"></div>
+          <div id="phoneWrap">
+            <div id="rig">
+            <svg id="palm" width="760" height="1030" viewBox="0 0 760 1030">
+              <defs>
+                <radialGradient id="palmG" cx="0.35" cy="0.45" r="0.7">
+                  <stop offset="0" stop-color="#6e4a3c" />
+                  <stop offset="1" stop-color="#1c120e" />
+                </radialGradient>
+              </defs>
+              <path d="M520 310 C580 300 620 345 628 420 L640 690 C645 800 610 870 550 885 L520 888 Z" fill="url(#palmG)" />
+            </svg>
+            <div id="phone">
+              <div class="btn" style="left: -4px; top: 210px; height: 60px"></div>
+              <div class="btn" style="left: -4px; top: 300px; height: 95px"></div>
+              <div class="btn" style="left: -4px; top: 410px; height: 95px"></div>
+              <div class="btn" style="right: -4px; top: 320px; height: 140px"></div>
+              <div id="screen">
+                <div id="island"></div>
+                <div id="text">
+                  <div id="l1" class="line" data-text="BLACK FRIDAY"><span id="c1" class="cursor"></span></div>
+                  <div id="l2" class="line" data-text="ВЫСОЦКИЙ ДЕВЕЛОПМЕНТ"><span id="c2" class="cursor"></span></div>
+                  <div id="l3" class="line" data-text="Скидки на квартиры"><span id="c3" class="cursor"></span></div>
+                </div>
+                <div id="glare"></div>
+              </div>
+              <!-- пальцы: рисованные, держат телефон из-за края -->
+              <svg id="hand" width="500" height="1030" viewBox="0 0 500 1030">
+                <defs>
+                  <linearGradient id="skin" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0" stop-color="#d4a48c" />
+                    <stop offset="0.55" stop-color="#b37a62" />
+                    <stop offset="1" stop-color="#6e4537" />
+                  </linearGradient>
+                  <linearGradient id="skinL" x1="1" y1="0" x2="0" y2="0">
+                    <stop offset="0" stop-color="#d4a48c" />
+                    <stop offset="0.55" stop-color="#b37a62" />
+                    <stop offset="1" stop-color="#6e4537" />
+                  </linearGradient>
+                  <linearGradient id="nail" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0" stop-color="#f3d6cc" />
+                    <stop offset="1" stop-color="#d9a99a" />
+                  </linearGradient>
+                  <filter id="fsh" x="-30%" y="-30%" width="160%" height="160%">
+                    <feDropShadow dx="-4" dy="6" stdDeviation="6" flood-color="#000" flood-opacity="0.55" />
+                  </filter>
+                </defs>
+                <g filter="url(#fsh)">
+                  <rect x="484" y="318" width="110" height="58" rx="29" fill="url(#skin)" />
+                  <rect x="482" y="390" width="116" height="62" rx="31" fill="url(#skin)" />
+                  <rect x="484" y="466" width="112" height="60" rx="30" fill="url(#skin)" />
+                  <rect x="488" y="540" width="100" height="52" rx="26" fill="url(#skin)" />
+                  <rect x="489" y="331" width="22" height="32" rx="10" fill="url(#nail)" opacity="0.85" />
+                  <rect x="487" y="404" width="23" height="34" rx="10" fill="url(#nail)" opacity="0.85" />
+                  <rect x="489" y="479" width="22" height="33" rx="10" fill="url(#nail)" opacity="0.85" />
+                  <rect x="493" y="551" width="20" height="30" rx="9" fill="url(#nail)" opacity="0.85" />
+                  <g transform="rotate(-22 0 760)">
+                    <rect x="-118" y="726" width="134" height="68" rx="34" fill="url(#skinL)" />
+                    <rect x="-12" y="738" width="24" height="44" rx="11" fill="url(#nail)" opacity="0.85" />
+                  </g>
+                </g>
+              </svg>
+            </div>
+            </div>
+          </div>
+        </div>
+        <div id="fade"></div>
+      </div>
+      <audio id="sfx" class="clip" src="assets/sfx/sfx.wav" data-start="0" data-duration="10.6" data-track-index="1" data-volume="1"></audio>
+    </div>
+    <script>
+      // ---------- расписание (то же, что в scripts/make_sfx.py) ----------
+      const T = {
+        slitA: [0.45, 1.05],  // разрез 1: правый верх → левый низ
+        slitB: [1.12, 1.62],  // разрез 2: левый верх → правый низ
+        bulge: 1.62,          // лоскуты выпирают
+        open: 1.82,           // лоскуты раскрываются
+        phone: 2.25,          // телефон лезет из дыры
+        settle: 3.45,
+        push: 3.85,           // наезд на экран
+        pushEnd: 4.75,
+        fade: 9.75,
+        end: 10.6,
+      };
+      const TIMES = [
+        [4.95, 5.04, 5.12, 5.22, 5.3, 5.39, 5.52, 5.6, 5.69, 5.77, 5.86, 5.94],
+        [6.35, 6.41, 6.47, 6.52, 6.58, 6.64, 6.7, 6.76, 6.82, 6.93, 6.99, 7.05, 7.11, 7.17, 7.23, 7.29, 7.35, 7.41, 7.47, 7.53],
+        [7.95, 8.02, 8.09, 8.16, 8.23, 8.3, 8.37, 8.48, 8.55, 8.62, 8.73, 8.8, 8.87, 8.94, 9.01, 9.08, 9.15, 9.22],
+      ];
+      const BLINK = 0.5;
+
+      // ---------- детерминированный «случай» ----------
+      let seed = 1234567;
+      const rnd = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
+
+      // ---------- рваные края лоскутов ----------
+      const S = 520, C = 260; // квадрат и центр
+      function jagged(ax, ay, bx, by, n, amp) {
+        const pts = [];
+        const nx = -(by - ay), ny = bx - ax, L = Math.hypot(nx, ny);
+        for (let i = 1; i < n; i++) {
+          const k = i / n;
+          const spike = rnd() < 0.18 ? 2.4 : 1;
+          const off = (rnd() * 2 - 1) * amp * spike;
+          pts.push([ax + (bx - ax) * k + (nx / L) * off, ay + (by - ay) * k + (ny / L) * off]);
+        }
+        return pts;
+      }
+      // кончик каждого лоскута чуть «откушен», чтобы в центре была рваная дыра
+      const tipPull = 26;
+      function triangle(a, b) {
+        // a, b — углы на шарнире; кончик — к центру
+        const cx = C + (a[0] + b[0] - 2 * C) * 0 , cy = C;
+        const dirx = (a[0] + b[0]) / 2 - C, diry = (a[1] + b[1]) / 2 - C, dl = Math.hypot(dirx, diry);
+        const tip = [C + (dirx / dl) * tipPull, C + (diry / dl) * tipPull];
+        return [a, b, ...jagged(b[0], b[1], tip[0], tip[1], 14, 5), tip, ...jagged(tip[0], tip[1], a[0], a[1], 14, 5)];
+      }
+      const poly = (pts, mirror) =>
+        "polygon(" + pts.map(([x, y]) => {
+          if (mirror === "y") y = S - y;
+          if (mirror === "x") x = S - x;
+          return `${x.toFixed(1)}px ${y.toFixed(1)}px`;
+        }).join(",") + ")";
+      const FL = {
+        "f-top":    { pts: triangle([0, 0], [S, 0]),   origin: "50% 0%",   axis: "rotationX", sign: 1,  mirror: "y" },
+        "f-right":  { pts: triangle([S, 0], [S, S]),   origin: "100% 50%", axis: "rotationY", sign: 1,  mirror: "x" },
+        "f-bottom": { pts: triangle([S, S], [0, S]),   origin: "50% 100%", axis: "rotationX", sign: -1, mirror: "y" },
+        "f-left":   { pts: triangle([0, S], [0, 0]),   origin: "0% 50%",   axis: "rotationY", sign: -1, mirror: "x" },
+      };
+      for (const [id, f] of Object.entries(FL)) {
+        const el = document.getElementById(id);
+        el.style.transformOrigin = f.origin;
+        el.querySelector(".front").style.clipPath = poly(f.pts);
+        const back = el.querySelector(".back");
+        back.style.clipPath = poly(f.pts, f.mirror);
+        back.style.transform = f.axis === "rotationX" ? "rotateX(180deg)" : "rotateY(180deg)";
+      }
+
+      // ---------- линии разрезов ----------
+      function slitPath(ax, ay, bx, by) {
+        const pts = [[ax, ay], ...jagged(ax, ay, bx, by, 40, 2.2), [bx, by]];
+        return "M" + pts.map((p) => p[0].toFixed(1) + " " + p[1].toFixed(1)).join(" L");
+      }
+      const A = { from: [800, 600], to: [280, 1120] };
+      const B = { from: [280, 600], to: [800, 1120] };
+      for (const [gid, s] of [["slitA", A], ["slitB", B]]) {
+        const d = slitPath(s.from[0], s.from[1], s.to[0], s.to[1]);
+        const g = document.getElementById(gid);
+        const [cut, edge] = g.querySelectorAll("path");
+        cut.setAttribute("d", d);
+        edge.setAttribute("d", d);
+        cut.setAttribute("fill", "none"); cut.setAttribute("stroke", "#000"); cut.setAttribute("stroke-width", "5"); cut.setAttribute("stroke-linecap", "round");
+        edge.setAttribute("fill", "none"); edge.setAttribute("stroke", "#8d9097"); edge.setAttribute("stroke-width", "1.6"); edge.setAttribute("stroke-opacity", "0.7");
+        edge.setAttribute("transform", "translate(-2.5 -2.5)");
+        const len = Math.hypot(s.to[0] - s.from[0], s.to[1] - s.from[1]) * 1.08;
+        for (const p of [cut, edge]) { p.setAttribute("stroke-dasharray", len); p.setAttribute("stroke-dashoffset", len); }
+        s.len = len; s.cut = cut; s.edge = edge;
+      }
+
+      // ---------- набор текста ----------
+      const lines = ["l1", "l2", "l3"].map((id) => document.getElementById(id));
+      const cursors = ["c1", "c2", "c3"].map((id) => document.getElementById(id));
+      const chars = lines.map((line) => {
+        const spans = [];
+        for (const ch of line.dataset.text) {
+          const s = document.createElement("span");
+          s.className = "ch";
+          s.textContent = ch;
+          line.insertBefore(s, line.lastElementChild);
+          spans.push(s);
+        }
+        return spans;
+      });
+      function renderType(t) {
+        // в какой строке курсор
+        let active = 0;
+        if (t >= TIMES[0].at(-1) + 0.3) active = 1;
+        if (t >= TIMES[1].at(-1) + 0.3) active = 2;
+        chars.forEach((spans, li) => spans.forEach((s, i) => (s.style.color = t >= TIMES[li][i] ? "inherit" : "transparent")));
+        cursors.forEach((c, li) => {
+          if (li !== active || t < T.push) { c.style.opacity = 0; return; }
+          const times = TIMES[li];
+          let n = 0;
+          while (n < times.length && t >= times[n]) n++;
+          const host = n === 0 ? chars[li][0] : chars[li][n - 1];
+          if (c.parentNode !== host) host.appendChild(c);
+          c.style.left = n === 0 ? "-4px" : "calc(100% + 3px)";
+          const typing = n > 0 && n < times.length;
+          const since = n === 0 ? t - T.push : t - times.at(-1);
+          c.style.opacity = typing || Math.floor(since / BLINK) % 2 === 0 ? 1 : 0;
+        });
+      }
+
+      // ---------- таймлайн ----------
+      const tl = gsap.timeline({ paused: true, onUpdate: () => renderType(tl.time()) });
+
+      // кончик лезвия идёт по разрезу, линия прорезается за ним
+      function cutAlong(s, [t0, t1]) {
+        const ang = (Math.atan2(s.to[1] - s.from[1], s.to[0] - s.from[0]) * 180) / Math.PI;
+        tl.set("#tip", { x: s.from[0], y: s.from[1], rotation: ang }, t0 - 0.12);
+        tl.to("#tip", { opacity: 1, duration: 0.1 }, t0 - 0.12);
+        tl.to("#tip", { x: s.to[0], y: s.to[1], duration: t1 - t0, ease: "power1.inOut" }, t0);
+        tl.to([s.cut, s.edge], { attr: { "stroke-dashoffset": 0 }, duration: t1 - t0, ease: "power1.inOut" }, t0);
+        tl.to("#tip", { opacity: 0, duration: 0.08 }, t1);
+      }
+      cutAlong(A, T.slitA);
+      cutAlong(B, T.slitB);
+
+      // лоскуты: выпирают, потом раскрываются наружу (к зрителю) и заворачиваются
+      tl.set("#hole", { opacity: 1 }, T.bulge);
+      const order = ["f-top", "f-right", "f-left", "f-bottom"];
+      order.forEach((id, i) => {
+        const f = FL[id];
+        tl.fromTo("#" + id, { [f.axis]: 0 }, { [f.axis]: f.sign * 9, duration: 0.2, ease: "power2.out" }, T.bulge + i * 0.02);
+        tl.to("#" + id, { [f.axis]: f.sign * 104, duration: 0.65, ease: "power3.out" }, T.open + i * 0.05);
+        tl.fromTo("#" + id + " .shade", { opacity: 0 }, { opacity: 0.55, duration: 0.4, ease: "power1.in" }, T.open + i * 0.05);
+      });
+      tl.to("#slits", { opacity: 0, duration: 0.15 }, T.open + 0.05);
+
+      // телефон: из глубины дыры к зрителю
+      tl.fromTo("#phoneWrap", { clipPath: "polygon(280px 600px, 800px 600px, 800px 1120px, 280px 1120px)" },
+        { clipPath: "polygon(-600px -600px, 1680px -600px, 1680px 2520px, -600px 2520px)", duration: 0.6, ease: "power2.in" }, T.phone + 0.35);
+      tl.fromTo("#rig", { scale: 0.3, y: -60, rotation: -16, opacity: 0 },
+        { scale: 1, y: 0, rotation: -4, opacity: 1, duration: T.settle - T.phone, ease: "power3.out" }, T.phone);
+      tl.to("#rig", { rotation: 0, duration: 0.5, ease: "power2.inOut" }, T.settle);
+
+      // наезд камеры на экран телефона
+      tl.fromTo("#cam", { scale: 1 }, { scale: 2.5, duration: T.pushEnd - T.push, ease: "power2.inOut" }, T.push);
+      tl.to("#cam", { scale: 2.56, duration: T.end - T.pushEnd, ease: "none" }, T.pushEnd);
+
+      // экран гаснет
+      tl.fromTo("#fade", { opacity: 0 }, { opacity: 1, duration: T.end - T.fade - 0.1, ease: "power1.in" }, T.fade);
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+      renderType(0);
+    </script>
+  </body>
+</html>
