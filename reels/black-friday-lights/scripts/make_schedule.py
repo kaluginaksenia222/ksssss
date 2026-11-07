@@ -143,24 +143,26 @@ impact = read("../../library/sfx/impact.wav")
 put(impact, LAST, 0.35)        # дом погас
 
 def typewriter():
-    """Удар клавиши печатной машинки: щелчок рычага, металл, глухой стук, дребезг литеры."""
-    n = int(0.12 * SR); t = np.arange(n) / SR; x = np.zeros(n, np.float32)
-    m = int(0.003 * SR)
-    hit = rng.normal(0, 1, m).astype(np.float32) * np.exp(-np.arange(m) / (0.0006 * SR))
-    x[:m] += np.diff(hit, prepend=0) * 1.2                                   # резкий удар
-    for f, d, g in ((rng.uniform(1900, 2500), 0.009, 0.55),                  # металл корпуса
-                    (rng.uniform(3400, 4200), 0.005, 0.35),
-                    (rng.uniform(150, 210), 0.018, 0.7)):                    # глухой стук по валику
-        x += (g * np.sin(2 * np.pi * f * t) * np.exp(-t / d)).astype(np.float32)
-    o = int(rng.uniform(0.014, 0.022) * SR); k = int(0.004 * SR)             # литера возвращается
-    rat = rng.normal(0, 1, k).astype(np.float32) * np.exp(-np.arange(k) / (0.0012 * SR))
-    x[o:o + k] += rat * 0.35
+    """Мягкий удар клавиши: глухой «ток» без металла и звона (заказчику резкий не понравился)."""
+    n = int(0.10 * SR); t = np.arange(n) / SR
+    att = np.minimum(1, t / 0.0015)                                           # мягкая атака, без щелчка
+    x = (0.8 * np.sin(2 * np.pi * rng.uniform(320, 420) * t) * np.exp(-t / 0.012)
+         + 0.6 * np.sin(2 * np.pi * rng.uniform(130, 170) * t) * np.exp(-t / 0.02)).astype(np.float32)
+    noise = rng.normal(0, 1, n).astype(np.float32)
+    x += 0.25 * onepole_soft(noise, 0.06) * np.exp(-t / 0.006).astype(np.float32)   # приглушённый шорох
+    x *= att.astype(np.float32)
     return x / np.abs(x).max()
+
+def onepole_soft(x, a):
+    y = np.empty_like(x); acc = 0.0
+    for i, v in enumerate(x):
+        acc += a * (v - acc); y[i] = acc
+    return y / (np.abs(y).max() + 1e-9)
 
 # буквы печатаются: печатная машинка (страница 1 и страница 2)
 for row in times + times2:
     for t0 in row:
-        put(typewriter(), t0, 0.42 + rng.uniform(-0.08, 0.08))
+        put(typewriter(), t0, 0.36 + rng.uniform(-0.05, 0.05))
 
 fs = int(FADE * SR); fe = int((END - 0.1) * SR)
 out[fs:fe] *= np.linspace(1, 0, fe - fs); out[fe:] = 0
@@ -174,6 +176,6 @@ print(f"окон {len(windows)}, в «%» {len(pct)}, гаснут до {LAST:.2
 # громкость под рилс: около −16 LUFS, пики не выше −1.5 dB
 import subprocess, os
 subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", "assets/sfx/sfx.wav", "-af",
-                "acompressor=threshold=-24dB:ratio=3:attack=2:release=60,loudnorm=I=-16:TP=-1.5:LRA=11,volume=0.5",   # −6 дБ: заказчик просил тише на 50 %
+                "acompressor=threshold=-24dB:ratio=3:attack=2:release=60,loudnorm=I=-20.6:TP=-1.5:LRA=11,volume=0.37",   # итог ≈ −26,6 LUFS: на 6 дБ тише версии со звуком (заказчик: тише на 50 %)
                 "-ar", "48000", "assets/sfx/sfx_norm.wav"], check=True)
 os.replace("assets/sfx/sfx_norm.wav", "assets/sfx/sfx.wav")
