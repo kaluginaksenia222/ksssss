@@ -88,7 +88,8 @@ export const Bus: React.FC<{
   toshaMouth?: number;
   businkaMouth?: number;
   businkaWing?: number;
-}> = ({ frame, toshaMouth = 0, businkaMouth = 0, businkaWing = 0 }) => {
+  label?: boolean;
+}> = ({ frame, toshaMouth = 0, businkaMouth = 0, businkaWing = 0, label = true }) => {
   const blinkT = frame % 110 < 5;
   const blinkB = (frame + 47) % 130 < 5;
   const prop = (frame * 38) % 360;
@@ -118,7 +119,7 @@ export const Bus: React.FC<{
       {/* блик на окнах */}
       <path d="M90,-128 l40,0 l-30,40Z" fill="#fff" opacity={0.5} />
       {/* надпись */}
-      <text x={-15} y={68} textAnchor="middle" fontFamily="Tight" fontSize={34} fill="#fff">ЛУННЫЙ</text>
+      {label && <text x={-15} y={68} textAnchor="middle" fontFamily="Tight" fontSize={34} fill="#fff">ЛУННЫЙ</text>}
       {/* колёса-крылышки */}
       <circle cx={-170} cy={95} r={38} fill={C.ink} />
       <circle cx={-170} cy={95} r={14} fill="#aaa" />
