@@ -142,8 +142,8 @@ def read(p):
 impact = read("../../library/sfx/impact.wav")
 put(impact, LAST, 0.35)        # дом погас
 
-# буквы: мягкие щелчки
-for row in times:
+# буквы: мягкие щелчки (страница 1 и страница 2)
+for row in times + times2:
     for t0 in row:
         put(click(0.4), t0, 0.32 + rng.uniform(-0.06, 0.06))
 
