@@ -301,7 +301,7 @@ export const EyeBags: React.FC<{bagAt: number; skinAt: number; titleAt: number; 
 };
 
 // ——— 8. Финал: глаз с ресницами, вдоль края ресниц прорисовывается пунктир разреза ———
-export const LashLine: React.FC<{at: number; until: number; top: number}> = ({at, until, top}) => {
+export const LashLine: React.FC<{at: number; until: number; top: number; label?: boolean}> = ({at, until, top, label = true}) => {
   const {t} = useT();
   const v = useFade(at, until, 0.5);
   const lashes = [0, 1, 2, 3, 4, 5, 6, 7, 8];
@@ -318,9 +318,11 @@ export const LashLine: React.FC<{at: number; until: number; top: number}> = ({at
         })}
         <Stroke d="M80 168 C180 212 380 212 480 168" at={at + 1.0} dur={1.0} w={4} color={COLORS.beige} dash="10 12" />
       </svg>
-      <div style={{fontFamily: FONTS.mono, fontWeight: 500, fontSize: 24, letterSpacing: '0.16em', color: COLORS.white, textShadow: shadow, marginTop: 6, opacity: interpolate(t, [at + 1.4, at + 1.9], [0, 1], clamp)}}>
-        РАЗРЕЗ ПО КРАЮ РЕСНИЦ
-      </div>
+      {label ? (
+        <div style={{fontFamily: FONTS.mono, fontWeight: 500, fontSize: 24, letterSpacing: '0.16em', color: COLORS.white, textShadow: shadow, marginTop: 6, opacity: interpolate(t, [at + 1.4, at + 1.9], [0, 1], clamp)}}>
+          РАЗРЕЗ ПО КРАЮ РЕСНИЦ
+        </div>
+      ) : null}
     </div>
   );
 };

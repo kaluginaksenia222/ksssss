@@ -27,7 +27,7 @@ const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
 const FACE = {cx: 600, cy: 700};
 
 // Стыки нарезки: на каждом плавная смена крупности, чтобы скачок не был заметен
-const CUTS = [2.12, 11.44, 13.2, 20.96, 23.46, 24.83, 27.39, 36.79, 38.25, 38.83];
+const CUTS = [2.12, 11.44, 13.2, 20.96, 23.46, 24.83, 27.39, 36.79, 38.25, 39.32, 40.77, 41.26];
 
 const HOOK_END = 2.3;
 const BLUE1 = {from: 6.55, to: 9.9};
@@ -183,7 +183,7 @@ export const LowerBleph: React.FC = () => {
       </Sequence>
 
       <Sequence name="Финал: разрез по краю ресниц" from={Math.round(37.0 * fps)}>
-        <LashLine at={0.3} until={3.5} top={1200} />
+        <LashLine at={0.3} until={5.2} top={1200} label={false} />
       </Sequence>
 
       <Captions />
