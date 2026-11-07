@@ -53,12 +53,27 @@
       #l4 { font-weight: 800; font-size: 44px; letter-spacing: 0.04em; color: var(--accent); margin-top: 14px; }
       .ch { color: transparent; }
 
+      /* страница 2 */
+      #text2 {
+        position: absolute; left: 0; right: 0; top: 0; bottom: 0;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        font-family: "Onest BF", sans-serif;
+      }
+      #m1 { font-weight: 800; font-size: 76px; letter-spacing: 0.01em; color: var(--ink); }
+      #m2 { font-weight: 800; font-size: 180px; letter-spacing: -0.02em; color: var(--accent); margin-top: 18px; }
+      /* условия акции — мелко, под главным, внутри безопасной зоны */
+      #note {
+        position: absolute; left: 160px; right: 160px; top: 1180px;
+        font-family: "Onest BF", sans-serif; font-weight: 500; font-size: 22px; line-height: 1.5;
+        letter-spacing: 0.04em; text-align: center; color: var(--ink-2); opacity: 0;
+      }
+
       #fade { position: absolute; inset: 0; background: #000; opacity: 0; }
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="10.8" data-width="1080" data-height="1920">
-      <div id="scene" class="clip" data-start="0" data-duration="10.8" data-track-index="0" data-track-kind="graphics" data-layout-ignore>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="16.25" data-width="1080" data-height="1920">
+      <div id="scene" class="clip" data-start="0" data-duration="16.25" data-track-index="0" data-track-kind="graphics" data-layout-ignore>
         <div id="cam">
           <div id="facade"></div>
           <div id="grid"></div>
@@ -69,6 +84,11 @@
           <div id="l3" class="line"></div>
           <div id="l4" class="line"></div>
         </div>
+        <div id="text2">
+          <div id="m1" class="line"></div>
+          <div id="m2" class="line"></div>
+        </div>
+        <div id="note">АКЦИЯ ДЕЙСТВУЕТ ДО 15&nbsp;НОЯБРЯ. НЕ СУММИРУЕТСЯ С&nbsp;ДРУГИМИ ПРЕДЛОЖЕНИЯМИ. ПОДРОБНОСТИ УТОЧНЯЙТЕ В&nbsp;ОТДЕЛЕ ПРОДАЖ И ПО ТЕЛЕФОНУ&nbsp;303-99-99</div>
         <div id="fade"></div>
       </div>
     </div>
@@ -109,6 +129,16 @@
           return s;
         }),
       );
+      const lines2 = ["m1", "m2"].map((id) => document.getElementById(id));
+      const chars2 = S.lines2.map((text, li) =>
+        [...text].map((ch) => {
+          const s = document.createElement("span");
+          s.className = "ch";
+          s.textContent = ch;
+          lines2[li].appendChild(s);
+          return s;
+        }),
+      );
       // буква «включается»: вспышка, мигание, тёплое свечение остывает
       function lampOn(dt) {
         if (dt < 0) return [0, 0];
@@ -120,12 +150,21 @@
 
       function render(t) {
         for (const w of wins) w.lit.style.opacity = w.dark ? 0 : (w.b * lampOff(t - w.off)).toFixed(3);
+        const paint = (s, o, glow, red) => {
+          s.style.color = o === 0 ? "transparent" : "inherit";
+          s.style.opacity = o;
+          s.style.textShadow = glow > 0 ? `0 0 ${(6 + 22 * glow).toFixed(1)}px ${red ? "rgba(255, 50, 40," : "rgba(255, 196, 110,"} ${(0.85 * glow).toFixed(2)})` : "none";
+        };
         chars.forEach((row, li) =>
           row.forEach((s, i) => {
             const [o, glow] = lampOn(t - S.times[li][i]);
-            s.style.color = o === 0 ? "transparent" : "inherit";
-            s.style.opacity = o;
-            s.style.textShadow = glow > 0 ? `0 0 ${(6 + 22 * glow).toFixed(1)}px ${li >= 2 ? "rgba(255, 50, 40," : "rgba(255, 196, 110,"} ${(0.85 * glow).toFixed(2)})` : "none";
+            paint(s, o * lampOff(t - S.offTimes[li][i]), glow, li >= 2);
+          }),
+        );
+        chars2.forEach((row, li) =>
+          row.forEach((s, i) => {
+            const [o, glow] = lampOn(t - S.times2[li][i]);
+            paint(s, o, glow, li === 1);
           }),
         );
       }
@@ -138,6 +177,9 @@
       tl.to(["#facade", ".win"], { opacity: 0, duration: 0.5, ease: "power1.in" }, S.pctOff);
       // текст еле заметно приближается
       tl.fromTo("#text", { scale: 1 }, { scale: 1.03, duration: S.end - S.times[0][0], ease: "none" }, S.times[0][0]);
+      // страница 2 еле заметно приближается, условия мягко проявляются
+      tl.fromTo("#text2", { scale: 1 }, { scale: 1.03, duration: S.end - S.times2[0][0], ease: "none" }, S.times2[0][0]);
+      tl.fromTo("#note", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, S.note);
       // финальное затухание
       tl.fromTo("#fade", { opacity: 0 }, { opacity: 1, duration: S.end - S.fade - 0.15, ease: "power1.in" }, S.fade);
 

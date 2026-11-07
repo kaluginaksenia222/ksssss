@@ -64,10 +64,31 @@ for text, (start, step) in zip(LINES, STEPS):
     times.append(row)
     t = row[-1]
 TEXT_END = t
-FADE = 9.95
+
+# ---- страница 1 гаснет буквами (волна слева направо, сверху вниз) ----
+P1_OFF = TEXT_END + 1.6
+off_times = []
+for li, text in enumerate(LINES):
+    off_times.append([round(P1_OFF + li * 0.06 + i * 0.012 + rng.uniform(0, 0.03), 3) for i, _ in enumerate(text)])
+P1_GONE = max(max(r) for r in off_times) + 0.1
+
+# ---- страница 2: «11 КВАРТИР», «−11%», мелкий текст условий ----
+LINES2 = ["11 КВАРТИР", "−11%"]
+times2, t = [], P1_GONE + 0.2
+for text, step in zip(LINES2, (0.05, 0.09)):
+    row = []
+    for ch in text:
+        row.append(round(t, 3))
+        t += step + (0.035 if ch == " " else 0)
+    times2.append(row)
+    t = row[-1] + 0.3
+NOTE = round(times2[-1][-1] + 0.45, 3)     # условия проявляются
+FADE = round(NOTE + 3.6, 2)                # успеть прочитать
+END = round(FADE + 0.9, 2)
 
 sched = {"cols": COLS, "rows": ROWS, "windows": windows, "lastOff": LAST, "pctOff": PCT_OFF0,
-         "lines": LINES, "times": times, "fade": FADE, "end": END}
+         "lines": LINES, "times": times, "offTimes": off_times,
+         "lines2": LINES2, "times2": times2, "note": NOTE, "fade": FADE, "end": END}
 open("assets/schedule.js", "w").write("window.SCHED = " + json.dumps(sched, ensure_ascii=False) + ";\n")
 
 # ================= звук =================
@@ -132,6 +153,7 @@ out *= 0.8 / np.abs(out).max()
 with wave.open("assets/sfx/sfx.wav", "w") as w:
     w.setnchannels(1); w.setsampwidth(2); w.setframerate(SR)
     w.writeframes((out * 32767).astype(np.int16).tobytes())
+print(f"страница 1 гаснет {P1_OFF:.2f}, страница 2: {times2[0][0]:.2f}–{times2[-1][-1]:.2f}, условия {NOTE:.2f}, конец {END:.2f}")
 print(f"окон {len(windows)}, в «%» {len(pct)}, гаснут до {LAST:.2f} c, % гаснет {PCT_OFF0:.2f}–{PCT_LAST:.2f} c, текст до {TEXT_END:.2f} c")
 
 # громкость под рилс: около −16 LUFS, пики не выше −1.5 dB
