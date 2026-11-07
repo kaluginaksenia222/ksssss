@@ -42,22 +42,23 @@
 
       /* текст — чуть ниже середины кадра */
       #text {
-        position: absolute; left: 0; right: 0; top: 900px;
+        position: absolute; left: 0; right: 0; top: 850px;
         display: flex; flex-direction: column; align-items: center;
         font-family: "Onest BF", sans-serif;
       }
       .line { position: relative; white-space: pre; line-height: 1; }
       #l1 { font-weight: 800; font-size: 76px; letter-spacing: 0.01em; color: var(--ink); }
-      #l2 { font-weight: 500; font-size: 28px; letter-spacing: 0.24em; color: var(--ink-2); margin-top: 30px; }
+      #l2 { font-weight: 800; font-size: 56px; letter-spacing: 0.005em; color: var(--ink); margin-top: 22px; }
       #l3 { font-weight: 800; font-size: 44px; letter-spacing: 0.04em; color: var(--accent); margin-top: 64px; }
+      #l4 { font-weight: 800; font-size: 44px; letter-spacing: 0.04em; color: var(--accent); margin-top: 14px; }
       .ch { color: transparent; }
 
       #fade { position: absolute; inset: 0; background: #000; opacity: 0; }
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="11" data-width="1080" data-height="1920">
-      <div id="scene" class="clip" data-start="0" data-duration="11" data-track-index="0" data-track-kind="graphics" data-layout-ignore>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="11.8" data-width="1080" data-height="1920">
+      <div id="scene" class="clip" data-start="0" data-duration="11.8" data-track-index="0" data-track-kind="graphics" data-layout-ignore>
         <div id="cam">
           <div id="facade"></div>
           <div id="grid"></div>
@@ -66,6 +67,7 @@
           <div id="l1" class="line"></div>
           <div id="l2" class="line"></div>
           <div id="l3" class="line"></div>
+          <div id="l4" class="line"></div>
         </div>
         <div id="fade"></div>
       </div>
@@ -97,7 +99,7 @@
       }
 
       // ---------- буквы ----------
-      const lines = ["l1", "l2", "l3"].map((id) => document.getElementById(id));
+      const lines = ["l1", "l2", "l3", "l4"].map((id) => document.getElementById(id));
       const chars = S.lines.map((text, li) =>
         [...text].map((ch) => {
           const s = document.createElement("span");
