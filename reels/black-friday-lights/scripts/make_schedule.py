@@ -4,7 +4,7 @@ import json, wave
 import numpy as np
 
 COLS, ROWS = 11, 21
-END = 11.8
+END = 10.8
 rng = np.random.default_rng(21)
 
 # ---- окна, из которых складывается «%» ----
@@ -53,18 +53,18 @@ PCT_LAST = max(w["off"] for w in windows if w["p"])
 
 # ---- текст: буквы «включаются» как окна ----
 LINES = ["ЧЁРНАЯ ПЯТНИЦА", "ВЫСОЦКИЙ ДЕВЕЛОПМЕНТ", "СКИДКИ НА КВАРТИРЫ", "В ЖК ЛУВР"]
-STEPS = [(PCT_LAST + 0.55, 0.07), (None, 0.05), (None, 0.05), (None, 0.07)]
+STEPS = [(PCT_LAST + 0.5, 0.05), (None, 0.034), (None, 0.034), (None, 0.05)]
 times, t = [], 0
 for text, (start, step) in zip(LINES, STEPS):
-    t = start if start is not None else t + (0.12 if text == "В ЖК ЛУВР" else 0.4)
+    t = start if start is not None else t + (0.1 if text == "В ЖК ЛУВР" else 0.28)
     row = []
     for ch in text:
         row.append(round(t, 3))
-        t += step + rng.uniform(-0.012, 0.012) + (0.05 if ch == " " else 0)
+        t += step + rng.uniform(-0.008, 0.008) + (0.035 if ch == " " else 0)
     times.append(row)
     t = row[-1]
 TEXT_END = t
-FADE = 10.95
+FADE = 9.95
 
 sched = {"cols": COLS, "rows": ROWS, "windows": windows, "lastOff": LAST, "pctOff": PCT_OFF0,
          "lines": LINES, "times": times, "fade": FADE, "end": END}
