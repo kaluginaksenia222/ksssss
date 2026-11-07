@@ -63,3 +63,33 @@
 
 - В настройках канала отметить **«Видео для детей» (Made for kids)**. Это обязательно по правилам YouTube для детского контента. Комментарии и персональная реклама будут отключены, это нормально.
 - Перед регистрацией проверить, свободен ли ник @OkiDokiHabits, и поискать «Oki Doki» в YouTube и магазинах, чтобы не пересечься с чужим брендом.
+
+## Готовые серии: названия и описания для YouTube
+
+### Серия 1 — «Чистим зубы» (`episodes/01-brush-teeth`, 25 с)
+
+**Название:** Oki Brushes His Teeth 🪥 Bye-Bye Germs! | Oki Doki #shorts
+
+**Описание:**
+> Sleepy Oki wakes up, smiles… and oops! Silly germs jump out of his mouth! 🦠
+> Oki grabs his toothbrush, brushes to the music and pops every germ. Clean teeth make his sprout bloom into a flower! 🌼
+>
+> A wordless cartoon for kids 2–6: no talking, just happy music.
+> Brush your teeth with Oki every morning and every night! 🪥✨
+>
+> #OkiDoki #BrushYourTeeth #KidsCartoon #ToddlerLearning #GoodHabits #CartoonForKids #Shorts
+
+### Серия 2 — «Моем руки» (`episodes/02-wash-hands`, 25 с)
+
+**Название:** Oki Washes His Hands 🧼 Germs Go Pop! | Oki Doki #shorts
+
+**Описание:**
+> Oki comes home with muddy paws and reaches for a cookie… but wait — germs! 🦠
+> Water, soap, rub-rub-rub — the bubbles pop every germ. Clean hands make Oki's sprout bloom, and now the cookie tastes even better! 🍪🌼
+>
+> A wordless cartoon for kids 2–6: no talking, just happy music.
+> Wash your hands with Oki before you eat! 🧼✨
+>
+> #OkiDoki #WashYourHands #KidsCartoon #ToddlerLearning #GoodHabits #CartoonForKids #Shorts
+
+Сборка серии: `python3 -I episodes/<серия>/music.py <звук.wav> 25`, затем `node lib/render.js episodes/<серия>/scene.js out/<имя>.mp4 <звук.wav> 0 25 30`.

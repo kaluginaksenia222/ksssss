@@ -83,6 +83,10 @@ function okiSVG(o) {
     const prop = side === 'L' ? o.propL : o.propR;
     return `<g transform="translate(${x0} ${y0}) rotate(${ang.toFixed(2)})">
       <ellipse cx="${side === 'L' ? -6 : 6}" cy="${ARM_LEN / 2 + 4}" rx="17" ry="${ARM_LEN / 2 + 6}" fill="${C.body}" ${st}/>
+      ${(o['mud' + side] || 0) > 0 ? `<g opacity="${o['mud' + side].toFixed(2)}">
+        <ellipse cx="${side === 'L' ? -6 : 6}" cy="${ARM_LEN - 2}" rx="13" ry="12" fill="#8A5A3B"/>
+        <circle cx="${side === 'L' ? -14 : 14}" cy="${ARM_LEN - 18}" r="5" fill="#8A5A3B"/>
+        <circle cx="${side === 'L' ? 2 : -2}" cy="${ARM_LEN - 22}" r="3.5" fill="#8A5A3B"/></g>` : ''}
       ${prop ? `<g transform="translate(0 ${ARM_LEN}) rotate(${-ang.toFixed(2)})">${prop}</g>` : ''}
     </g>`;
   };
@@ -228,6 +232,8 @@ function germ(t, { hue = 0, phase = 0, mood = 'cheeky' } = {}) {
 
 // ---------- предметы ----------
 const P = {
+  cookie: (bite = 0) => `<g transform="scale(${(1 - bite).toFixed(3)})"><circle r="34" fill="#E0A458" ${ink()}/>
+    <circle cx="-12" cy="-8" r="5" fill="#6B3E26"/><circle cx="10" cy="-12" r="4" fill="#6B3E26"/><circle cx="4" cy="10" r="5" fill="#6B3E26"/><circle cx="-14" cy="14" r="3.5" fill="#6B3E26"/><circle cx="18" cy="8" r="3.5" fill="#6B3E26"/></g>`,
   toothbrush: (paste = 0) => `
     <rect x="-62" y="-10" width="92" height="20" rx="10" fill="${C.teal}" ${ink()}/>
     <rect x="24" y="-11" width="42" height="22" rx="7" fill="#fff" ${ink()}/>
