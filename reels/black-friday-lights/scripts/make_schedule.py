@@ -52,8 +52,8 @@ for w in windows:
 PCT_LAST = max(w["off"] for w in windows if w["p"])
 
 # ---- текст: буквы «включаются» как окна ----
-LINES = ["ЧЁРНАЯ ПЯТНИЦА", "ВЫСОЦКИЙ ДЕВЕЛОПМЕНТ", "СКИДКИ НА КВАРТИРЫ", "В ЖК ЛУВР"]
-STEPS = [(PCT_LAST + 0.5, 0.05), (None, 0.034), (None, 0.034), (None, 0.05)]
+LINES = ["ЧЁРНАЯ ПЯТНИЦА", "СКИДКИ НА КВАРТИРЫ", "В ЖК ЛУВР"]
+STEPS = [(PCT_LAST + 0.5, 0.05), (None, 0.034), (None, 0.05)]
 times, t = [], 0
 for text, (start, step) in zip(LINES, STEPS):
     t = start if start is not None else t + (0.1 if text == "В ЖК ЛУВР" else 0.28)
