@@ -12,7 +12,7 @@ import {
 } from 'remotion';
 import {fontsLoaded} from '../design/fonts';
 import {COLORS, EASE, FONTS} from '../design/tokens';
-import {CrowdSearch, DiagonalVeil, LightSweepTitle, NaturalSlider, UnderlineTitle} from './calm';
+import {CrowdSearch, DiagonalVeil, HighlightBubble, LightSweepTitle, NaturalSlider, UnderlineTitle} from './calm';
 import {PAGES} from './transcript';
 import {InstagramHandle} from './ui';
 
@@ -22,13 +22,13 @@ import {InstagramHandle} from './ui';
 const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
 
 const FACE = {cx: 590, cy: 620};
-const CUTS = [2.42, 4.02, 8.77, 14.37];
-const HOOK_END = 4.1;
-const BLUE = {from: 4.3, to: 8.75};
+const CUTS = [3.55, 3.89, 8.52, 13.82, 15.97, 19.12];
+const HOOK_END = 3.55;
+const BLUE = {from: 4.2, to: 8.5};
 const CAPTION_OFF = [
   [0, HOOK_END],
   [BLUE.from + 0.3, BLUE.to - 0.2],
-  [14.3, 99],
+  [19.12, 99],
 ];
 
 const Footage: React.FC = () => {
@@ -104,7 +104,7 @@ const SoundTrack: React.FC = () => {
       <Audio src={staticFile('music/calm_pad.wav')} volume={(f) => interpolate(f, [durationInFrames - 1.2 * fps, durationInFrames - 1], [1, 0], clamp)} />
       {sfx('shimmer', 0.2, 0.22, 1.1)}
       {[BLUE.from, BLUE.to - 0.7].map((at) => sfx('whoosh', at, 0.08, 0.6))}
-      {[9.86, 14.45].map((at) => sfx('pop', at, 0.05, 0.2))}
+      {[11.14, 16.4, 19.12].map((at) => sfx('pop', at, 0.05, 0.2))}
     </>
   );
 };
@@ -124,12 +124,13 @@ export const Natural: React.FC = () => {
 
       <Sequence name="Синяя сцена: никто не заметит" from={Math.round(BLUE.from * fps)} durationInFrames={Math.round((BLUE.to - BLUE.from) * fps)}>
         <DiagonalVeil until={BLUE.to - BLUE.from}>
-          <CrowdSearch until={BLUE.to - BLUE.from - 0.4} titleAt={7.12 - BLUE.from} />
+          <CrowdSearch until={BLUE.to - BLUE.from - 0.4} titleAt={6.32 - BLUE.from} />
         </DiagonalVeil>
       </Sequence>
 
-      <NaturalSlider at={9.0} settleAt={10.3} tugAt={12.6} until={14.3} top={1250} />
-      <UnderlineTitle at={14.35} until={15.7} text="Естественный результат" size={60} top={1060} />
+      <NaturalSlider at={9.2} settleAt={11.14} tugAt={13.96} until={15.95} top={1250} />
+      <HighlightBubble at={16.4} until={19.1} top={1220} />
+      <UnderlineTitle at={19.12} until={20.2} text="Естественный результат" size={60} top={1060} />
 
       <Captions />
       <AbsoluteFill style={{top: 'auto', bottom: 170, height: 'auto', alignItems: 'center'}}>

@@ -204,3 +204,30 @@ export const UnderlineTitle: React.FC<{at: number; until: number; text: string; 
     </div>
   );
 };
+
+// ——— 6. Кружок «актуальное», как в профиле Instagram: обводка прорисовывается по кругу,
+// внутри проявляется «до / после», под кружком — подпись ———
+export const HighlightBubble: React.FC<{at: number; until: number; top: number}> = ({at, until, top}) => {
+  const {frame, fps, t} = useT();
+  const v = useFade(at, until, 0.5);
+  const p = spring({frame: frame - Math.round(at * fps), fps, config: SOFT});
+  const ring = interpolate(t, [at + 0.1, at + 1.0], [0, 1], {...clamp, easing: EASE.inOut});
+  const inner = interpolate(t, [at + 0.5, at + 1.0], [0, 1], clamp);
+  return (
+    <div style={{position: 'absolute', top, left: 0, right: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', opacity: v, scale: String(interpolate(p, [0, 1], [0.9, 1]))}}>
+      <svg width={220} height={220} viewBox="-110 -110 220 220" style={{filter: 'drop-shadow(0 4px 16px rgba(0,0,0,0.45))'}}>
+        <circle r={86} fill="rgba(8,32,82,0.55)" />
+        <circle r={100} fill="none" stroke={COLORS.beige} strokeWidth={6} strokeLinecap="round" pathLength={1} strokeDasharray={`${ring} 1`} transform="rotate(-90)" />
+        <text y={-6} textAnchor="middle" fontFamily="InterTightCyr, InterTightLat, sans-serif" fontWeight={900} fontSize={34} fill={COLORS.white} opacity={inner}>
+          ДО
+        </text>
+        <text y={34} textAnchor="middle" fontFamily="InterTightCyr, InterTightLat, sans-serif" fontWeight={900} fontSize={34} fill={COLORS.beige} opacity={inner}>
+          ПОСЛЕ
+        </text>
+      </svg>
+      <div style={{fontFamily: FONTS.mono, fontWeight: 500, fontSize: 22, letterSpacing: '0.18em', color: COLORS.white, textShadow: '0 2px 12px rgba(0,0,0,0.6)', marginTop: 12, opacity: inner}}>
+        В АКТУАЛЬНОМ
+      </div>
+    </div>
+  );
+};
