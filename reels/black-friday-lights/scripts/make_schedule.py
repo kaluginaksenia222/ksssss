@@ -83,8 +83,8 @@ for text, step in zip(LINES2, (0.05, 0.09)):
     times2.append(row)
     t = row[-1] + 0.3
 NOTE = round(times2[-1][-1] + 0.45, 3)     # условия проявляются
-FADE = round(NOTE + 3.6, 2)                # успеть прочитать
-END = round(FADE + 0.9, 2)
+END = 15.0                                 # ролик ровно 15 секунд
+FADE = END - 0.9
 
 sched = {"cols": COLS, "rows": ROWS, "windows": windows, "lastOff": LAST, "pctOff": PCT_OFF0,
          "lines": LINES, "times": times, "offTimes": off_times,
