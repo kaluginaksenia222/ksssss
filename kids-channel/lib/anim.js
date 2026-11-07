@@ -153,7 +153,14 @@ function okiSVG(o) {
     default:
       mouth = `<path d="M-20 18 Q0 ${18 + 28 * mo} 20 18 Z" fill="#7A1F2B" ${ink(5)}/><ellipse cx="0" cy="${18 + 14 * mo}" rx="9" ry="${2 + 3 * mo}" fill="#FF7A8A"/>`;
   }
-  const eyes = o.eyes === 'happy' ? happyEye(-32) + happyEye(32) : eye(-32) + eye(32);
+  // глаза-спиральки: Оки «залип» в телефон
+  const spiralEye = (x) => {
+    const pts = [];
+    for (let i = 0; i <= 60; i++) { const th = (i / 60) * Math.PI * 4; const r = 1.4 * th; pts.push(`${(x + r * Math.cos(th)).toFixed(1)},${(-14 + r * Math.sin(th) * 1.15).toFixed(1)}`); }
+    return `<ellipse cx="${x}" cy="-14" rx="21" ry="26" fill="#fff" ${st}/>
+      <polyline points="${pts.join(' ')}" fill="none" stroke="#6C5CE7" stroke-width="3.5" stroke-linecap="round" transform="rotate(${(o.spin || 0).toFixed(1)} ${x} -14)"/>`;
+  };
+  const eyes = o.eyes === 'happy' ? happyEye(-32) + happyEye(32) : o.eyes === 'spiral' ? spiralEye(-32) + spiralEye(32) : eye(-32) + eye(32);
 
   // росток: droop — вянет, bloom — распускается цветок
   const droop = clamp(o.droop || 0), bloom = clamp(o.bloom || 0);
@@ -230,8 +237,47 @@ function germ(t, { hue = 0, phase = 0, mood = 'cheeky' } = {}) {
     <circle cx="-12" cy="18" r="3" fill="${C.germDark}" opacity=".6"/><circle cx="18" cy="-18" r="2.5" fill="${C.germDark}" opacity=".6"/>`;
 }
 
+// ---------- мячик-дружок (из 3-й серии) ----------
+// b: { sq (сжатие при ударе), spin (вращение полосок), look:[x,y], mood: 'happy'|'wink'|'o' }
+function ballSVG(b = {}) {
+  const sq = b.sq || 0, sx = 1 + sq * 0.22, sy = 1 - sq * 0.22;
+  const [lx, ly] = b.look || [0, 0];
+  const eye = (x) => b.mood === 'wink' && x > 0
+    ? `<path d="M${x - 9} -6 Q${x} -16 ${x + 9} -6" fill="none" ${ink(4)}/>`
+    : `<ellipse cx="${x}" cy="-8" rx="10" ry="12" fill="#fff" ${ink(4)}/><circle cx="${x + lx * 3}" cy="${-6 + ly * 4}" r="6" fill="#2B2340"/><circle cx="${x + lx * 3 - 2}" cy="${-9 + ly * 4}" r="2.2" fill="#fff"/>`;
+  const mouth = b.mood === 'o' ? `<ellipse cx="0" cy="18" rx="7" ry="8" fill="#7A1F2B" ${ink(3.5)}/>`
+    : `<path d="M-14 12 Q0 30 14 12 Z" fill="#7A1F2B" ${ink(3.5)}/>`;
+  return `<g transform="translate(0 64) scale(${sx.toFixed(3)} ${sy.toFixed(3)}) translate(0 -64)">
+    <clipPath id="ballc"><circle r="64"/></clipPath>
+    <circle r="64" fill="${C.blue}"/>
+    <g clip-path="url(#ballc)" transform="rotate(${(b.spin || 0).toFixed(1)})">
+      <rect x="-70" y="-14" width="140" height="28" fill="${C.yellow}"/>
+      <rect x="-14" y="-70" width="28" height="140" fill="#FF5A5F" opacity=".9"/>
+    </g>
+    <circle r="64" fill="none" ${ink(6)}/>
+    <ellipse cx="-26" cy="-34" rx="16" ry="9" transform="rotate(-30 -26 -34)" fill="#fff" opacity=".5"/>
+    <g transform="translate(0 6)">${eye(-18)}${eye(18)}${mouth}<ellipse cx="-34" cy="10" rx="8" ry="5" fill="#FF4F6D" opacity=".5"/><ellipse cx="34" cy="10" rx="8" ry="5" fill="#FF4F6D" opacity=".5"/></g>
+  </g>`;
+}
+
 // ---------- предметы ----------
 const P = {
+  phone: (mode = 'game', t = 0) => {
+    let screen = '';
+    if (mode === 'game') {
+      const cols = ['#FF5A5F', '#FFD23F', '#4CC25E', '#4D96FF', '#8C6CF2'];
+      for (let i = 0; i < 6; i++) {
+        const c = cols[(i + Math.floor(t * 6)) % cols.length];
+        screen += `<rect x="${-26 + (i % 2) * 28}" y="${-46 + Math.floor(i / 2) * 32}" width="24" height="26" rx="6" fill="${c}"/>`;
+      }
+    } else if (mode === 'sleep') {
+      screen = `<rect x="-30" y="-50" width="60" height="100" rx="8" fill="#2B2F4A"/>
+        <path d="M-18 0 Q-11 7 -4 0 M4 0 Q11 7 18 0" fill="none" stroke="#9EB3FF" stroke-width="4" stroke-linecap="round"/>`;
+    }
+    return `<rect x="-38" y="-62" width="76" height="124" rx="14" fill="#2B2340" ${ink(5)}/>
+      <rect x="-30" y="-50" width="60" height="100" rx="8" fill="${mode === 'game' ? '#BFF3FF' : '#2B2F4A'}"/>${screen}
+      <circle cx="0" cy="55" r="3.5" fill="#888"/>`;
+  },
   cookie: (bite = 0) => `<g transform="scale(${(1 - bite).toFixed(3)})"><circle r="34" fill="#E0A458" ${ink()}/>
     <circle cx="-12" cy="-8" r="5" fill="#6B3E26"/><circle cx="10" cy="-12" r="4" fill="#6B3E26"/><circle cx="4" cy="10" r="5" fill="#6B3E26"/><circle cx="-14" cy="14" r="3.5" fill="#6B3E26"/><circle cx="18" cy="8" r="3.5" fill="#6B3E26"/></g>`,
   toothbrush: (paste = 0) => `
@@ -284,4 +330,4 @@ const DEFS = `
     </radialGradient>
   </defs>`;
 
-module.exports = { C, clamp, lerp, E, kf, win, g, ink, okiSVG, okiPoint, handWorld, handLocal, germ, P, DEFS };
+module.exports = { ballSVG, C, clamp, lerp, E, kf, win, g, ink, okiSVG, okiPoint, handWorld, handLocal, germ, P, DEFS };

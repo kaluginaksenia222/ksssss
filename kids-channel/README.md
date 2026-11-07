@@ -92,4 +92,21 @@
 >
 > #OkiDoki #WashYourHands #KidsCartoon #ToddlerLearning #GoodHabits #CartoonForKids #Shorts
 
+### Серия 3 — «Телефон в сторону, идём играть» (`episodes/03-phone-away`, 25 с)
+
+Другая анимация: пока Оки в телефоне, мир серый (а за окном ярко), после — взрыв цвета, перелёт на улицу, бег и радуга.
+Новый друг — мячик с мордочкой. Мелодия своя (свистелка + хлопки), чужую музыку не используем: Content ID.
+
+**Название:** Oki Puts the Phone Away 📱➡️⚽ Let's Play! | Oki Doki #shorts
+
+**Описание:**
+> Oki is stuck in his phone and the whole room turns grey… 📱
+> Knock-knock! A bouncy ball wants to play! Oki puts the phone to sleep — and the world bursts into color! 🌈
+> Run, jump and play outside with Oki and his new friend. ⚽🌼
+>
+> A wordless cartoon for kids 2–6: no talking, just happy music.
+> Put the phone away and go play with Oki! ✨
+>
+> #OkiDoki #ScreenTime #PlayOutside #KidsCartoon #ToddlerLearning #GoodHabits #Shorts
+
 Сборка серии: `python3 -I episodes/<серия>/music.py <звук.wav> 25`, затем `node lib/render.js episodes/<серия>/scene.js out/<имя>.mp4 <звук.wav> 0 25 30`.
