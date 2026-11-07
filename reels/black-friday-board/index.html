@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="ru" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Onest BF"; font-weight: 800; src: url("assets/fonts/onest-latin-800-normal.woff2") format("woff2"); unicode-range: U+0000-00FF; }
+      @font-face { font-family: "Onest BF"; font-weight: 800; src: url("assets/fonts/onest-cyrillic-800-normal.woff2") format("woff2"); unicode-range: U+0400-04FF; }
+
+      :root {
+        --ink: #f2f2f0;
+        --accent: #ff2a2a;
+        --tile-top: #1c1c1f;
+        --tile-bot: #161618;
+        --gap: #000;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+      #root { position: absolute; inset: 0; background: #000; }
+      #scene { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: hidden; }
+
+      /* табло 20 × 7, по центру кадра */
+      #board { position: absolute; left: 31px; top: 697px; width: 1017px; height: 526px; transform-origin: 540px 263px; }
+      .cell { position: absolute; width: 48px; height: 70px; perspective: 260px; }
+      .half { position: absolute; left: 0; width: 48px; height: 35px; overflow: hidden; }
+      .half span {
+        position: absolute; left: 0; width: 48px; height: 70px; line-height: 70px; text-align: center;
+        font-family: "Onest BF", sans-serif; font-weight: 800; font-size: 40px; color: var(--ink);
+      }
+      .top { top: 0; background: var(--tile-top); border-radius: 5px 5px 0 0; transform-origin: 50% 100%; }
+      .bot { top: 35px; background: var(--tile-bot); border-radius: 0 0 5px 5px; transform-origin: 50% 0%; }
+      .bot span { top: -35px; }
+      /* щель между половинками */
+      .cell::after { content: ""; position: absolute; left: 0; right: 0; top: 34px; height: 2px; background: var(--gap); z-index: 5; }
+      .flap { z-index: 3; backface-visibility: hidden; }
+      .red { color: var(--accent) !important; }
+
+      #logo { position: absolute; left: 50%; top: 1268px; width: 170px; margin-left: -85px; opacity: 0; }
+      #fade { position: absolute; inset: 0; background: #000; opacity: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="15" data-width="1080" data-height="1920">
+      <div id="scene" class="clip" data-start="0" data-duration="15" data-track-index="0" data-track-kind="graphics" data-layout-ignore>
+        <div id="board"></div>
+        <img id="logo" src="assets/img/logo-white.png" alt="" />
+        <div id="fade"></div>
+      </div>
+      <audio id="sfx" class="clip" src="assets/sfx/sfx.wav" data-start="0" data-duration="15" data-track-index="1" data-volume="1"></audio>
+    </div>
+    <script>
+      const COLS = 20, ROWS = 7, CW = 48, CH = 70, GX = 3, GY = 6;
+      const FLIP = 0.065;                // одна перекидка
+      const ABC = "АБВГДЕЖЗИКЛМНОПРСТУФХЦЧШЫЭЯ0123456789";
+
+      // ===== сцены табло: строка → текст (по центру), * в начале = красным =====
+      const SCENES = [
+        { t: 0.25, rows: { 3: "*ЧЕРНАЯ ПЯТНИЦА" } },
+        { t: 3.6, rows: { 1: "*ЧЕРНАЯ ПЯТНИЦА", 3: "ВЫСОЦКИЙ ДЕВЕЛОПМЕНТ", 4: "ВО ВСЕХ НАШИХ", 5: "КОМПЛЕКСАХ" } },
+        { t: 7.9, rows: { 1: "*ЧЕРНАЯ ПЯТНИЦА", 3: "ЖК ЛУВР", 4: "ЖК 9 КОСМОНАВТОВ", 5: "ЖК БОЛЬШОЙ КАРЕТНЫЙ" } },
+      ];
+      const T = { logo: 11.0, fade: 14.1, end: 15 };
+
+      const hash = (a, b, c) => {
+        let h = (a * 374761393 + b * 668265263 + c * 2147483647) >>> 0;
+        h = ((h ^ (h >>> 13)) * 1274126177) >>> 0;
+        return (h ^ (h >>> 16)) / 4294967296;
+      };
+
+      // что должно стоять в клетке в каждой сцене
+      function layout(scene) {
+        const g = Array.from({ length: ROWS }, () => Array.from({ length: COLS }, () => ({ ch: " ", red: false })));
+        for (const [r, raw] of Object.entries(scene.rows)) {
+          const red = raw[0] === "*", txt = red ? raw.slice(1) : raw;
+          const c0 = Math.floor((COLS - txt.length) / 2);
+          [...txt].forEach((ch, i) => (g[r][c0 + i] = { ch, red }));
+        }
+        return g;
+      }
+      const GRIDS = SCENES.map(layout);
+
+      // для каждой клетки — последовательность символов со временем начала каждой перекидки
+      const CELLS = [];
+      const FLIPS = []; // моменты всех перекидок — для звука
+      for (let r = 0; r < ROWS; r++)
+        for (let c = 0; c < COLS; c++) {
+          const seq = [{ ch: " ", red: false, t: -1 }];
+          let cur = seq[0];
+          SCENES.forEach((sc, si) => {
+            const target = GRIDS[si][r][c];
+            if (target.ch === cur.ch && target.red === cur.red) return;
+            let t = sc.t + c * 0.028 + r * 0.06 + hash(r, c, si) * 0.08;
+            const n = 3 + Math.floor(hash(c, r, si + 7) * 6);
+            for (let k = 0; k < n; k++) {
+              const ch = ABC[Math.floor(hash(r * 31 + k, c, si) * ABC.length)];
+              seq.push({ ch, red: false, t }); FLIPS.push(t); t += FLIP;
+            }
+            seq.push({ ch: target.ch, red: target.red, t }); FLIPS.push(t);
+            cur = target;
+          });
+          CELLS.push({ r, c, seq });
+        }
+
+      // DOM: 4 половинки на клетку — статичные верх/низ и две «створки»
+      const board = document.getElementById("board");
+      function half(cls) {
+        const d = document.createElement("div"); d.className = "half " + cls;
+        const s = document.createElement("span"); d.appendChild(s); return [d, s];
+      }
+      for (const cell of CELLS) {
+        const el = document.createElement("div"); el.className = "cell";
+        el.style.left = cell.c * (CW + GX) + "px"; el.style.top = cell.r * (CH + GY) + "px";
+        const [top, topS] = half("top"), [bot, botS] = half("bot");
+        const [ft, ftS] = half("top flap"), [fb, fbS] = half("bot flap");
+        el.append(top, bot, ft, fb); board.appendChild(el);
+        Object.assign(cell, { topS, botS, ft, ftS, fb, fbS });
+      }
+      const set = (s, e) => { s.textContent = e.ch; s.classList.toggle("red", e.red); };
+
+      function render(t) {
+        for (const cell of CELLS) {
+          const q = cell.seq;
+          let k = 0;
+          while (k + 1 < q.length && t >= q[k + 1].t) k++;
+          // k — текущий символ; если идёт перекидка на k+1 … нет: перекидка k-1 → k длится FLIP после q[k].t
+          const A = k > 0 ? q[k - 1] : q[0], B = q[k];
+          const p = k > 0 ? (t - B.t) / FLIP : 1;
+          if (p >= 1) {
+            set(cell.topS, B); set(cell.botS, B);
+            cell.ft.style.visibility = "hidden"; cell.fb.style.visibility = "hidden";
+            continue;
+          }
+          // верх уже новый, низ ещё старый; створки переворачиваются
+          set(cell.topS, B); set(cell.botS, A);
+          if (p < 0.5) {
+            set(cell.ftS, A); cell.ft.style.visibility = "visible";
+            cell.ft.style.transform = `rotateX(${(-180 * p).toFixed(1)}deg)`;
+            cell.fb.style.visibility = "hidden";
+          } else {
+            set(cell.fbS, B); cell.fb.style.visibility = "visible";
+            cell.fb.style.transform = `rotateX(${(180 * (1 - p)).toFixed(1)}deg)`;
+            cell.ft.style.visibility = "hidden";
+          }
+        }
+      }
+
+      const tl = gsap.timeline({ paused: true, onUpdate: () => render(tl.time()) });
+      tl.fromTo("#board", { scale: 1 }, { scale: 1.04, duration: T.end, ease: "none" }, 0);
+      tl.fromTo("#logo", { opacity: 0, y: 12 }, { opacity: 0.95, y: 0, duration: 0.7, ease: "power2.out" }, T.logo);
+      tl.fromTo("#fade", { opacity: 0 }, { opacity: 1, duration: T.end - T.fade - 0.1, ease: "power1.in" }, T.fade);
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+      render(0);
+    </script>
+  </body>
+</html>
