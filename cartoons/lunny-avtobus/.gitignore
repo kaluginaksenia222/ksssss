@@ -1,0 +1,6 @@
+node_modules
+out/
+renders/
+# музыку генерирует scripts/lullaby.py
+public/music/
+public/*.mp4
