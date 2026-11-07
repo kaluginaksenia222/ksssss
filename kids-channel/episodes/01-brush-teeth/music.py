@@ -166,6 +166,22 @@ def tada():
     return s * 0.6
 
 
+def scrub():  # щётка шуршит
+    t = tt(0.16)
+    n = rng.uniform(-1, 1, len(t))
+    n = n - np.convolve(n, np.ones(6) / 6, mode='same')
+    return n * np.sin(np.pi * t / 0.16) ** 2
+
+
+def chime():  # цветок распускается: быстрое восходящее арпеджио колокольчиков
+    s = np.zeros(int(2.0 * SR))
+    for k, n in enumerate(['C5', 'E5', 'G5', 'C6', 'E6', 'G6']):
+        sig = musicbox(hz(n), 1.4)
+        i = int(k * 0.06 * SR)
+        s[i:i + len(sig)] += sig
+    return s * 0.5
+
+
 # ---------- партитура ----------
 B = 0.5  # доля
 
@@ -193,30 +209,49 @@ put(mus, 9.0, snare_roll(1.0), 0.25)
 for i in range(4):
     put(mus, 9.0 + i * 0.25, pluck(hz(['G3', 'B3', 'D4', 'G4'][i]), 0.4), 0.3)
 
-# 10.0+: основная тема — бодрые аккорды укулеле, бочка, хлопки, маримба
+# 10–18 и 19–24: основная тема — бодрые аккорды укулеле, бочка, хлопки, маримба.
+# 18–19: пауза в ударных (Оки смотрит на чистые зубы), 19: цветок распустился — тема снова.
 chords = [['C4', 'E4', 'G4'], ['G3', 'B3', 'D4'], ['A3', 'C4', 'E4'], ['F3', 'A3', 'C4']]
 roots = ['C3', 'G2', 'A2', 'F2']
 theme = [('E5', 0), ('G5', 0.5), ('G5', 1), ('A5', 1.5), ('G5', 2), ('E5', 3), ('D5', 4), ('B4', 4.5), ('D5', 5), ('G5', 6),
          ('C5', 8), ('E5', 8.5), ('A5', 9), ('G5', 10), ('E5', 11), ('F5', 12), ('E5', 13), ('D5', 14), ('C5', 15)]
-t0 = 10.0
-bar = 0
-while t0 + bar * 2 < DUR:
-    tb = t0 + bar * 2
-    ch = chords[bar % 4]
-    for beat in range(4):
-        for k, n in enumerate(ch):
-            put(mus, tb + beat * B + k * 0.012, pluck(hz(n), 0.4, 0.3), 0.16 if beat % 2 == 0 else 0.11)
-        put(mus, tb + beat * B, kick(), 0.5 if beat % 2 == 0 else 0.0)
-        if beat % 2 == 1:
-            put(mus, tb + beat * B, clap(), 0.35)
-        put(mus, tb + beat * B + 0.25, shaker(), 1.0)
-        put(mus, tb + beat * B, shaker(), 0.6)
-    put(mus, tb, bass(hz(roots[bar % 4])), 0.35)
-    put(mus, tb + 1.0, bass(hz(roots[bar % 4])), 0.3)
-    put(mus, tb + 1.5, bass(hz(roots[bar % 4]) * 1.5), 0.25)
-    bar += 1
+END = 24.0
+tb = 10.0
+while tb < END - 0.01:
+    if 18.0 <= tb < 19.0:
+        tb += B
+        continue
+    rel = tb - (10.0 if tb < 18.0 else 19.0)
+    ci = int(rel // 2) % 4
+    beat = int(round(rel / B)) % 4
+    for k, n in enumerate(chords[ci]):
+        put(mus, tb + k * 0.012, pluck(hz(n), 0.4, 0.3), 0.16 if beat % 2 == 0 else 0.11)
+    if beat % 2 == 0:
+        put(mus, tb, kick(), 0.5)
+    else:
+        put(mus, tb, clap(), 0.35)
+    put(mus, tb, shaker(), 0.6)
+    put(mus, tb + 0.25, shaker(), 1.0)
+    if beat == 0:
+        put(mus, tb, bass(hz(roots[ci])), 0.35)
+    if beat == 2:
+        put(mus, tb, bass(hz(roots[ci])), 0.3)
+    if beat == 3:
+        put(mus, tb, bass(hz(roots[ci]) * 1.5), 0.25)
+    tb += B
 for n, b in theme:
-    put(mus, t0 + b * B, marimba(hz(n), 0.45), 0.3)
+    put(mus, 10.0 + b * B, marimba(hz(n), 0.45), 0.3)
+for n, b in theme:
+    if b < 10:
+        put(mus, 19.0 + b * B, marimba(hz(n), 0.45), 0.3)
+# 18–19: мягкий пэд и колокольчики на паузе
+put(mus, 17.8, pad([hz('F3'), hz('A3'), hz('C4')], 1.3), 0.16)
+# финальный аккорд
+for k, n in enumerate(['C4', 'E4', 'G4', 'C5']):
+    put(mus, END + k * 0.03, pluck(hz(n), 1.0, 0.8), 0.3)
+put(mus, END, musicbox(hz('C6'), 1.0), 0.25)
+put(mus, END, kick(), 0.5)
+put(mus, END, bass(hz('C3'), 1.0), 0.35)
 
 # ---------- звуки к картинке ----------
 for at in (0.5, 1.0, 1.5):
@@ -233,6 +268,24 @@ put(sfx, 8.75, squish(), 0.55)                       # тюбик
 put(sfx, 8.85, slide(500, 1000, 0.5), 0.07)          # паста летит
 put(sfx, 9.4, squish(), 0.4)                         # плюх на щётку
 put(sfx, 9.95, tada(), 0.22)                         # та-да
+k = 0
+while 11.0 + k * 0.25 < 17.0:                      # щётка шуршит в такт
+    put(sfx, 11.0 + k * 0.25, scrub(), 0.10)
+    k += 1
+for tp in (12.0, 13.5, 15.0):                       # пена летит, микроб лопается
+    put(sfx, tp - 0.45, boop(500), 0.25)
+    put(sfx, tp, pop(), 0.55)
+    put(sfx, tp + 0.03, slide(900, 1500, 0.18), 0.12)
+put(sfx, 17.0, whoosh(0.5), 0.3)                     # щётка обратно в стакан
+put(sfx, 17.5, marimba(hz('E6'), 0.3), 0.25)
+put(sfx, 18.2, musicbox(hz('E7'), 0.8) + musicbox(hz('B7'), 0.8), 0.18)   # зубы сверкают
+put(sfx, 18.9, pop(), 0.5)                           # цветок
+put(sfx, 18.9, chime(), 0.35)
+for k in range(6):                                   # прыжки в танце
+    put(sfx, 19.5 + k * 0.5 + 0.48, boop(300), 0.18)
+put(sfx, 21.9, pop(), 0.4)                           # значок
+put(sfx, 21.95, ding(), 0.18)
+put(sfx, 22.6, slide(500, 800, 0.35), 0.08)          # пока-пока
 
 mus[int(10.0 * SR):] *= 0.5  # основная тема не должна быть резко громче вступления
 mix = mus * 0.85 + sfx

@@ -87,7 +87,7 @@ function okiSVG(o) {
     </g>`;
   };
   // руки, опущенные вниз, — за телом; поднятые — перед ним
-  const behind = (side) => (side === 'L' ? o.armL || 0 : o.armR || 0) < 40;
+  const behind = (side) => { const r = side === 'L' ? o.armL || 0 : o.armR || 0; return r < 40 && r > -25; }; // рука внутрь (отрицательный подъём) — перед телом
 
   // глаза
   const [lx, ly] = o.look || [0, 0];
@@ -138,6 +138,9 @@ function okiSVG(o) {
       break;
     case 'flat':
       mouth = `<path d="M-14 24 Q0 ${20 - 6 * mo} 14 24" fill="none" ${st}/>`;
+      break;
+    case 'puff':
+      mouth = `<path d="M-10 24 Q0 30 10 24" fill="none" ${st}/>`;
       break;
     case 'brush':
       mouth = `<path d="M-22 16 Q0 ${30 + 10 * mo} 22 16 Z" fill="#7A1F2B" ${ink(5)}/>
