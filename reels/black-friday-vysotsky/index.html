@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="ru" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter Tight BF";
+        font-weight: 900;
+        src: url("assets/fonts/inter-tight-latin-900-normal.woff2") format("woff2");
+        unicode-range: U+0000-00FF;
+      }
+      @font-face {
+        font-family: "Inter Tight BF";
+        font-weight: 900;
+        src: url("assets/fonts/inter-tight-cyrillic-900-normal.woff2") format("woff2");
+        unicode-range: U+0400-04FF;
+      }
+      @font-face {
+        font-family: "JetBrains Mono BF";
+        font-weight: 500;
+        src: url("assets/fonts/jetbrains-mono-latin-500-normal.woff2") format("woff2");
+        unicode-range: U+0000-00FF;
+      }
+      @font-face {
+        font-family: "JetBrains Mono BF";
+        font-weight: 500;
+        src: url("assets/fonts/jetbrains-mono-cyrillic-500-normal.woff2") format("woff2");
+        unicode-range: U+0400-04FF;
+      }
+      :root {
+        --ground: #000;
+        --ink: #ffffff;
+        --ink-2: #a6a6a6;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: var(--ground);
+      }
+      #root {
+        position: absolute;
+        inset: 0;
+        background: var(--ground);
+      }
+      #type {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1080px;
+        height: 1920px;
+      }
+      /* блок текста чуть ниже середины кадра */
+      #block {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 960px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+      }
+      .line {
+        position: relative;
+        white-space: pre;
+      }
+      #l1 {
+        font-family: "Inter Tight BF", sans-serif;
+        font-weight: 900;
+        font-size: 80px;
+        line-height: 1;
+        letter-spacing: 0.01em;
+        color: var(--ink);
+      }
+      #l2 {
+        font-family: "JetBrains Mono BF", monospace;
+        font-weight: 500;
+        font-size: 30px;
+        line-height: 1;
+        letter-spacing: 0.22em;
+        color: var(--ink-2);
+      }
+      .ch {
+        position: relative;
+        color: transparent;
+      }
+      .cursor {
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: var(--ink);
+        opacity: 0;
+      }
+      #c1 {
+        width: 7px;
+        height: 80px;
+      }
+      #c2 {
+        width: 4px;
+        height: 32px;
+        background: var(--ink-2);
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="5.5"
+      data-width="1080"
+      data-height="1920"
+    >
+      <div
+        id="type"
+        class="clip"
+        data-start="0"
+        data-duration="5.5"
+        data-track-index="0"
+        data-track-kind="graphics"
+      >
+        <div id="block" data-layout-ignore>
+          <div id="l1" class="line" data-text="BLACK FRIDAY"><span id="c1" class="cursor"></span></div>
+          <div id="l2" class="line" data-text="ВЫСОЦКИЙ ДЕВЕЛОПМЕНТ"><span id="c2" class="cursor"></span></div>
+        </div>
+      </div>
+      <audio
+        id="typing"
+        class="clip"
+        src="assets/sfx/typing.wav"
+        data-start="0"
+        data-duration="5.5"
+        data-track-index="1"
+        data-volume="1"
+      ></audio>
+    </div>
+    <script>
+      // Время появления каждой буквы (с), то же расписание, по которому собран звук клавиш:
+      // scripts/make_typing_sound.py → scripts/schedule.json
+      const TIMES = [
+        [0.55, 0.634, 0.708, 0.813, 0.882, 0.979, 1.126, 1.194, 1.29, 1.357, 1.448, 1.517],
+        [2.167, 2.234, 2.317, 2.372, 2.431, 2.506, 2.594, 2.667, 2.733, 2.882, 2.934, 3.018, 3.08, 3.136, 3.19, 3.253, 3.335, 3.392, 3.466, 3.541],
+      ];
+      const DURATION = 5.5;
+      const BLINK = 0.53;
+
+      const lines = [document.getElementById("l1"), document.getElementById("l2")];
+      const cursors = [document.getElementById("c1"), document.getElementById("c2")];
+      const chars = lines.map((line) => {
+        const spans = [];
+        for (const ch of line.dataset.text) {
+          const s = document.createElement("span");
+          s.className = "ch";
+          s.textContent = ch;
+          line.insertBefore(s, line.lastElementChild);
+          spans.push(s);
+        }
+        return spans;
+      });
+
+      // Всё на экране — функция времени t: буквы, позиция и мигание курсора.
+      function render(t) {
+        let active = 0; // строка, где стоит курсор
+        if (t >= TIMES[0][TIMES[0].length - 1] + 0.35) active = 1;
+        chars.forEach((spans, li) => {
+          spans.forEach((s, i) => (s.style.color = t >= TIMES[li][i] ? "inherit" : "transparent"));
+        });
+        cursors.forEach((c, li) => {
+          if (li !== active) {
+            c.style.opacity = 0;
+            return;
+          }
+          const times = TIMES[li];
+          let n = 0;
+          while (n < times.length && t >= times[n]) n++;
+          const typing = n > 0 && n < times.length;
+          // курсор живёт внутри последней напечатанной буквы (без замеров вёрстки)
+          const host = n === 0 ? chars[li][0] : chars[li][n - 1];
+          if (c.parentNode !== host) host.appendChild(c);
+          c.style.left = n === 0 ? `${li === 0 ? -6 : -4}px` : `calc(100% + ${li === 0 ? 6 : 4}px)`;
+          // до начала и после конца строки курсор мигает, во время печати горит
+          const since = n === 0 ? t : t - times[times.length - 1];
+          const blinkOn = Math.floor(since / BLINK) % 2 === 0;
+          let o = typing ? 1 : blinkOn ? 1 : 0;
+          if (li === 1 && t > DURATION - 0.6) o = 0; // в самом конце курсор уходит
+          c.style.opacity = o;
+        });
+      }
+
+      const tl = gsap.timeline({ paused: true, onUpdate: () => render(tl.time()) });
+      // лёгкий наезд на весь блок, чтобы кадр жил
+      tl.fromTo("#block", { scale: 1 }, { scale: 1.04, duration: DURATION, ease: "none" }, 0);
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+      render(0);
+    </script>
+  </body>
+</html>
