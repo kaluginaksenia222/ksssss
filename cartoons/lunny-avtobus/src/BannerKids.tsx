@@ -2,6 +2,7 @@
 // Главное — в безопасной зоне 1235×338 по центру (x 406–1641, y 407–745).
 import React from "react";
 import { AbsoluteFill } from "remotion";
+import { Bear, Bunny, Butterfly, Chick, Hedgehog, Kitten } from "./animals";
 
 const W = 2048;
 const H = 1152;
@@ -17,7 +18,6 @@ const Cloud: React.FC<{ x: number; y: number; s: number }> = ({ x, y, s }) => (
 
 const Balloon: React.FC<{ x: number; y: number; c: string; s?: number; tilt?: number }> = ({ x, y, c, s = 1, tilt = 0 }) => (
   <g transform={`translate(${x} ${y}) scale(${s}) rotate(${tilt})`}>
-    <path d="M0,62 q-14,40 6,80 q16,34 -4,74" stroke="#5b5b7a" strokeWidth={3} fill="none" />
     <ellipse cx={0} cy={0} rx={48} ry={60} fill={c} />
     <path d="M-8,58 L8,58 L0,70Z" fill={c} />
     <ellipse cx={-18} cy={-22} rx={10} ry={18} fill="#fff" opacity={0.45} transform="rotate(20 -18 -22)" />
@@ -42,6 +42,15 @@ const Flower: React.FC<{ x: number; y: number; c: string }> = ({ x, y, c }) => (
     <circle r={6} fill="#ffd23f" />
   </g>
 );
+
+const PAW: [number, number] = [971, 581];
+const BALLOONS: [number, number, string, number, number][] = [
+  [880, 420, "#ff5a5f", 1, -12],
+  [960, 370, "#ffd23f", 0.9, -5],
+  [1040, 340, "#ff8fc7", 1.1, 0],
+  [1125, 375, "#3fa9f5", 0.95, 6],
+  [1195, 430, "#8a6cf0", 0.85, 12],
+];
 
 export const BannerKids: React.FC = () => {
   const rainbow = ["#ff5a5f", "#ff9f1c", "#ffd23f", "#5ccf5a", "#3fa9f5", "#8a6cf0"];
@@ -77,15 +86,31 @@ export const BannerKids: React.FC = () => {
         <Tree x={330} y={900} s={0.8} c="#4cbb45" />
         <Tree x={1850} y={850} s={1.1} c="#3fa83a" />
         <Tree x={1700} y={890} s={0.8} c="#4cbb45" />
+        <g transform="translate(560 1000) scale(0.9)"><Hedgehog /></g>
+        <g transform="translate(1380 1000) scale(0.8)"><Chick /></g>
+        <g transform="translate(1460 1020) scale(0.65)"><Chick flip /></g>
         {Array.from({ length: 40 }, (_, i) => (
           <Flower key={i} x={rnd(i, 1) * W} y={1010 + rnd(i, 2) * 110} c={flowerColors[i % 5]} />
         ))}
-        {/* шарики в безопасной зоне */}
-        <Balloon x={760} y={520} c="#ff5a5f" tilt={-8} />
-        <Balloon x={850} y={480} c="#ffd23f" s={0.9} tilt={4} />
-        <Balloon x={1200} y={500} c="#3fa9f5" tilt={6} />
-        <Balloon x={1290} y={545} c="#8a6cf0" s={0.85} tilt={-4} />
-        <Balloon x={1024} y={450} c="#ff8fc7" s={1.1} />
+        {/* котёнок летит на шариках — в центре безопасной зоны */}
+        {BALLOONS.map(([x, y, c, sc], i) => (
+          <path key={i} d={`M${x},${(y as number) + 66 * (sc as number)} Q${((x as number) + PAW[0]) / 2 + (i % 2 ? 14 : -14)},${((y as number) + PAW[1]) / 2 + 30} ${PAW[0]},${PAW[1]}`} stroke="#5b5b7a" strokeWidth={3} fill="none" />
+        ))}
+        {BALLOONS.map(([x, y, c, sc, t], i) => (
+          <Balloon key={i} x={x as number} y={y as number} c={c as string} s={sc as number} tilt={t as number} />
+        ))}
+        <g transform="translate(1038 668) scale(0.95)">
+          <Kitten />
+        </g>
+        {/* зайка и медвежонок сидят на облаках у радуги */}
+        <g transform="translate(520 640) scale(0.95)">
+          <Bunny />
+        </g>
+        <g transform="translate(1530 650) scale(0.95)">
+          <Bear />
+        </g>
+        <g transform="translate(700 470) rotate(-15) scale(1.1)"><Butterfly c="#ff8fc7" /></g>
+        <g transform="translate(1390 430) rotate(12)"><Butterfly c="#8a6cf0" /></g>
         {/* воздушный змей слева */}
         <g transform="translate(560 300) rotate(-15)">
           <path d="M0,-70 L50,0 L0,90 L-50,0Z" fill="#ff9f1c" />
