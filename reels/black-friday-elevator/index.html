@@ -65,9 +65,9 @@
       #page2 { justify-content: flex-start; padding-top: 560px; }
       .line { position: relative; white-space: pre; line-height: 1; }
       #l1 { font-weight: 800; font-size: 76px; letter-spacing: 0.01em; color: var(--ink); }
-      #l2 { font-weight: 800; font-size: 44px; letter-spacing: 0.04em; color: var(--accent); margin-top: 64px; }
-      #l3 { font-weight: 800; font-size: 44px; letter-spacing: 0.04em; color: var(--accent); margin-top: 14px; }
+      #l2 { font-weight: 800; font-size: 56px; letter-spacing: 0.02em; color: var(--accent); margin-top: 34px; }
       #m1 { font-weight: 800; font-size: 76px; letter-spacing: 0.01em; color: var(--ink); }
+      #m2 { font-weight: 800; font-size: 44px; letter-spacing: 0.04em; color: var(--ink); margin-top: 54px; }
       /* «−11%» — тем же табло лифта */
       #pctLed { position: relative; --dot: 22px; --dgap: 6px; --gap: 28px; --glow: 12px; margin-top: 54px; }
       .ch { color: transparent; }
@@ -95,21 +95,21 @@
         <div id="page1" class="page">
           <div id="l1" class="line"></div>
           <div id="l2" class="line"></div>
-          <div id="l3" class="line"></div>
         </div>
         <div id="page2" class="page">
           <div id="m1" class="line"></div>
           <div id="pctLed" class="led"></div>
+          <div id="m2" class="line"></div>
         </div>
         <div id="note">АКЦИЯ ДЕЙСТВУЕТ ДО 15&nbsp;НОЯБРЯ. НЕ СУММИРУЕТСЯ С&nbsp;ДРУГИМИ ПРЕДЛОЖЕНИЯМИ. ПОДРОБНОСТИ УТОЧНЯЙТЕ В&nbsp;ОТДЕЛЕ ПРОДАЖ И ПО ТЕЛЕФОНУ&nbsp;303-99-99</div>
         <div id="fade"></div>
       </div>
     </div>
     <script>
-      // ================= тексты (заглушки ЖК и цифр — заменить) =================
-      const PAGE1 = ["ЧЁРНАЯ ПЯТНИЦА", "СКИДКИ НА КВАРТИРЫ", "В ЖК НАЗВАНИЕ"];
-      const PAGE2 = ["11 КВАРТИР"];
-      const PCT = "-11%";
+      // ================= тексты =================
+      const PAGE1 = ["ЧЁРНАЯ ПЯТНИЦА", "ЖК БОЛЬШОЙ КАРЕТНЫЙ"];
+      const PAGE2 = ["СКИДКИ", "НА ПЕРВУЮ ОЧЕРЕДЬ"];
+      const PCT = "-3%";
 
       // ================= шрифт табло 5×7 =================
       const G = {
@@ -176,7 +176,7 @@
       }
       const T = {
         glitch: 3.22, bf: 3.5, doors: 4.35, doorsEnd: 5.35, push: 4.45, pushEnd: 5.7,
-        text1: 5.6, p1off: 9.4, text2: 10.05, pct: 10.75, note: 11.55, fade: 14.1, end: 15,
+        text1: 5.6, p1off: 9.4, text2: 10.05, pct: 10.75, note: 12.0, fade: 14.1, end: 15,
       };
       // буквы страницы 1 и 2
       function typeTimes(lines, start, steps, gaps) {
@@ -189,9 +189,12 @@
         });
         return out;
       }
-      const TIMES1 = typeTimes(PAGE1, T.text1, [0.05, 0.034, 0.05], [0.28, 0.1]);
+      const TIMES1 = typeTimes(PAGE1, T.text1, [0.05, 0.04], [0.28]);
       const OFF1 = PAGE1.map((text, li) => [...text].map((_, i) => T.p1off + li * 0.06 + i * 0.012 + hash(li, i) * 0.03));
-      const TIMES2 = typeTimes(PAGE2, T.text2, [0.05], []);
+      const TIMES2 = [
+        typeTimes([PAGE2[0]], T.text2, [0.05], [])[0],
+        typeTimes([PAGE2[1]], T.pct + PCT.length * 5 * 0.022 + 0.3, [0.04], [])[0],
+      ];
 
       // ================= буквы =================
       function spans(id, text) {
@@ -201,8 +204,8 @@
           s.className = "ch"; s.textContent = ch; line.appendChild(s); return s;
         });
       }
-      const chars1 = PAGE1.map((txt, i) => spans(["l1", "l2", "l3"][i], txt));
-      const chars2 = PAGE2.map((txt, i) => spans(["m1"][i], txt));
+      const chars1 = PAGE1.map((txt, i) => spans(["l1", "l2"][i], txt));
+      const chars2 = PAGE2.map((txt, i) => spans(["m1", "m2"][i], txt));
       function lampOn(dt) {
         if (dt < 0) return [0, 0];
         if (dt < 0.03) return [0.5, 1];
