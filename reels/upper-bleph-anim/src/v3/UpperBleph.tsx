@@ -6,21 +6,33 @@ import {COLORS, EASE, FONTS} from '../design/tokens';
 import {InstagramHandle} from './ui';
 
 // Схема верхней блефаропластики: глаз и веко тонкими линиями, операция по шагам.
-// Схематично и без натурализма. Время — секунды ролика.
+// Схематично и без натурализма. Закадровый голос — синтезированный (RHVoice). Время — секунды ролика.
 
 const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
 
 // Шаги: начало, номер, заголовок, пояснение
-const STEPS = [
-  {at: 2.2, title: 'Нависание кожи', note: 'избыток кожи ложится на веко, взгляд тяжёлый'},
-  {at: 5.0, title: 'Разметка', note: 'отмечаем лишнюю кожу, нижняя линия — в естественной складке'},
-  {at: 8.0, title: 'Разрез', note: 'по линиям разметки'},
-  {at: 10.5, title: 'Удаление кожи', note: 'убираем лишнюю полоску кожи'},
-  {at: 13.5, title: 'Жировые грыжи', note: 'при необходимости убираем излишек жира'},
-  {at: 16.5, title: 'Косметический шов', note: 'шов прячется в естественной складке века'},
+// Время шагов совпадает с началом реплик озвучки (voice.json, длительности — из scripts/voice.py)
+const VOICE = [
+  {id: 'hook', at: 0.3},
+  {id: 's1', at: 4.64},
+  {id: 's2', at: 10.75},
+  {id: 's3', at: 17.44},
+  {id: 's4', at: 21.7},
+  {id: 's5', at: 26.49},
+  {id: 's6', at: 30.69},
+  {id: 'result', at: 36.41},
 ];
-const RESULT_AT = 19.5;
-const END = 24.5;
+const HOOK_END = 4.4;
+const STEPS = [
+  {at: 4.64, title: 'Нависание кожи', note: 'избыток кожи ложится на веко, взгляд тяжёлый'},
+  {at: 10.75, title: 'Разметка', note: 'отмечаем лишнюю кожу, нижняя линия — в естественной складке'},
+  {at: 17.44, title: 'Разрез', note: 'по линиям разметки'},
+  {at: 21.7, title: 'Удаление кожи', note: 'убираем лишнюю полоску кожи'},
+  {at: 26.49, title: 'Жировые грыжи', note: 'при необходимости убираем излишек жира'},
+  {at: 30.69, title: 'Косметический шов', note: 'шов прячется в естественной складке века'},
+];
+const RESULT_AT = 36.41;
+const END = 43.5;
 
 // Геометрия глаза (координаты внутри svg 1000×600)
 const LASH_LINE = 'M150 400 C330 270 670 270 850 400';
@@ -158,7 +170,7 @@ const Caption: React.FC<{num: string; title: string; note: string; at: number; u
 
 const Hook: React.FC = () => {
   const t = useT();
-  const v = Math.min(ease(t, 0.1, 0.7), 1 - ease(t, 1.8, 2.2));
+  const v = Math.min(ease(t, 0.1, 0.7), 1 - ease(t, HOOK_END - 0.4, HOOK_END));
   return (
     <div style={{position: 'absolute', top: 1110, left: 40, right: 40, textAlign: 'center', opacity: v}}>
       <div style={{fontFamily: FONTS.mono, fontWeight: 500, fontSize: 24, letterSpacing: '0.2em', color: 'rgba(255,255,255,0.75)'}}>КАК ПРОХОДИТ ОПЕРАЦИЯ</div>
@@ -203,7 +215,13 @@ export const UpperBleph: React.FC = () => {
       <AbsoluteFill style={{top: 'auto', bottom: 170, height: 'auto', alignItems: 'center'}}>
         <InstagramHandle handle="dr_kudryakov" />
       </AbsoluteFill>
-      <Audio src={staticFile('music/calm_pad.wav')} volume={(f) => interpolate(f, [durationInFrames - 1.5 * fps, durationInFrames - 1], [1.6, 0], clamp)} />
+      {VOICE.map((v) => (
+        <Sequence key={v.id} name={`Голос ${v.id}`} from={Math.round(v.at * fps)}>
+          <Audio src={staticFile(`voice/${v.id}.wav`)} />
+        </Sequence>
+      ))}
+      {/* Тихая музыка под голосом */}
+      <Audio src={staticFile('music/calm_pad_45.wav')} volume={(f) => interpolate(f, [durationInFrames - 1.5 * fps, durationInFrames - 1], [1, 0], clamp)} />
       {[0.2, ...STEPS.map((s) => s.at), RESULT_AT].map((at) => (
         <Sequence key={at} from={Math.round(at * fps)} durationInFrames={Math.round(0.3 * fps)}>
           <Audio src={staticFile('sfx/pop.wav')} volume={0.06} />
