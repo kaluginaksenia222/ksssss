@@ -51,27 +51,29 @@
       .line { position: relative; white-space: pre; line-height: 1; }
       #l1 { font-weight: 800; font-size: 76px; letter-spacing: 0.01em; color: var(--ink); }
       #l2 { font-weight: 800; font-size: 56px; letter-spacing: 0.005em; color: var(--ink); margin-top: 22px; }
-      #l3 { font-weight: 800; font-size: 44px; letter-spacing: 0.04em; color: var(--accent); margin-top: 64px; }
-      #l4 { font-weight: 800; font-size: 44px; letter-spacing: 0.04em; color: var(--accent); margin-top: 14px; }
+      #l3 { font-weight: 800; font-size: 62px; letter-spacing: 0.03em; color: var(--ink); margin-top: 56px; }
+      #l4 { font-weight: 800; font-size: 62px; letter-spacing: 0.03em; color: var(--ink); margin-top: 12px; }
       .ch { color: transparent; }
+      /* логотип ЖК «Лувр» (светлая версия бренд-бука) и контакты — крупно, чтобы читалось издалека */
+      #logo2 { position: absolute; left: 50%; top: 150px; width: 260px; height: auto; margin-left: -130.0px; opacity: 0; }
+      #phone { font-family: "Onest BF", sans-serif; font-weight: 800; font-size: 84px; line-height: 1; letter-spacing: 0.02em; color: var(--ink); margin-top: 0; opacity: 0; }
+      #site { font-family: "Onest BF", sans-serif; font-weight: 500; font-size: 40px; line-height: 1.1; letter-spacing: 0.04em; color: #d6d6da; margin-top: 13px; opacity: 0; }
 
       /* страница 2 */
       #text2 {
         position: absolute; left: 0; right: 0; top: 0; bottom: 0;
-        display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
-        padding-top: 560px;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        padding-top: 0;
         font-family: "Onest BF", sans-serif;
       }
       #m1 { font-weight: 800; font-size: 76px; letter-spacing: 0.01em; color: var(--ink); }
-      #m2 { font-weight: 800; font-size: 180px; letter-spacing: -0.02em; color: var(--accent); margin-top: 18px; }
+      #m2 { font-weight: 800; font-size: 180px; letter-spacing: -0.02em; color: var(--accent); margin-top: 0; }
       /* условия акции — мелко, под главным, внутри безопасной зоны */
-      #note {
-        position: absolute; left: 110px; right: 110px; bottom: 90px;
-        font-family: "Onest BF", sans-serif; text-align: center; opacity: 0;
-      }
-      /* условия и рекламная пометка — мелко внизу */
-      #note .cond { font-weight: 500; font-size: 24px; line-height: 1.45; letter-spacing: 0.04em; color: var(--ink-2); }
-      #note .legal { margin-top: 22px; font-weight: 400; font-size: 20px; line-height: 1.45; color: #8a8a90; }
+      #note { position: relative; margin-top: 50px; font-family: "Onest BF", sans-serif; text-align: center; opacity: 0; }
+      #bottom { position: absolute; left: 60px; right: 60px; bottom: 70px; display: flex; flex-direction: column; align-items: center; }
+      /* крупнее обычного: файл уменьшают до 384×768 (×0,4) */
+      #note .cond { font-weight: 500; font-size: 22px; line-height: 1.4; letter-spacing: 0.03em; color: var(--ink-2); }
+      #note .legal { margin-top: 13px; font-weight: 400; font-size: 19px; line-height: 1.4; color: #8a8a90; }
 
       #fade { position: absolute; inset: 0; background: #000; opacity: 0; }
     </style>
@@ -92,9 +94,14 @@
           <div id="m1" class="line"></div>
           <div id="m2" class="line"></div>
         </div>
+        <img id="logo2" src="assets/img/louvre-logo.svg" alt="" />
+        <div id="bottom">
+        <div id="phone">303-99-99</div>
+        <div id="site">louvre-e.ru</div>
         <div id="note">
-          <div class="cond">АКЦИЯ ДЕЙСТВУЕТ ДО 15&nbsp;НОЯБРЯ. НЕ СУММИРУЕТСЯ С&nbsp;ДРУГИМИ ПРЕДЛОЖЕНИЯМИ. ПОДРОБНОСТИ УТОЧНЯЙТЕ В&nbsp;ОТДЕЛЕ ПРОДАЖ И ПО <span style="white-space: nowrap">ТЕЛЕФОНУ 303-99-99</span></div>
+          <div class="cond">АКЦИЯ ДЕЙСТВУЕТ ДО 15&nbsp;НОЯБРЯ. НЕ СУММИРУЕТСЯ С&nbsp;ДРУГИМИ ПРЕДЛОЖЕНИЯМИ. ПОДРОБНОСТИ УТОЧНЯЙТЕ В&nbsp;ОТДЕЛЕ ПРОДАЖ.</div>
           <div class="legal">Реклама квартир в&nbsp;жилом комплексе "Лувр" бизнес-класса в&nbsp;центре Екатеринбурга. Застройщик - ОБЩЕСТВО С&nbsp;ОГРАНИЧЕННОЙ ОТВЕТСТВЕННОСТЬЮ "СПЕЦИАЛИЗИРОВАННЫЙ ЗАСТРОЙЩИК "НИЖНЕЙСЕТСКИЙ ПРУД" ОГРН: 1169658108839, ИНН: 6685119693, КПП: 668501001</div>
+        </div>
         </div>
         <div id="fade"></div>
       </div>
@@ -165,7 +172,7 @@
         chars.forEach((row, li) =>
           row.forEach((s, i) => {
             const [o, glow] = lampOn(t - S.times[li][i]);
-            paint(s, o * lampOff(t - S.offTimes[li][i]), glow, li >= 1);
+            paint(s, o * lampOff(t - S.offTimes[li][i]), glow, false);
           }),
         );
         chars2.forEach((row, li) =>
@@ -186,6 +193,8 @@
       tl.fromTo("#text", { scale: 1 }, { scale: 1.03, duration: S.end - S.times[0][0], ease: "none" }, S.times[0][0]);
       // страница 2 еле заметно приближается, условия мягко проявляются
       tl.fromTo("#text2", { scale: 1 }, { scale: 1.03, duration: S.end - S.times2[0][0], ease: "none" }, S.times2[0][0]);
+      tl.fromTo("#logo2", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power1.out" }, S.times2[0][0]);
+      tl.fromTo(["#phone", "#site"], { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out", stagger: 0.12 }, S.times2[1].at(-1) + 0.3);
       tl.fromTo("#note", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, S.note);
       // финальное затухание
       tl.fromTo("#fade", { opacity: 0 }, { opacity: 1, duration: S.end - S.fade - 0.15, ease: "power1.in" }, S.fade);
