@@ -51,19 +51,23 @@
       .line { position: relative; white-space: pre; line-height: 1; }
       #l1 { font-weight: 800; font-size: 42px; letter-spacing: 0.01em; color: var(--ink); }
       #l2 { font-weight: 800; font-size: 56px; letter-spacing: 0.005em; color: var(--ink); margin-top: 22px; }
-      #l3 { font-weight: 800; font-size: 26px; letter-spacing: 0.04em; color: var(--accent); margin-top: 32px; }
-      #l4 { font-weight: 800; font-size: 26px; letter-spacing: 0.04em; color: var(--accent); margin-top: 8px; }
+      #l3 { font-weight: 800; font-size: 34px; letter-spacing: 0.03em; color: var(--ink); margin-top: 28px; }
+      #l4 { font-weight: 800; font-size: 34px; letter-spacing: 0.03em; color: var(--ink); margin-top: 8px; }
       .ch { color: transparent; }
+      /* логотип ЖК «Лувр» (светлая версия бренд-бука) и контакты — крупно, чтобы читалось издалека */
+      #logo2 { width: 130px; height: auto; margin-bottom: 26px; opacity: 0; }
+      #phone { font-family: "Onest BF", sans-serif; font-weight: 800; font-size: 46px; line-height: 1; letter-spacing: 0.02em; color: var(--ink); margin-top: 18px; opacity: 0; }
+      #site { font-family: "Onest BF", sans-serif; font-weight: 500; font-size: 22px; line-height: 1.1; letter-spacing: 0.04em; color: #d6d6da; margin-top: 6px; opacity: 0; }
 
       /* страница 2 */
       #text2 {
         position: absolute; left: 0; right: 0; top: 0; bottom: 0;
         display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
-        padding-top: 250px;
+        padding-top: 64px;
         font-family: "Onest BF", sans-serif;
       }
       #m1 { font-weight: 800; font-size: 40px; letter-spacing: 0.01em; color: var(--ink); }
-      #m2 { font-weight: 800; font-size: 108px; letter-spacing: -0.02em; color: var(--accent); margin-top: 6px; }
+      #m2 { font-weight: 800; font-size: 104px; letter-spacing: -0.02em; color: var(--accent); margin-top: 2px; }
       /* условия акции — мелко, под главным, внутри безопасной зоны */
       #note {
         position: absolute; left: 36px; right: 36px; bottom: 40px;
@@ -89,8 +93,11 @@
           <div id="l4" class="line"></div>
         </div>
         <div id="text2">
+          <img id="logo2" src="assets/img/louvre-logo.svg" alt="" />
           <div id="m1" class="line"></div>
           <div id="m2" class="line"></div>
+          <div id="phone">303-99-99</div>
+          <div id="site">louvre-e.ru</div>
         </div>
         <div id="note">
           <div class="cond">АКЦИЯ ДЕЙСТВУЕТ ДО 15&nbsp;НОЯБРЯ. НЕ СУММИРУЕТСЯ С&nbsp;ДРУГИМИ ПРЕДЛОЖЕНИЯМИ. ПОДРОБНОСТИ УТОЧНЯЙТЕ В&nbsp;ОТДЕЛЕ ПРОДАЖ И ПО ТЕЛЕФОНУ&nbsp;303-99-99</div>
@@ -165,7 +172,7 @@
         chars.forEach((row, li) =>
           row.forEach((s, i) => {
             const [o, glow] = lampOn(t - S.times[li][i]);
-            paint(s, o * lampOff(t - S.offTimes[li][i]), glow, li >= 1);
+            paint(s, o * lampOff(t - S.offTimes[li][i]), glow, false);
           }),
         );
         chars2.forEach((row, li) =>
@@ -186,6 +193,8 @@
       tl.fromTo("#text", { scale: 1 }, { scale: 1.03, duration: S.end - S.times[0][0], ease: "none" }, S.times[0][0]);
       // страница 2 еле заметно приближается, условия мягко проявляются
       tl.fromTo("#text2", { scale: 1 }, { scale: 1.03, duration: S.end - S.times2[0][0], ease: "none" }, S.times2[0][0]);
+      tl.fromTo("#logo2", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power1.out" }, S.times2[0][0]);
+      tl.fromTo(["#phone", "#site"], { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out", stagger: 0.12 }, S.times2[1].at(-1) + 0.3);
       tl.fromTo("#note", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, S.note);
       // финальное затухание
       tl.fromTo("#fade", { opacity: 0 }, { opacity: 1, duration: S.end - S.fade - 0.15, ease: "power1.in" }, S.fade);
