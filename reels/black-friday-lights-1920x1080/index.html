@@ -57,27 +57,25 @@
       #l4 { font-weight: 800; font-size: 58px; letter-spacing: 0.03em; color: var(--ink); margin-top: 10px; }
       .ch { color: transparent; }
       /* логотип ЖК «Лувр» (светлая версия бренд-бука) и контакты — крупно, чтобы читалось издалека */
-      #logo2 { width: 150px; height: auto; margin-bottom: 22px; opacity: 0; }
-      #phone { font-family: "Onest BF", sans-serif; font-weight: 800; font-size: 58px; line-height: 1; letter-spacing: 0.02em; color: var(--ink); margin-top: 16px; opacity: 0; }
-      #site { font-family: "Onest BF", sans-serif; font-weight: 500; font-size: 28px; line-height: 1.1; letter-spacing: 0.04em; color: #d6d6da; margin-top: 6px; opacity: 0; }
+      #logo2 { position: absolute; left: 50%; top: 40px; width: 130px; height: auto; margin-left: -65.0px; opacity: 0; }
+      #phone { font-family: "Onest BF", sans-serif; font-weight: 800; font-size: 52px; line-height: 1; letter-spacing: 0.02em; color: var(--ink); margin-top: 0; opacity: 0; }
+      #site { font-family: "Onest BF", sans-serif; font-weight: 500; font-size: 24px; line-height: 1.1; letter-spacing: 0.04em; color: #d6d6da; margin-top: 8px; opacity: 0; }
 
       /* страница 2 */
       #text2 {
         position: absolute; left: 0; right: 0; top: 0; bottom: 0;
-        display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
-        padding-top: 60px;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        padding-top: 0;
         font-family: "Onest BF", sans-serif;
       }
       #m1 { font-weight: 800; font-size: 56px; letter-spacing: 0.01em; color: var(--ink); }
-      #m2 { font-weight: 800; font-size: 170px; letter-spacing: -0.02em; color: var(--accent); margin-top: 0px; }
+      #m2 { font-weight: 800; font-size: 170px; letter-spacing: -0.02em; color: var(--accent); margin-top: 0; }
       /* условия акции — мелко, под главным, внутри безопасной зоны */
-      #note {
-        position: absolute; left: 200px; right: 200px; bottom: 56px;
-        font-family: "Onest BF", sans-serif; text-align: center; opacity: 0;
-      }
-      #note .cond { font-weight: 500; font-size: 20px; line-height: 1.45; letter-spacing: 0.04em; color: var(--ink-2); }
+      #note { position: relative; margin-top: 22px; font-family: "Onest BF", sans-serif; text-align: center; opacity: 0; }
+      #bottom { position: absolute; left: 200px; right: 200px; bottom: 36px; display: flex; flex-direction: column; align-items: center; }
+      #note .cond { font-weight: 500; font-size: 15px; line-height: 1.45; letter-spacing: 0.04em; color: var(--ink-2); }
       /* обязательная рекламная пометка — мельче, под условиями */
-      #note .legal { margin-top: 18px; font-weight: 400; font-size: 16px; line-height: 1.45; letter-spacing: 0.01em; color: #7c7c82; }
+      #note .legal { margin-top: 9px; font-weight: 400; font-size: 12px; line-height: 1.45; letter-spacing: 0.01em; color: #7c7c82; }
 
       #fade { position: absolute; inset: 0; background: #000; opacity: 0; }
     </style>
@@ -96,15 +94,17 @@
           <div id="l4" class="line"></div>
         </div>
         <div id="text2">
-          <img id="logo2" src="assets/img/louvre-logo.svg" alt="" />
           <div id="m1" class="line"></div>
           <div id="m2" class="line"></div>
-          <div id="phone">303-99-99</div>
-          <div id="site">louvre-e.ru</div>
         </div>
+        <img id="logo2" src="assets/img/louvre-logo.svg" alt="" />
+        <div id="bottom">
+        <div id="phone">303-99-99</div>
+        <div id="site">louvre-e.ru</div>
         <div id="note">
           <div class="cond">АКЦИЯ ДЕЙСТВУЕТ ДО 15&nbsp;НОЯБРЯ. НЕ СУММИРУЕТСЯ С&nbsp;ДРУГИМИ ПРЕДЛОЖЕНИЯМИ. ПОДРОБНОСТИ УТОЧНЯЙТЕ В&nbsp;ОТДЕЛЕ ПРОДАЖ.</div>
           <div class="legal">Реклама квартир в&nbsp;жилом комплексе "Лувр" бизнес-класса в&nbsp;центре Екатеринбурга. Застройщик - ОБЩЕСТВО С&nbsp;ОГРАНИЧЕННОЙ ОТВЕТСТВЕННОСТЬЮ "СПЕЦИАЛИЗИРОВАННЫЙ ЗАСТРОЙЩИК "НИЖНЕЙСЕТСКИЙ ПРУД" ОГРН: 1169658108839, ИНН: 6685119693, КПП: 668501001</div>
+        </div>
         </div>
         <div id="fade"></div>
         </div>
