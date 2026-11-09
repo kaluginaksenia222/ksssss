@@ -1,3 +1,5 @@
 .hyperframes/
 renders/
 __pycache__/
+formats/*/renders/
+formats/*/.hyperframes/
