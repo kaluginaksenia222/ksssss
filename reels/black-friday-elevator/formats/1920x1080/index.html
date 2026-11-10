@@ -50,7 +50,7 @@
       #opening { position: absolute; left: 14px; top: 14px; right: 14px; bottom: 0; overflow: hidden; background: #000; }
       #inside { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 40%, #241d15 0%, #0a0806 45%, #000 75%); opacity: 0; }
       .door {
-        position: absolute; top: 0; bottom: 0; width: 50%;
+        position: absolute; top: 0; bottom: 0; width: 50%; overflow: hidden;
         background:
           repeating-linear-gradient(90deg, rgba(255,255,255,0.10) 0 2px, rgba(0,0,0,0.05) 2px 5px),
           linear-gradient(90deg, var(--door-1), var(--door-2));
@@ -67,22 +67,26 @@
         font-family: "Onest BF", sans-serif;
       }
       #page1 { justify-content: center; }
-      #page2 { justify-content: flex-start; padding-top: 150px; }
+      #page2 { justify-content: center; padding-top: 0; padding-bottom: 150px; }
       .line { position: relative; white-space: pre; line-height: 1; }
       #l1 { font-weight: 800; font-size: 76px; letter-spacing: 0.01em; color: var(--ink); }
       #l2 { font-weight: 800; font-size: 56px; letter-spacing: 0.02em; color: var(--accent); margin-top: 34px; }
       #m1 { font-weight: 800; font-size: 76px; letter-spacing: 0.01em; color: var(--ink); }
-      #m2 { font-weight: 800; font-size: 44px; letter-spacing: 0.04em; color: var(--ink); margin-top: 54px; }
+      #m2 { font-weight: 800; font-size: 58px; letter-spacing: 0.03em; color: var(--ink); margin-top: 46px; }
       /* «−11%» — тем же табло лифта */
       #pctLed { position: relative; --dot: 22px; --dgap: 6px; --gap: 28px; --glow: 12px; margin-top: 54px; }
       .ch { color: transparent; }
-      #note {
-        position: absolute; left: 300px; right: 300px; bottom: 50px;
-        font-family: "Onest BF", sans-serif; text-align: center; opacity: 0;
-      }
-      #note .cond { font-weight: 500; font-size: 22px; line-height: 1.45; letter-spacing: 0.03em; color: var(--ink-2); }
+      .dlogo { position: absolute; top: 300px; width: 340px; height: auto; }
+      /* перевод аббревиатуры BF (закон «О рекламе») — под табло */
+      #bfcap { position: absolute; left: 0; width: 1080px; top: 566px; text-align: center; font-family: "Onest BF", sans-serif; font-weight: 800; font-size: 38px; letter-spacing: 0.03em; color: var(--ink); opacity: 0; }
+      #logo2 { position: absolute; left: 50%; top: 40px; width: 230px; height: auto; margin-left: -115.0px; opacity: 0; }
+      #bottom { position: absolute; left: 300px; right: 300px; bottom: 34px; display: flex; flex-direction: column; align-items: center; }
+      #phone { font-family: "Onest BF", sans-serif; font-weight: 800; font-size: 62px; line-height: 1; letter-spacing: 0.02em; color: var(--ink); opacity: 0; }
+      #site { font-family: "Onest BF", sans-serif; font-weight: 500; font-size: 30px; line-height: 1.1; letter-spacing: 0.04em; color: #d6d6da; margin-top: 9px; opacity: 0; }
+      #note { position: relative; margin-top: 22px; font-family: "Onest BF", sans-serif; text-align: center; opacity: 0; }
+      #note .cond { font-weight: 500; font-size: 17px; line-height: 1.45; letter-spacing: 0.03em; color: var(--ink-2); }
       /* обязательная рекламная пометка — мельче, под условиями */
-      #note .legal { margin-top: 20px; font-weight: 400; font-size: 18px; line-height: 1.45; color: #85858b; }
+      #note .legal { margin-top: 15px; font-weight: 400; font-size: 14px; line-height: 1.45; color: #85858b; }
       #fade { position: absolute; inset: 0; background: #000; opacity: 0; }
     </style>
   </head>
@@ -93,11 +97,12 @@
         <div id="cam">
           <div id="lift">
           <div id="panel"><div id="floorLed" class="led"></div></div>
+          <div id="bfcap">BLACK FRIDAY — ЧЁРНАЯ ПЯТНИЦА</div>
           <div id="frame">
             <div id="opening">
               <div id="inside"></div>
-              <div id="doorL" class="door"></div>
-              <div id="doorR" class="door"></div>
+              <div id="doorL" class="door"><img class="dlogo" src="assets/img/karetny-red.png" alt="" style="left: 176px" /></div>
+              <div id="doorR" class="door"><img class="dlogo" src="assets/img/karetny-red.png" alt="" style="left: -170px" /></div>
             </div>
           </div>
           </div>
@@ -111,9 +116,14 @@
           <div id="pctLed" class="led"></div>
           <div id="m2" class="line"></div>
         </div>
+        <img id="logo2" src="assets/img/karetny-white.png" alt="" />
+        <div id="bottom">
+        <div id="phone">303-99-99</div>
+        <div id="site">bolshoykaretny.ru</div>
         <div id="note">
-          <div class="cond">АКЦИЯ ДЕЙСТВУЕТ ДО 15&nbsp;НОЯБРЯ. НЕ СУММИРУЕТСЯ С&nbsp;ДРУГИМИ ПРЕДЛОЖЕНИЯМИ. ПОДРОБНОСТИ УТОЧНЯЙТЕ В&nbsp;ОТДЕЛЕ ПРОДАЖ И ПО <span style="white-space: nowrap">ТЕЛЕФОНУ 303-99-99</span></div>
+          <div class="cond">АКЦИЯ ДЕЙСТВУЕТ ДО 15&nbsp;НОЯБРЯ. НЕ СУММИРУЕТСЯ С&nbsp;ДРУГИМИ ПРЕДЛОЖЕНИЯМИ. ПОДРОБНОСТИ УТОЧНЯЙТЕ В&nbsp;ОТДЕЛЕ ПРОДАЖ.</div>
           <div class="legal">Реклама квартир в&nbsp;жилом комплексе «Большой каретный». Район Уктус г.&nbsp;Екатеринбург. Застройщик - ОБЩЕСТВО С&nbsp;ОГРАНИЧЕННОЙ ОТВЕТСТВЕННОСТЬЮ "СПЕЦИАЛИЗИРОВАННЫЙ ЗАСТРОЙЩИК "НИЖНЕЙСЕТСКИЙ ПРУД" ОГРН: 1169658108839, ИНН: 6685119693, КПП: 668501001</div>
+        </div>
         </div>
         <div id="fade"></div>
         </div>
@@ -122,7 +132,7 @@
     <script>
       // ================= тексты =================
       const PAGE1 = ["ЧЁРНАЯ ПЯТНИЦА", "ЖК БОЛЬШОЙ КАРЕТНЫЙ"];
-      const PAGE2 = ["СКИДКА", "НА ПЕРВУЮ ОЧЕРЕДЬ"];
+      const PAGE2 = ["СКИДКА", "ДОМ УЖЕ СДАН"];
       const PCT = "-3%";
 
       // ================= шрифт табло 5×7 =================
@@ -294,6 +304,9 @@
       // страницы чуть приближаются
       tl.fromTo("#page1", { scale: 1 }, { scale: 1.03, duration: T.p1off + 0.5 - T.text1, ease: "none" }, T.text1);
       tl.fromTo("#page2", { scale: 1 }, { scale: 1.03, duration: T.end - T.text2, ease: "none" }, T.text2);
+      tl.fromTo("#bfcap", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power1.out" }, T.bf + 0.1);
+      tl.fromTo("#logo2", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power1.out" }, T.text2);
+      tl.fromTo(["#phone", "#site"], { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out", stagger: 0.12 }, T.pct + 0.6);
       tl.fromTo("#note", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, T.note);
       tl.fromTo("#fade", { opacity: 0 }, { opacity: 1, duration: T.end - T.fade - 0.1, ease: "power1.in" }, T.fade);
 

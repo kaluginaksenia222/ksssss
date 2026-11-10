@@ -3,3 +3,6 @@ renders/
 __pycache__/
 formats/*/renders/
 formats/*/.hyperframes/
+# логотип заказчика — не в публичный репозиторий
+assets/img/
+formats/*/assets/img/

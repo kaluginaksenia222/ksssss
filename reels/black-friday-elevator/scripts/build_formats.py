@@ -10,10 +10,10 @@ LEGAL = ('Реклама квартир в&nbsp;жилом комплексе «
 
 # имя: выход W×H, сцена-макет DW×DH (увеличивается в k раз), масштаб лифта s, отступы и кегли
 FORMATS = {
-    "576x864":   dict(W=576,  H=864,  DW=1080, DH=1620, s=1.00, p2=420, lr=90,  bottom=70, cond=22, legal=19),
-    "960x1920":  dict(W=960,  H=1920, DW=1080, DH=2160, s=1.10, p2=660, lr=70,  bottom=90, cond=31, legal=28),
-    "1920x1080": dict(W=1920, H=1080, DW=1920, DH=1080, s=0.62, p2=150, lr=300, bottom=50, cond=22, legal=18),
-    "3200x1600": dict(W=3200, H=1600, DW=1920, DH=960,  s=0.56, p2=120, lr=300, bottom=40, cond=20, legal=16),
+    "576x864":   dict(W=576,  H=864,  DW=1080, DH=1620, s=1.00, lr=90,  bottom=50, cond=19, legal=16, lt=70,  lw=330, ph=78, site=38),
+    "960x1920":  dict(W=960,  H=1920, DW=1080, DH=2160, s=1.10, lr=70,  bottom=80, cond=26, legal=22, lt=130, lw=420, ph=100, site=48),
+    "1920x1080": dict(W=1920, H=1080, DW=1920, DH=1080, s=0.62, lr=300, bottom=34, cond=17, legal=14, lt=40,  lw=230, ph=62, site=30, p2b=150),
+    "3200x1600": dict(W=3200, H=1600, DW=1920, DH=960,  s=0.56, lr=300, bottom=26, cond=16, legal=13, lt=28,  lw=200, ph=56, site=28, p2b=170),
 }
 # лифт в исходнике: табло + проём занимают x 180..900, y 300..1720; центр дверей (540, 1170); проём 692×1086
 LIFT_CX, LIFT_CY, DOOR_CY, OPEN_W, OPEN_H = 540, 1010, 1170, 692, 1086
@@ -48,21 +48,38 @@ def build(name, f):
          'repeating-linear-gradient(90deg, rgba(255,255,255,0.10) 0 2px, rgba(0,0,0,0.05) 2px 5px),\n          linear-gradient(270deg'),
         ('#doorL { left: 0; box-shadow: inset -2px 0 0 #050506; }', '#doorL { left: 0; box-shadow: inset -3px 0 0 #5c5f65; }'),
         ('#doorR { right: 0; box-shadow: inset 2px 0 0 #050506;', '#doorR { right: 0; box-shadow: inset 3px 0 0 #5c5f65;'),
-        ('#page2 { justify-content: flex-start; padding-top: 560px; }', f'#page2 {{ justify-content: flex-start; padding-top: {f["p2"]}px; }}'),
+        ('#page2 { justify-content: flex-start; padding-top: 560px; }', f'#page2 {{ justify-content: center; padding-top: 0; padding-bottom: {f.get("p2b", 0)}px; }}'),
+        ('#m2 { font-weight: 800; font-size: 44px; letter-spacing: 0.04em; color: var(--ink); margin-top: 54px; }',
+         '#m2 { font-weight: 800; font-size: 58px; letter-spacing: 0.03em; color: var(--ink); margin-top: 46px; }'),
+        ('const PAGE2 = ["СКИДКА", "НА ПЕРВУЮ ОЧЕРЕДЬ"];', 'const PAGE2 = ["СКИДКА", "ДОМ УЖЕ СДАН"];'),
+        # логотип ЖК на дверях лифта: половинки на каждой створке, разъезжаются вместе с дверями
+        ('position: absolute; top: 0; bottom: 0; width: 50%;', 'position: absolute; top: 0; bottom: 0; width: 50%; overflow: hidden;'),
+        ('<div id="doorL" class="door"></div>', '<div id="doorL" class="door"><img class="dlogo" src="assets/img/karetny-red.png" alt="" style="left: 176px" /></div>'),
+        ('<div id="doorR" class="door"></div>', '<div id="doorR" class="door"><img class="dlogo" src="assets/img/karetny-red.png" alt="" style="left: -170px" /></div>'),
+        ('''          <div id="frame">''', '''          <div id="bfcap">BLACK FRIDAY — ЧЁРНАЯ ПЯТНИЦА</div>
+          <div id="frame">'''),
         ('''      #note {
         position: absolute; left: 160px; right: 160px; bottom: 90px;
         font-family: "Onest BF", sans-serif; font-weight: 500; font-size: 22px; line-height: 1.5;
         letter-spacing: 0.04em; text-align: center; color: var(--ink-2); opacity: 0;
-      }''', f'''      #note {{
-        position: absolute; left: {f["lr"]}px; right: {f["lr"]}px; bottom: {f["bottom"]}px;
-        font-family: "Onest BF", sans-serif; text-align: center; opacity: 0;
-      }}
+      }''', f'''      .dlogo {{ position: absolute; top: 300px; width: 340px; height: auto; }}
+      /* перевод аббревиатуры BF (закон «О рекламе») — под табло */
+      #bfcap {{ position: absolute; left: 0; width: 1080px; top: 566px; text-align: center; font-family: "Onest BF", sans-serif; font-weight: 800; font-size: 38px; letter-spacing: 0.03em; color: var(--ink); opacity: 0; }}
+      #logo2 {{ position: absolute; left: 50%; top: {f["lt"]}px; width: {f["lw"]}px; height: auto; margin-left: -{f["lw"]/2}px; opacity: 0; }}
+      #bottom {{ position: absolute; left: {f["lr"]}px; right: {f["lr"]}px; bottom: {f["bottom"]}px; display: flex; flex-direction: column; align-items: center; }}
+      #phone {{ font-family: "Onest BF", sans-serif; font-weight: 800; font-size: {f["ph"]}px; line-height: 1; letter-spacing: 0.02em; color: var(--ink); opacity: 0; }}
+      #site {{ font-family: "Onest BF", sans-serif; font-weight: 500; font-size: {f["site"]}px; line-height: 1.1; letter-spacing: 0.04em; color: #d6d6da; margin-top: {round(f["ph"]*0.15)}px; opacity: 0; }}
+      #note {{ position: relative; margin-top: {round(f["ph"]*0.35)}px; font-family: "Onest BF", sans-serif; text-align: center; opacity: 0; }}
       #note .cond {{ font-weight: 500; font-size: {f["cond"]}px; line-height: 1.45; letter-spacing: 0.03em; color: var(--ink-2); }}
       /* обязательная рекламная пометка — мельче, под условиями */
       #note .legal {{ margin-top: {round(f["cond"] * 0.9)}px; font-weight: 400; font-size: {f["legal"]}px; line-height: 1.45; color: #85858b; }}'''),
         ('<div id="note">АКЦИЯ ДЕЙСТВУЕТ ДО 15&nbsp;НОЯБРЯ. НЕ СУММИРУЕТСЯ С&nbsp;ДРУГИМИ ПРЕДЛОЖЕНИЯМИ. ПОДРОБНОСТИ УТОЧНЯЙТЕ В&nbsp;ОТДЕЛЕ ПРОДАЖ И ПО ТЕЛЕФОНУ&nbsp;303-99-99</div>',
-         '<div id="note">\n          <div class="cond">АКЦИЯ ДЕЙСТВУЕТ ДО 15&nbsp;НОЯБРЯ. НЕ СУММИРУЕТСЯ С&nbsp;ДРУГИМИ ПРЕДЛОЖЕНИЯМИ. ПОДРОБНОСТИ УТОЧНЯЙТЕ В&nbsp;ОТДЕЛЕ ПРОДАЖ И ПО <span style="white-space: nowrap">ТЕЛЕФОНУ 303-99-99</span></div>\n'
-         f'          <div class="legal">{LEGAL}</div>\n        </div>'),
+         '<img id="logo2" src="assets/img/karetny-white.png" alt="" />\n        <div id="bottom">\n        <div id="phone">303-99-99</div>\n        <div id="site">bolshoykaretny.ru</div>\n        <div id="note">\n          <div class="cond">АКЦИЯ ДЕЙСТВУЕТ ДО 15&nbsp;НОЯБРЯ. НЕ СУММИРУЕТСЯ С&nbsp;ДРУГИМИ ПРЕДЛОЖЕНИЯМИ. ПОДРОБНОСТИ УТОЧНЯЙТЕ В&nbsp;ОТДЕЛЕ ПРОДАЖ.</div>\n'
+         f'          <div class="legal">{LEGAL}</div>\n        </div>\n        </div>'),
+        ('      tl.fromTo("#note",', '''      tl.fromTo("#bfcap", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power1.out" }, T.bf + 0.1);
+      tl.fromTo("#logo2", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power1.out" }, T.text2);
+      tl.fromTo(["#phone", "#site"], { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out", stagger: 0.12 }, T.pct + 0.6);
+      tl.fromTo("#note",'''),
         ('\n      <audio id="sfx" class="clip" src="assets/sfx/sfx.wav" data-start="0" data-duration="15" data-track-index="1" data-volume="1"></audio>', ''),
         ('data-width="1080" data-height="1920"', f'data-width="{W}" data-height="{H}"'),
         ('tl.to("#cam", { scale: 2.4,', f'tl.to("#cam", {{ scale: {push:.2f},'),
@@ -70,14 +87,14 @@ def build(name, f):
           <div id="panel"><div id="floorLed" class="led"></div></div>''', '''        <div id="cam">
           <div id="lift">
           <div id="panel"><div id="floorLed" class="led"></div></div>'''),
-        ('''              <div id="doorR" class="door"></div>
-            </div>
+        ('''            </div>
           </div>
-        </div>''', '''              <div id="doorR" class="door"></div>
-            </div>
+        </div>
+        <div id="page1" class="page">''', '''            </div>
           </div>
           </div>
-        </div>'''),
+        </div>
+        <div id="page1" class="page">'''),
     ]
     for a, b in R:
         assert a in h, (name, a[:70])
@@ -93,7 +110,7 @@ def build(name, f):
                   '      @font-face { font-family: "Onest BF"; font-weight: 500;', 1)
     d = f"formats/{name}"
     os.makedirs(f"{d}/assets", exist_ok=True)
-    for sub in ("fonts", "vendor"):
+    for sub in ("fonts", "vendor", "img"):
         shutil.copytree(f"assets/{sub}", f"{d}/assets/{sub}", dirs_exist_ok=True)
     for w in ("400",):
         for sc in ("latin", "cyrillic"):
