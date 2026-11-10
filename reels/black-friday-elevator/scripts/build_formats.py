@@ -12,8 +12,8 @@ LEGAL = ('Реклама квартир в&nbsp;жилом комплексе «
 FORMATS = {
     "576x864":   dict(W=576,  H=864,  DW=1080, DH=1620, s=1.00, lr=90,  bottom=50, cond=19, legal=16, lt=70,  lw=330, ph=78, site=38),
     "960x1920":  dict(W=960,  H=1920, DW=1080, DH=2160, s=1.10, lr=70,  bottom=80, cond=26, legal=22, lt=130, lw=420, ph=100, site=48),
-    "1920x1080": dict(W=1920, H=1080, DW=1920, DH=1080, s=0.62, lr=300, bottom=34, cond=17, legal=14, lt=40,  lw=230, ph=62, site=30, p2b=150),
-    "3200x1600": dict(W=3200, H=1600, DW=1920, DH=960,  s=0.56, lr=300, bottom=26, cond=16, legal=13, lt=28,  lw=200, ph=56, site=28, p2b=170),
+    "1920x1080": dict(W=1920, H=1080, DW=1920, DH=1080, s=0.62, lr=300, bottom=34, cond=17, legal=14, lt=40,  lw=230, ph=62, site=30, p2b=70),
+    "3200x1600": dict(W=3200, H=1600, DW=1920, DH=960,  s=0.56, lr=300, bottom=26, cond=16, legal=13, lt=22,  lw=170, ph=56, site=28, p2b=100),
 }
 # лифт в исходнике: табло + проём занимают x 180..900, y 300..1720; центр дверей (540, 1170); проём 692×1086
 LIFT_CX, LIFT_CY, DOOR_CY, OPEN_W, OPEN_H = 540, 1010, 1170, 692, 1086
@@ -50,8 +50,8 @@ def build(name, f):
         ('#doorR { right: 0; box-shadow: inset 2px 0 0 #050506;', '#doorR { right: 0; box-shadow: inset 3px 0 0 #5c5f65;'),
         ('#page2 { justify-content: flex-start; padding-top: 560px; }', f'#page2 {{ justify-content: center; padding-top: 0; padding-bottom: {f.get("p2b", 0)}px; }}'),
         ('#m2 { font-weight: 800; font-size: 44px; letter-spacing: 0.04em; color: var(--ink); margin-top: 54px; }',
-         '#m2 { font-weight: 800; font-size: 58px; letter-spacing: 0.03em; color: var(--ink); margin-top: 46px; }'),
-        ('const PAGE2 = ["СКИДКА", "НА ПЕРВУЮ ОЧЕРЕДЬ"];', 'const PAGE2 = ["СКИДКА", "ДОМ УЖЕ СДАН"];'),
+         '#m2 { font-weight: 800; font-size: 54px; line-height: 1.25; text-align: center; letter-spacing: 0.03em; color: var(--ink); margin-top: 40px; }'),
+        ('const PAGE2 = ["СКИДКА", "НА ПЕРВУЮ ОЧЕРЕДЬ"];', 'const PAGE2 = ["СКИДКА", "НА ПЕРВУЮ ОЧЕРЕДЬ\\nДОМ УЖЕ СДАН"];'),
         # логотип ЖК на дверях лифта: половинки на каждой створке, разъезжаются вместе с дверями
         ('position: absolute; top: 0; bottom: 0; width: 50%;', 'position: absolute; top: 0; bottom: 0; width: 50%; overflow: hidden;'),
         ('<div id="doorL" class="door"></div>', '<div id="doorL" class="door"><img class="dlogo" src="assets/img/karetny-red.png" alt="" style="left: 126px" /></div>'),
