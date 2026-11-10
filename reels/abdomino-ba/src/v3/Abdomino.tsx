@@ -40,7 +40,7 @@ const MARKS: Mark[] = [
   {at: 0.4, lines: ['Диастаз'], label: {x: 1016, y: 800, align: 'right'}, from: [800, 862], to: [588, 980], bend: -40},
   {at: 1.2, lines: ['Растянутая', 'кожа'], label: {x: 64, y: 880, align: 'left'}, from: [190, 990], to: [430, 1175], bend: 40},
   {at: 2.0, lines: ['Деформация', 'пупка'], label: {x: 1016, y: 1190, align: 'right'}, from: [770, 1200], to: [584, 1124], bend: 30},
-  {at: 2.8, lines: ['Неэстетичный рубец', 'после кесарева'], label: {x: 1016, y: 1545, align: 'right'}, from: [700, 1550], to: [600, 1482], bend: -30},
+  {at: 2.8, lines: ['Неэстетичный рубец', 'после кесарева'], label: {x: 1016, y: 1690, align: 'right'}, from: [690, 1590], to: [606, 1484], bend: -24},
 ];
 
 const Footage: React.FC = () => (
