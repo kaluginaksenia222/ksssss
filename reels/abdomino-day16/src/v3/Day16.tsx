@@ -23,7 +23,7 @@ import {InstagramHandle} from './ui';
 
 const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
 
-const CUTS = [7.84, 14.12, 15.98, 20.04];
+const CUTS = [7.79, 14.07, 15.93, 19.99];
 const HOOK_END = 2.55;
 const BLUE = {from: 14.25, to: 19.3};
 export const DAY16_SECONDS = 23.3;
