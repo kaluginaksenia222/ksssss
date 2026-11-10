@@ -12,7 +12,7 @@ import {
 } from 'remotion';
 import {fontsLoaded} from '../design/fonts';
 import {COLORS, EASE, FONTS} from '../design/tokens';
-import {Blinds, DayCounter, FadingScar, LowScar, OutlineFillTitle, ProcedureList, StitchesOff, SwellingBubble, WarmFlash} from './fresh';
+import {Blinds, DayCounter, LowScar, OutlineFillTitle, ProcedureList, SwellingBubble, WarmFlash} from './fresh';
 import {PAGES} from './transcript';
 import {InstagramHandle} from './ui';
 
@@ -33,7 +33,6 @@ const CAPTION_OFF = [
   [3.4, 5.65], // список процедур
   [12.6, 14.15], // заголовок «будет естественно»
   [BLUE.from + 0.2, BLUE.to - 0.2],
-  [20.9, 99], // «противорубцовая терапия» на плашке
 ];
 
 const Footage: React.FC = () => {
@@ -117,10 +116,8 @@ const SoundTrack: React.FC = () => {
       {sfx('impact', 0.02, 0.22, 1.0)}
       {sfx('shimmer', 1.0, 0.22, 1.1)}
       {[3.52, 4.83].map((at) => sfx('pop', at, 0.06, 0.2))}
-      {sfx('tick', 7.0, 0.06, 0.3)}
       {[BLUE.from, BLUE.to - 0.5].map((at) => sfx('whoosh', at, 0.09, 0.6))}
       {sfx('pop', BLUE.from + 2.57, 0.05, 0.2)}
-      {sfx('pop', 20.4, 0.05, 0.2)}
     </>
   );
 };
@@ -139,7 +136,6 @@ export const Day16: React.FC = () => {
 
       <DayCounter at={0.15} until={HOOK_END} top={1290} />
       <ProcedureList items={[{text: 'Абдоминопластика', at: 3.52}, {text: 'Липосакция боков', at: 4.83}]} until={5.75} top={250} />
-      <StitchesOff at={6.0} offAt={7.0} until={8.1} top={260} />
       <SwellingBubble at={8.9} shrinkAt={12.18} until={13.0} top={230} />
       <OutlineFillTitle at={12.7} until={14.15} text="Будет естественно" top={1330} />
 
@@ -148,8 +144,6 @@ export const Day16: React.FC = () => {
           <LowScar scarAt={0.55} lineAt={1.8} tapeAt={2.57} titleAt={2.0} />
         </Blinds>
       </Sequence>
-
-      <FadingScar at={20.3} until={DAY16_SECONDS} top={260} />
 
       <Captions />
       <AbsoluteFill style={{top: 'auto', bottom: 170, height: 'auto', alignItems: 'center'}}>
