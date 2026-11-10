@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8">
+<style>
+@font-face{font-family:IT;font-weight:900;src:url(../../../library/fonts/inter-tight-cyrillic-900-normal.woff2);unicode-range:U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:IT;font-weight:900;src:url(../../../library/fonts/inter-tight-latin-900-normal.woff2);unicode-range:U+0000-00FF,U+2000-206F,U+2190-21FF,U+2605}
+@font-face{font-family:IT;font-weight:800;src:url(../../../library/fonts/inter-tight-cyrillic-800-normal.woff2);unicode-range:U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:IT;font-weight:800;src:url(../../../library/fonts/inter-tight-latin-800-normal.woff2);unicode-range:U+0000-00FF,U+2000-206F,U+2190-21FF,U+2605}
+@font-face{font-family:I;font-weight:500;src:url(../../../library/fonts/inter-cyrillic-500-normal.woff2);unicode-range:U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:I;font-weight:500;src:url(../../../library/fonts/inter-latin-500-normal.woff2);unicode-range:U+0000-00FF,U+2000-206F,U+2190-21FF,U+2605}
+@font-face{font-family:I;font-weight:700;src:url(../../../library/fonts/inter-cyrillic-700-normal.woff2);unicode-range:U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:I;font-weight:700;src:url(../../../library/fonts/inter-latin-700-normal.woff2);unicode-range:U+0000-00FF,U+2000-206F,U+2190-21FF,U+2605}
+:root{--y:#FFC21A;--ink:#121212;--dark:#0F1310;}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#777;display:flex;flex-direction:column;gap:40px;padding:40px;align-items:center}
+.card{width:900px;height:1200px;position:relative;overflow:hidden;font-family:I;color:#fff}
+.bgimg{position:absolute;left:0;width:900px;object-fit:cover}
+.h{font-family:IT;font-weight:900;text-transform:uppercase;letter-spacing:-.02em;line-height:.92}
+.chip{display:inline-flex;align-items:center;gap:10px;border-radius:999px;font-weight:700;font-size:22px;padding:10px 20px}
+.y{color:var(--y)}
+/* 1 */
+#c1{background:var(--dark)}
+#c1 .bgimg{top:370px;height:830px;object-position:50% 0}
+#c1 .fade{position:absolute;left:0;right:0;top:360px;height:260px;background:linear-gradient(var(--dark),rgba(15,19,16,0))}
+#c1 .top{position:absolute;left:56px;right:56px;top:56px}
+#c1 .h{font-size:92px;margin-top:26px}
+#c1 .sub{font-family:IT;font-weight:800;font-size:34px;margin-top:18px;color:#fff;opacity:.9;text-transform:uppercase;letter-spacing:.01em}
+.new{background:var(--y);color:var(--ink)}
+.stats{position:absolute;right:40px;top:430px;display:flex;flex-direction:column;gap:14px}
+.stat{width:190px;padding:20px 22px;border-radius:28px;background:rgba(18,18,18,.55);backdrop-filter:blur(14px);border:1.5px solid rgba(255,255,255,.18)}
+.stat b{display:block;font-family:IT;font-weight:900;font-size:58px;line-height:1;color:var(--y)}
+.stat span{display:block;font-weight:700;font-size:21px;margin-top:6px;line-height:1.15}
+.compat{position:absolute;left:40px;bottom:44px;background:rgba(255,255,255,.94);color:var(--ink);font-size:24px;padding:16px 26px}
+.compat i{width:30px;height:30px;border-radius:8px;background:var(--y);display:inline-block;position:relative}
+.compat i:before,.compat i:after{content:"";position:absolute;top:-6px;width:10px;height:8px;border-radius:3px 3px 0 0;background:var(--y)}
+.compat i:before{left:4px}.compat i:after{right:4px}
+/* 2 */
+#c2{background:#E9E7E4;color:var(--ink)}
+#c2 .bgimg{top:350px;height:850px;object-position:80% 0}
+#c2 .fade{position:absolute;left:0;right:0;top:340px;height:200px;background:linear-gradient(#E9E7E4,rgba(233,231,228,0))}
+#c2 .top{position:absolute;left:56px;right:56px;top:60px}
+#c2 .big{font-family:IT;font-weight:900;font-size:220px;line-height:.8;color:var(--ink);letter-spacing:-.05em;float:left;margin-right:24px}
+#c2 .h{font-size:64px;padding-top:6px}
+#c2 .p{clear:both;padding-top:30px;font-size:27px;font-weight:500;line-height:1.3;max-width:690px}
+#c2 .p b{background:var(--y);padding:0 8px;border-radius:8px;font-weight:700}
+.pin{position:absolute;transform:translate(-50%,-100%);display:flex;flex-direction:column;align-items:center}
+.pin .lab{background:var(--ink);color:#fff;font-weight:700;font-size:19px;border-radius:999px;padding:8px 14px 8px 8px;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.pin .n{width:28px;height:28px;border-radius:50%;background:var(--y);color:var(--ink);font-family:IT;font-weight:900;font-size:17px;display:grid;place-items:center}
+.pin .stem{width:2px;height:34px;background:var(--ink)}
+/* 3 */
+#c3{background:var(--dark)}
+#c3 .bgimg{top:0;height:1200px;object-position:58% 50%}
+#c3 .shade{position:absolute;inset:0;background:linear-gradient(rgba(10,12,10,.85) 0%,rgba(10,12,10,.35) 38%,rgba(10,12,10,0) 55%,rgba(10,12,10,.0) 70%,rgba(10,12,10,.75) 100%)}
+#c3 .top{position:absolute;left:56px;right:56px;top:60px}
+#c3 .h{font-size:76px;margin-top:22px}
+.grid{position:absolute;left:40px;right:40px;bottom:40px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid div{padding:22px 24px;border-radius:26px;background:rgba(255,255,255,.12);backdrop-filter:blur(16px);border:1.5px solid rgba(255,255,255,.2)}
+.grid b{display:block;font-family:IT;font-weight:900;font-size:42px;color:var(--y);line-height:1}
+.grid span{display:block;font-size:21px;font-weight:500;margin-top:6px;opacity:.95}
+</style></head><body>
+
+<div class="card" id="c1">
+  <img class="bgimg" src="box-tree.jpg">
+  <div class="fade"></div>
+  <div class="top">
+    <span class="chip new">★ Новинка 2026</span>
+    <div class="h">Конструктор<br><span class="y">Стройтехника</span></div>
+    <div class="sub">Экскаватор + 4 машины в одном наборе</div>
+  </div>
+  <div class="stats">
+    <div class="stat"><b>4в1</b><span>4 модели или&nbsp;1&nbsp;большая</span></div>
+    <div class="stat"><b>709</b><span>деталей</span></div>
+    <div class="stat"><b>6+</b><span>возраст</span></div>
+  </div>
+  <div class="chip compat"><i></i>Совместим с классическими конструкторами</div>
+</div>
+
+<div class="card" id="c2">
+  <img class="bgimg" src="fleet.jpg">
+  <div class="fade"></div>
+  <div class="top">
+    <div class="big">5</div>
+    <div class="h">моделей<br>из одного<br>набора</div>
+    <div class="p">4 машины собираются отдельно, а&nbsp;вместе —<br><b>в&nbsp;большой экскаватор</b></div>
+  </div>
+  <!-- pins: original coords (x, y) in source photo; card = (x*.8333, 430+(y-520)*.8333*(770/692)) -->
+  <div class="pin" style="left:140px;top:836px"><div class="lab"><span class="n">1</span>Самосвал</div><div class="stem"></div></div>
+  <div class="pin" style="left:330px;top:767px"><div class="lab"><span class="n">2</span>Погрузчик</div><div class="stem" style="height:70px"></div></div>
+  <div class="pin" style="left:479px;top:637px"><div class="lab"><span class="n">3</span>Подъёмник</div><div class="stem"></div></div>
+  <div class="pin" style="left:708px;top:780px"><div class="lab"><span class="n">4</span>Вилочный погрузчик</div><div class="stem"></div></div>
+</div>
+
+<div class="card" id="c3">
+  <img class="bgimg" src="forklift.jpg">
+  <div class="shade"></div>
+  <div class="top">
+    <span class="chip new">🎁 Подарок на Новый год</span>
+    <div class="h">Собирать<br>всей <span class="y">семьёй</span></div>
+  </div>
+  <div class="grid">
+    <div><b>4 набора</b><span>по 177 деталей в каждом</span></div>
+    <div><b>Фигурки</b><span>строителей в комплекте</span></div>
+    <div><b>Экскаватор</b><span>собирается из всех 4 машин</span></div>
+    <div><b>6+ лет</b><span>развивает моторику</span></div>
+  </div>
+</div>
+</body></html>
