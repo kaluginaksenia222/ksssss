@@ -54,15 +54,15 @@ def build(name, f):
         ('const PAGE2 = ["СКИДКА", "НА ПЕРВУЮ ОЧЕРЕДЬ"];', 'const PAGE2 = ["СКИДКА", "ДОМ УЖЕ СДАН"];'),
         # логотип ЖК на дверях лифта: половинки на каждой створке, разъезжаются вместе с дверями
         ('position: absolute; top: 0; bottom: 0; width: 50%;', 'position: absolute; top: 0; bottom: 0; width: 50%; overflow: hidden;'),
-        ('<div id="doorL" class="door"></div>', '<div id="doorL" class="door"><img class="dlogo" src="assets/img/karetny-red.png" alt="" style="left: 176px" /></div>'),
-        ('<div id="doorR" class="door"></div>', '<div id="doorR" class="door"><img class="dlogo" src="assets/img/karetny-red.png" alt="" style="left: -170px" /></div>'),
+        ('<div id="doorL" class="door"></div>', '<div id="doorL" class="door"><img class="dlogo" src="assets/img/karetny-red.png" alt="" style="left: 126px" /></div>'),
+        ('<div id="doorR" class="door"></div>', '<div id="doorR" class="door"><img class="dlogo" src="assets/img/karetny-red.png" alt="" style="left: -220px" /></div>'),
         ('''          <div id="frame">''', '''          <div id="bfcap">BLACK FRIDAY — ЧЁРНАЯ ПЯТНИЦА</div>
           <div id="frame">'''),
         ('''      #note {
         position: absolute; left: 160px; right: 160px; bottom: 90px;
         font-family: "Onest BF", sans-serif; font-weight: 500; font-size: 22px; line-height: 1.5;
         letter-spacing: 0.04em; text-align: center; color: var(--ink-2); opacity: 0;
-      }''', f'''      .dlogo {{ position: absolute; top: 300px; width: 340px; height: auto; }}
+      }''', f'''      .dlogo {{ position: absolute; top: 420px; width: 440px; height: auto; }}
       /* перевод аббревиатуры BF (закон «О рекламе») — под табло */
       #bfcap {{ position: absolute; left: 0; width: 1080px; top: 566px; text-align: center; font-family: "Onest BF", sans-serif; font-weight: 800; font-size: 38px; letter-spacing: 0.03em; color: var(--ink); opacity: 0; }}
       #logo2 {{ position: absolute; left: 50%; top: {f["lt"]}px; width: {f["lw"]}px; height: auto; margin-left: -{f["lw"]/2}px; opacity: 0; }}
