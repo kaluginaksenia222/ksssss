@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="ru" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Onest BF"; font-weight: 400; src: url("assets/fonts/onest-latin-400-normal.woff2") format("woff2"); unicode-range: U+0000-00FF; }
+      @font-face { font-family: "Onest BF"; font-weight: 400; src: url("assets/fonts/onest-cyrillic-400-normal.woff2") format("woff2"); unicode-range: U+0400-04FF; }
+      @font-face { font-family: "Onest BF"; font-weight: 500; src: url("assets/fonts/onest-latin-500-normal.woff2") format("woff2"); unicode-range: U+0000-00FF; }
+      @font-face { font-family: "Onest BF"; font-weight: 500; src: url("assets/fonts/onest-cyrillic-500-normal.woff2") format("woff2"); unicode-range: U+0400-04FF; }
+      @font-face { font-family: "Onest BF"; font-weight: 800; src: url("assets/fonts/onest-latin-800-normal.woff2") format("woff2"); unicode-range: U+0000-00FF; }
+      @font-face { font-family: "Onest BF"; font-weight: 800; src: url("assets/fonts/onest-cyrillic-800-normal.woff2") format("woff2"); unicode-range: U+0400-04FF; }
+
+      :root {
+        --ink: #ffffff;
+        --ink-2: #9a9a9f;
+        --accent: #ff2a2a;
+        --led-on: #ff2a2a;
+        --led-off: #210707;
+        --door-1: #cdd0d5;
+        --door-2: #9fa3a9;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+      #root { position: absolute; inset: 0; background: #000; }
+      #scene { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: hidden; }
+      /* макет 1080×1920, увеличен в 1.0000 раза до 1080×1920: всё векторное и остаётся чётким */
+      #stage { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; transform: scale(1.000000); transform-origin: 0 0; overflow: hidden; }
+      #lift { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; transform: translate(-27.0px, -100.5px) scale(1.05); transform-origin: 0 0; }
+
+      /* ---------- лифт ---------- */
+      #cam { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; transform-origin: 540.0px 1128.0px; }
+      /* табло над дверями */
+      #panel {
+        position: absolute; left: 290px; top: 300px; width: 500px; height: 250px;
+        border-radius: 18px; background: #070708; box-shadow: 0 0 0 6px #b4b8be, inset 0 0 30px #000;
+      }
+      .led { position: absolute; display: flex; gap: var(--gap); }
+      .glyph { display: grid; grid-template-columns: repeat(5, var(--dot)); grid-auto-rows: var(--dot); gap: var(--dgap); }
+      .dot { border-radius: 50%; background: var(--led-off); }
+      .dot.on { background: var(--led-on); box-shadow: 0 0 var(--glow) rgba(255, 40, 40, 0.85); }
+      #floorLed { --dot: 18px; --dgap: 6px; --gap: 30px; --glow: 10px; left: 40px; top: 41px; }
+
+      /* проём и двери */
+      #frame {
+        position: absolute; left: 180px; top: 620px; width: 720px; height: 1100px;
+        background: #85898f; box-shadow: 0 0 0 2px #b4b8be;
+      }
+      #opening { position: absolute; left: 14px; top: 14px; right: 14px; bottom: 0; overflow: hidden; background: #000; }
+      #inside { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 40%, #241d15 0%, #0a0806 45%, #000 75%); opacity: 0; }
+      .door {
+        position: absolute; top: 0; bottom: 0; width: 50%; overflow: hidden;
+        background:
+          repeating-linear-gradient(90deg, rgba(255,255,255,0.10) 0 2px, rgba(0,0,0,0.05) 2px 5px),
+          linear-gradient(90deg, var(--door-1), var(--door-2));
+      }
+      #doorL { left: 0; box-shadow: inset -3px 0 0 #5c5f65; }
+      #doorR { right: 0; box-shadow: inset 3px 0 0 #5c5f65; background:
+          repeating-linear-gradient(90deg, rgba(255,255,255,0.10) 0 2px, rgba(0,0,0,0.05) 2px 5px),
+          linear-gradient(270deg, var(--door-1), var(--door-2)); }
+
+      /* ---------- текст ---------- */
+      .page {
+        position: absolute; left: 0; right: 0; top: 0; bottom: 0;
+        display: flex; flex-direction: column; align-items: center;
+        font-family: "Onest BF", sans-serif;
+      }
+      #page1 { justify-content: center; }
+      #page2 { justify-content: center; padding-top: 0; padding-bottom: 0px; }
+      .line { position: relative; white-space: pre; line-height: 1; }
+      #l1 { font-weight: 800; font-size: 76px; letter-spacing: 0.01em; color: var(--ink); }
+      #l2 { font-weight: 800; font-size: 56px; letter-spacing: 0.02em; color: var(--accent); margin-top: 34px; }
+      #m1 { font-weight: 800; font-size: 76px; letter-spacing: 0.01em; color: var(--ink); }
+      #m2 { font-weight: 800; font-size: 54px; line-height: 1.25; text-align: center; letter-spacing: 0.03em; color: var(--ink); margin-top: 40px; }
+      /* «−11%» — тем же табло лифта */
+      #pctLed { position: relative; --dot: 22px; --dgap: 6px; --gap: 28px; --glow: 12px; margin-top: 54px; }
+      .ch { color: transparent; }
+      .dlogo { position: absolute; top: 420px; width: 440px; height: auto; }
+      /* перевод аббревиатуры BF (закон «О рекламе») — под табло */
+      #bfcap { position: absolute; left: 0; width: 1080px; top: 566px; text-align: center; font-family: "Onest BF", sans-serif; font-weight: 800; font-size: 38px; letter-spacing: 0.03em; color: var(--ink); opacity: 0; }
+      #logo2 { position: absolute; left: 50%; top: 110px; width: 400px; height: auto; margin-left: -200.0px; opacity: 0; }
+      #bottom { position: absolute; left: 80px; right: 80px; bottom: 80px; display: flex; flex-direction: column; align-items: center; }
+      #phone { font-family: "Onest BF", sans-serif; font-weight: 800; font-size: 96px; line-height: 1; letter-spacing: 0.02em; color: var(--ink); opacity: 0; }
+      #site { font-family: "Onest BF", sans-serif; font-weight: 500; font-size: 46px; line-height: 1.1; letter-spacing: 0.04em; color: #d6d6da; margin-top: 14px; opacity: 0; }
+      #note { position: relative; margin-top: 34px; font-family: "Onest BF", sans-serif; text-align: center; opacity: 0; }
+      #note .cond { font-weight: 500; font-size: 24px; line-height: 1.45; letter-spacing: 0.03em; color: var(--ink-2); }
+      /* обязательная рекламная пометка — мельче, под условиями */
+      #note .legal { margin-top: 22px; font-weight: 400; font-size: 20px; line-height: 1.45; color: #85858b; }
+      #fade { position: absolute; inset: 0; background: #000; opacity: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="15" data-width="1080" data-height="1920">
+      <div id="scene" class="clip" data-start="0" data-duration="15" data-track-index="0" data-track-kind="graphics" data-layout-ignore>
+        <div id="stage">
+        <div id="cam">
+          <div id="lift">
+          <div id="panel"><div id="floorLed" class="led"></div></div>
+          <div id="bfcap">BLACK FRIDAY — ЧЁРНАЯ ПЯТНИЦА</div>
+          <div id="frame">
+            <div id="opening">
+              <div id="inside"></div>
+              <div id="doorL" class="door"><img class="dlogo" src="assets/img/karetny-red.png" alt="" style="left: 126px" /></div>
+              <div id="doorR" class="door"><img class="dlogo" src="assets/img/karetny-red.png" alt="" style="left: -220px" /></div>
+            </div>
+          </div>
+          </div>
+        </div>
+        <div id="page1" class="page">
+          <div id="l1" class="line"></div>
+          <div id="l2" class="line"></div>
+        </div>
+        <div id="page2" class="page">
+          <div id="m1" class="line"></div>
+          <div id="pctLed" class="led"></div>
+          <div id="m2" class="line"></div>
+        </div>
+        <img id="logo2" src="assets/img/karetny-white.png" alt="" />
+        <div id="bottom">
+        <div id="phone">303-99-99</div>
+        <div id="site">bolshoykaretny.ru</div>
+        <div id="note">
+          <div class="cond">АКЦИЯ ДЕЙСТВУЕТ ДО 15&nbsp;НОЯБРЯ. НЕ СУММИРУЕТСЯ С&nbsp;ДРУГИМИ ПРЕДЛОЖЕНИЯМИ. ПОДРОБНОСТИ УТОЧНЯЙТЕ В&nbsp;ОТДЕЛЕ ПРОДАЖ.</div>
+          <div class="legal">Реклама квартир в&nbsp;жилом комплексе «Большой каретный». Район Уктус г.&nbsp;Екатеринбург. Застройщик - ОБЩЕСТВО С&nbsp;ОГРАНИЧЕННОЙ ОТВЕТСТВЕННОСТЬЮ "СПЕЦИАЛИЗИРОВАННЫЙ ЗАСТРОЙЩИК "НИЖНЕЙСЕТСКИЙ ПРУД" ОГРН: 1169658108839, ИНН: 6685119693, КПП: 668501001</div>
+        </div>
+        </div>
+        <div id="fade"></div>
+        </div>
+      </div>
+    </div>
+    <script>
+      // ================= тексты =================
+      const PAGE1 = ["ЧЁРНАЯ ПЯТНИЦА", "ЖК БОЛЬШОЙ КАРЕТНЫЙ"];
+      const PAGE2 = ["СКИДКА", "НА ПЕРВУЮ ОЧЕРЕДЬ\nДОМ УЖЕ СДАН"];
+      const PCT = "-3%";
+
+      // ================= шрифт табло 5×7 =================
+      const G = {
+        "0": ["01110","10001","10011","10101","11001","10001","01110"],
+        "1": ["00100","01100","00100","00100","00100","00100","01110"],
+        "2": ["01110","10001","00001","00010","00100","01000","11111"],
+        "3": ["11111","00010","00100","00010","00001","10001","01110"],
+        "4": ["00010","00110","01010","10010","11111","00010","00010"],
+        "5": ["11111","10000","11110","00001","00001","10001","01110"],
+        "6": ["00110","01000","10000","11110","10001","10001","01110"],
+        "7": ["11111","00001","00010","00100","01000","01000","01000"],
+        "8": ["01110","10001","10001","01110","10001","10001","01110"],
+        "9": ["01110","10001","10001","01111","00001","00010","01100"],
+        "B": ["11110","10001","10001","11110","10001","10001","11110"],
+        "F": ["11111","10000","10000","11110","10000","10000","10000"],
+        "%": ["11001","11001","00010","00100","01000","10011","10011"],
+        "-": ["00000","00000","00000","11111","00000","00000","00000"],
+        " ": ["00000","00000","00000","00000","00000","00000","00000"],
+      };
+      const ARROW = ["00100","00100","00100","10101","01110","00100","00000"];
+
+      function makeLed(el, n) {
+        const glyphs = [];
+        for (let g = 0; g < n; g++) {
+          const box = document.createElement("div");
+          box.className = "glyph";
+          const dots = [];
+          for (let i = 0; i < 35; i++) {
+            const d = document.createElement("div");
+            d.className = "dot";
+            box.appendChild(d);
+            dots.push(d);
+          }
+          el.appendChild(box);
+          glyphs.push(dots);
+        }
+        return glyphs;
+      }
+      const setGlyph = (dots, rows, mask) =>
+        dots.forEach((d, i) => d.classList.toggle("on", rows[Math.floor(i / 5)][i % 5] === "1" && (!mask || mask(i))));
+      // стрелка вниз «бежит» по табло
+      const arrowFrame = (k) => ARROW.map((_, r) => ARROW[(r - k + 70) % 7]);
+
+      const floorLed = makeLed(document.getElementById("floorLed"), 3);
+      const pctLed = makeLed(document.getElementById("pctLed"), PCT.length);
+
+      // детерминированный «шум»
+      const hash = (a, b) => {
+        let h = (a * 374761393 + b * 668265263) >>> 0;
+        h = ((h ^ (h >>> 13)) * 1274126177) >>> 0;
+        return (h ^ (h >>> 16)) / 4294967296;
+      };
+
+      // ================= расписание =================
+      // этажи 25 → 1, всё быстрее
+      const FLOORS = [];
+      {
+        const n = 25, t0 = 0.35, t1 = 3.1;
+        const iv = [];
+        for (let i = 0; i < n - 1; i++) iv.push(0.3 * Math.pow(0.06 / 0.3, i / (n - 2)));
+        const k = (t1 - t0) / iv.reduce((a, b) => a + b, 0);
+        let t = t0;
+        for (let i = 0; i < n; i++) { FLOORS.push({ f: 25 - i, t }); if (i < n - 1) t += iv[i] * k; }
+      }
+      const T = {
+        glitch: 3.22, bf: 3.5, doors: 4.35, doorsEnd: 5.35, push: 4.45, pushEnd: 5.7,
+        text1: 5.6, p1off: 9.4, text2: 10.05, pct: 10.75, note: 12.0, fade: 14.1, end: 15,
+      };
+      // буквы страницы 1 и 2
+      function typeTimes(lines, start, steps, gaps) {
+        const out = []; let t = start;
+        lines.forEach((text, li) => {
+          if (li > 0) t += gaps[li - 1];
+          const row = [];
+          for (const ch of text) { row.push(t); t += steps[li] + (ch === " " ? 0.035 : 0); }
+          out.push(row); t = row.at(-1);
+        });
+        return out;
+      }
+      const TIMES1 = typeTimes(PAGE1, T.text1, [0.05, 0.04], [0.28]);
+      const OFF1 = PAGE1.map((text, li) => [...text].map((_, i) => T.p1off + li * 0.06 + i * 0.012 + hash(li, i) * 0.03));
+      const TIMES2 = [
+        typeTimes([PAGE2[0]], T.text2, [0.05], [])[0],
+        typeTimes([PAGE2[1]], T.pct + PCT.length * 5 * 0.022 + 0.3, [0.04], [])[0],
+      ];
+
+      // ================= буквы =================
+      function spans(id, text) {
+        const line = document.getElementById(id);
+        return [...text].map((ch) => {
+          const s = document.createElement("span");
+          s.className = "ch"; s.textContent = ch; line.appendChild(s); return s;
+        });
+      }
+      const chars1 = PAGE1.map((txt, i) => spans(["l1", "l2"][i], txt));
+      const chars2 = PAGE2.map((txt, i) => spans(["m1", "m2"][i], txt));
+      function lampOn(dt) {
+        if (dt < 0) return [0, 0];
+        if (dt < 0.03) return [0.5, 1];
+        if (dt < 0.06) return [0.15, 1];
+        if (dt < 0.09) return [1, 1];
+        return [1, Math.max(0, 1 - (dt - 0.09) / 0.6)];
+      }
+      function lampOff(dt) {
+        if (dt < 0) return 1;
+        if (dt < 0.03) return 0.35;
+        if (dt < 0.055) return 0.6;
+        if (dt < 0.09) return 0.12;
+        return 0;
+      }
+      function paint(s, o, glow, red) {
+        s.style.color = o === 0 ? "transparent" : "inherit";
+        s.style.opacity = o;
+        s.style.textShadow = glow > 0 ? `0 0 ${(6 + 22 * glow).toFixed(1)}px ${red ? "rgba(255, 50, 40," : "rgba(255, 255, 255,"} ${(0.7 * glow).toFixed(2)})` : "none";
+      }
+
+      // ================= кадр как функция времени =================
+      function render(t) {
+        // --- табло этажей ---
+        const frameNo = Math.floor(t * 30);
+        if (t < T.glitch) {
+          let cur = FLOORS[0];
+          for (const fl of FLOORS) if (t >= fl.t) cur = fl;
+          const s = String(cur.f).padStart(2, " ");
+          setGlyph(floorLed[0], arrowFrame(Math.floor(t * 9)));
+          setGlyph(floorLed[1], G[s[0]]);
+          setGlyph(floorLed[2], G[s[1]]);
+        } else if (t < T.bf) {
+          // табло «сбоит»: случайные точки
+          const full = ["11111","11111","11111","11111","11111","11111","11111"];
+          floorLed.forEach((dots, g) => setGlyph(dots, full, (i) => hash(frameNo, g * 35 + i) < 0.45));
+        } else {
+          // BF — мигает два раза и горит
+          const dt = t - T.bf;
+          const on = !(dt > 0.25 && dt < 0.4) && !(dt > 0.55 && dt < 0.7);
+          setGlyph(floorLed[0], G[" "]);
+          setGlyph(floorLed[1], on ? G["B"] : G[" "]);
+          setGlyph(floorLed[2], on ? G["F"] : G[" "]);
+        }
+
+        // --- страница 1 ---
+        chars1.forEach((row, li) => row.forEach((s, i) => {
+          const [o, glow] = lampOn(t - TIMES1[li][i]);
+          paint(s, o * lampOff(t - OFF1[li][i]), glow, li >= 1);
+        }));
+        // --- страница 2 ---
+        chars2.forEach((row, li) => row.forEach((s, i) => {
+          const [o, glow] = lampOn(t - TIMES2[li][i]);
+          paint(s, o, glow, false);
+        }));
+        // «−11%» зажигается по столбцам слева направо
+        pctLed.forEach((dots, g) => {
+          setGlyph(dots, G[PCT[g]], (i) => t >= T.pct + (g * 5 + (i % 5)) * 0.022);
+        });
+      }
+
+      // ================= таймлайн =================
+      const tl = gsap.timeline({ paused: true, onUpdate: () => render(tl.time()) });
+      tl.fromTo("#cam", { scale: 1 }, { scale: 1.06, duration: T.doors, ease: "none" }, 0);
+      // двери разъезжаются, камера въезжает в кабину
+      tl.fromTo("#doorL", { xPercent: 0 }, { xPercent: -100, duration: T.doorsEnd - T.doors, ease: "power3.inOut" }, T.doors);
+      tl.fromTo("#doorR", { xPercent: 0 }, { xPercent: 100, duration: T.doorsEnd - T.doors, ease: "power3.inOut" }, T.doors);
+      tl.fromTo("#inside", { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power1.out" }, T.doors);
+      tl.to("#cam", { scale: 1.94, duration: T.pushEnd - T.push, ease: "power2.in" }, T.push);
+      tl.to("#cam", { opacity: 0, duration: 0.35, ease: "power1.in" }, T.pushEnd - 0.3);
+      // табло «−11%» существует только на странице 2
+      tl.fromTo("#pctLed", { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "none" }, T.text2);
+      // страницы чуть приближаются
+      tl.fromTo("#page1", { scale: 1 }, { scale: 1.03, duration: T.p1off + 0.5 - T.text1, ease: "none" }, T.text1);
+      tl.fromTo("#page2", { scale: 1 }, { scale: 1.03, duration: T.end - T.text2, ease: "none" }, T.text2);
+      tl.fromTo("#bfcap", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power1.out" }, T.bf + 0.1);
+      tl.fromTo("#logo2", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power1.out" }, T.text2);
+      tl.fromTo(["#phone", "#site"], { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out", stagger: 0.12 }, T.pct + 0.6);
+      tl.fromTo("#note", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, T.note);
+      tl.fromTo("#fade", { opacity: 0 }, { opacity: 1, duration: T.end - T.fade - 0.1, ease: "power1.in" }, T.fade);
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+      render(0);
+    </script>
+  </body>
+</html>

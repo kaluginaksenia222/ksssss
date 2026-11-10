@@ -12,6 +12,7 @@ LEGAL = ('Реклама квартир в&nbsp;жилом комплексе «
 FORMATS = {
     "576x864":   dict(W=576,  H=864,  DW=1080, DH=1620, s=1.00, lr=90,  bottom=50, cond=19, legal=16, lt=70,  lw=330, ph=78, site=38),
     "960x1920":  dict(W=960,  H=1920, DW=1080, DH=2160, s=1.10, lr=70,  bottom=80, cond=26, legal=22, lt=130, lw=420, ph=100, site=48),
+    "1080x1920": dict(W=1080, H=1920, DW=1080, DH=1920, s=1.05, lr=80,  bottom=80, cond=24, legal=20, lt=110, lw=400, ph=96, site=46),
     "1920x1080": dict(W=1920, H=1080, DW=1920, DH=1080, s=0.62, lr=300, bottom=34, cond=17, legal=14, lt=40,  lw=230, ph=62, site=30, p2b=70),
     "3200x1600": dict(W=3200, H=1600, DW=1920, DH=960,  s=0.56, lr=300, bottom=26, cond=16, legal=13, lt=22,  lw=170, ph=56, site=28, p2b=100),
 }
