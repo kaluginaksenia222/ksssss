@@ -14,3 +14,6 @@ out/
 public/*.mp4
 public/*.webm
 out/
+
+# Кадр для обложки — из видео пациентки, в публичный репозиторий не кладём (получается из source.mp4, кадр 8,0 с)
+public/cover_frame.png
