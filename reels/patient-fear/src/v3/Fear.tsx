@@ -171,7 +171,7 @@ export const Fear: React.FC = () => {
       <LampBeam at={77.6} titleAt={78.8} until={FEAR_SECONDS} lamp={[440, 360]} top={1110} lines={['Это выбор', 'пациента']} />
 
       <Captions />
-      <AbsoluteFill style={{top: 1440, left: 100, right: 1080 - 866, height: 'auto', alignItems: 'center'}}>
+      <AbsoluteFill style={{top: 1440, left: 100, right: 1080 - 866, width: 'auto', height: 'auto', alignItems: 'center'}}>
         <InstagramHandle handle="dr_kudryakov" />
       </AbsoluteFill>
       <SoundTrack />
