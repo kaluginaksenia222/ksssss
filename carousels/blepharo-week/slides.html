@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Неделя после блефаропластики</title>
+<style>
+@font-face{font-family:Head;font-weight:800;src:url(../../library/fonts/inter-tight-cyrillic-800-normal.woff2)}
+@font-face{font-family:Head;font-weight:800;src:url(../../library/fonts/inter-tight-latin-800-normal.woff2);unicode-range:U+0000-00FF,U+2000-206F}
+@font-face{font-family:Head;font-weight:900;src:url(../../library/fonts/inter-tight-cyrillic-900-normal.woff2)}
+@font-face{font-family:Head;font-weight:900;src:url(../../library/fonts/inter-tight-latin-900-normal.woff2);unicode-range:U+0000-00FF,U+2000-206F}
+@font-face{font-family:Body;font-weight:400;src:url(../../library/fonts/inter-cyrillic-400-normal.woff2)}
+@font-face{font-family:Body;font-weight:400;src:url(../../library/fonts/inter-latin-400-normal.woff2);unicode-range:U+0000-00FF,U+2000-206F}
+@font-face{font-family:Body;font-weight:500;src:url(../../library/fonts/inter-cyrillic-500-normal.woff2)}
+@font-face{font-family:Body;font-weight:500;src:url(../../library/fonts/inter-latin-500-normal.woff2);unicode-range:U+0000-00FF,U+2000-206F}
+@font-face{font-family:Body;font-weight:700;src:url(../../library/fonts/inter-cyrillic-700-normal.woff2)}
+@font-face{font-family:Body;font-weight:700;src:url(../../library/fonts/inter-latin-700-normal.woff2);unicode-range:U+0000-00FF,U+2000-206F}
+@font-face{font-family:Script;src:url(../../library/fonts/great-vibes-cyrillic-400-normal.woff2)}
+@font-face{font-family:Script;src:url(../../library/fonts/great-vibes-latin-400-normal.woff2);unicode-range:U+0000-00FF,U+2000-206F}
+@font-face{font-family:Mono;src:url(../../library/fonts/jetbrains-mono-cyrillic-500-normal.woff2)}
+@font-face{font-family:Mono;src:url(../../library/fonts/jetbrains-mono-latin-500-normal.woff2);unicode-range:U+0000-00FF,U+2000-206F}
+
+:root{
+  --navy:#082052; --navy80:#2A3E6C; --navy40:#9AA4BC;
+  --beige:#F8F0E5; --beigeDark:#EDE2D1; --line:#DCCDB6; --card:#FCF7EF;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#777;font-family:Body,sans-serif;display:flex;flex-direction:column;gap:40px;padding:40px;align-items:center}
+.slide{width:1080px;height:1350px;position:relative;overflow:hidden;background:var(--beige);color:var(--navy)}
+.slide.dark{background:var(--navy);color:var(--beige)}
+/* точечная сетка */
+.slide::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(circle,rgba(154,164,188,.45) 1.6px,transparent 1.8px);background-size:28px 28px;opacity:.55}
+.slide.dark::before{background-image:radial-gradient(circle,rgba(248,240,229,.12) 1.6px,transparent 1.8px);opacity:1}
+.slide>*{position:relative}
+
+/* верхняя полоса */
+.top{position:absolute;left:64px;right:64px;top:56px;display:flex;align-items:center;justify-content:space-between}
+.dots{display:flex;gap:10px}
+.dots i{width:12px;height:12px;border-radius:50%;border:2px solid currentColor;opacity:.45}
+.dots i.on{background:currentColor;opacity:1}
+.tag{font-family:Mono;font-size:22px;letter-spacing:.06em;border:2px solid currentColor;border-radius:40px;padding:8px 20px;opacity:.85}
+.count{font-family:Mono;font-size:22px;letter-spacing:.08em;opacity:.7}
+
+.bignum{position:absolute;right:40px;top:90px;font-family:Head;font-weight:900;font-size:430px;line-height:.8;letter-spacing:-.06em;color:var(--navy);opacity:.07}
+.dark .bignum{color:var(--beige);opacity:.08}
+
+.label{font-family:Mono;font-size:24px;letter-spacing:.12em;text-transform:uppercase;opacity:.7}
+h1,h2{font-family:Head;font-weight:900;text-transform:uppercase;letter-spacing:-.03em;line-height:.92}
+h2{font-size:132px}
+.sub{font-family:Body;font-weight:500;font-size:38px;line-height:1.2;margin-top:18px}
+.script{font-family:Script;font-weight:400;text-transform:none;letter-spacing:0;line-height:1}
+
+.head{position:absolute;left:64px;top:150px;right:64px}
+
+/* карточка с глазом */
+.card{position:absolute;left:64px;right:64px;top:470px;height:420px;background:var(--card);border:2px solid var(--line);border-radius:36px;
+  box-shadow:0 12px 32px rgba(8,32,82,.10);display:flex;align-items:center;padding:0 36px 0 20px;gap:10px}
+.dark .card{background:rgba(248,240,229,.06);border-color:rgba(248,240,229,.18);box-shadow:none}
+.card svg.eye{width:560px;height:360px;flex:none}
+.meter{flex:1;display:flex;flex-direction:column;gap:30px}
+.meter .row .k{font-family:Mono;font-size:22px;letter-spacing:.12em;opacity:.7;margin-bottom:12px;display:flex;justify-content:space-between}
+.bars{display:flex;gap:6px}
+.bars b{flex:1;height:34px;border-radius:8px;background:currentColor;opacity:.13}
+.bars b.on{opacity:1}
+
+/* пункты */
+.list{position:absolute;left:64px;right:64px;top:930px;display:flex;flex-direction:column;gap:18px}
+.item{display:flex;gap:22px;align-items:flex-start;font-size:33px;line-height:1.25;font-weight:500}
+.item .n{flex:none;font-family:Mono;font-size:22px;border-radius:30px;padding:8px 14px;background:var(--navy);color:var(--beige);margin-top:2px}
+.dark .item .n{background:var(--beige);color:var(--navy)}
+.item b{font-weight:700}
+
+.pill{display:inline-flex;align-items:center;gap:14px;background:var(--navy);color:var(--beige);border-radius:60px;padding:16px 30px;font-weight:700;font-size:30px;text-transform:uppercase;letter-spacing:.02em}
+.dark .pill{background:var(--beige);color:var(--navy)}
+.pill.ghost{background:transparent;color:inherit;border:2px solid currentColor}
+.bottom{position:absolute;left:64px;right:64px;bottom:60px;display:flex;justify-content:space-between;align-items:center}
+.handle{font-family:Mono;font-size:22px;letter-spacing:.06em;opacity:.75;display:flex;gap:10px;align-items:center}
+.handle svg{width:26px;height:26px}
+</style>
+</head>
+<body>
+
+<!-- 1. ОБЛОЖКА -->
+<section class="slide dark" id="s1">
+  <div class="top"><span class="tag">ПАМЯТКА ПАЦИЕНТУ</span><span class="count">01 / 10</span></div>
+  <div style="position:absolute;left:64px;right:64px;top:180px">
+    <h1 style="font-size:112px">Неделя после</h1>
+    <h1 style="font-size:90px;margin-top:6px">блефаропластики</h1>
+    <div class="script" style="font-size:150px;margin:6px 0 0 280px;transform:rotate(-4deg)">день за днём</div>
+  </div>
+  <svg class="eye" data-s="0.15" data-b="0" style="position:absolute;left:150px;top:650px;width:780px;height:470px"></svg>
+  <div style="position:absolute;left:64px;right:64px;bottom:160px;font-size:36px;line-height:1.3;font-weight:500;opacity:.9">
+    Чтобы на 3-й день не пугаться отражения в зеркале,<br>а знать: всё идёт по плану
+  </div>
+  <div class="bottom"><span class="handle" data-ig>@dr_kudryakov</span><span class="pill">листайте →</span></div>
+</section>
+
+<!-- 2. ДЕНЬ 0 -->
+<section class="slide" id="s2">
+  <div class="top"><div class="dots"></div><span class="count">02 / 10</span></div>
+  <div class="bignum">00</div>
+  <div class="head"><div class="label">день операции</div><h2 style="margin-top:14px">День 0</h2><div class="sub">Чаще всего домой — в тот же день</div></div>
+  <div class="card"><svg class="eye" data-s="0.3" data-b="0.1" data-sut="1"></svg>
+    <div class="meter" data-otek="3" data-sin="1"></div></div>
+  <div class="list">
+    <div class="item"><span class="n">01</span><span><b>Холод на веки</b> — по 10–15 минут каждый час, через салфетку</span></div>
+    <div class="item"><span class="n">02</span><span><b>Спать с приподнятой головой</b> — на двух подушках</span></div>
+    <div class="item"><span class="n">03</span><span><b>Не наклоняться</b> и не поднимать тяжёлое</span></div>
+  </div>
+  <div class="bottom"><span class="handle" data-ig>@dr_kudryakov</span><span class="pill ghost">слёзы — это нормально</span></div>
+</section>
+
+<!-- 3. ДЕНЬ 1 -->
+<section class="slide" id="s3">
+  <div class="top"><div class="dots"></div><span class="count">03 / 10</span></div>
+  <div class="bignum">01</div>
+  <div class="head"><div class="label">первые сутки</div><h2 style="margin-top:14px">День 1</h2><div class="sub">Отёк нарастает</div></div>
+  <div class="card"><svg class="eye" data-s="0.62" data-b="0.45" data-sut="1"></svg>
+    <div class="meter" data-otek="6" data-sin="4"></div></div>
+  <div class="list">
+    <div class="item"><span class="n">01</span><span>Веки тяжёлые, <b>глаз трудно открыть</b> до конца</span></div>
+    <div class="item"><span class="n">02</span><span>Может быть <b>жжение, слёзы или сухость</b></span></div>
+    <div class="item"><span class="n">03</span><span>Холод продолжаем, <b>глаза не трём</b></span></div>
+  </div>
+  <div class="bottom"><span class="handle" data-ig>@dr_kudryakov</span><span class="pill">это нормально</span></div>
+</section>
+
+<!-- 4. ДЕНЬ 2–3 ПИК -->
+<section class="slide dark" id="s4">
+  <div class="top"><div class="dots"></div><span class="count">04 / 10</span></div>
+  <div class="bignum">2–3</div>
+  <div class="head"><div class="label">самое сложное</div>
+    <div style="display:flex;align-items:flex-end;gap:30px;margin-top:14px"><h2>День 2–3</h2></div>
+    <div class="sub">Пик отёка. В зеркале — хуже всего</div></div>
+  <div class="card"><svg class="eye" data-s="0.95" data-b="0.9" data-sut="1"></svg>
+    <div class="meter" data-otek="9" data-sin="8"></div></div>
+  <div class="list">
+    <div class="item"><span class="n">01</span><span>Отёк и синяки <b>на максимуме</b></span></div>
+    <div class="item"><span class="n">02</span><span>Один глаз может отекать сильнее — <b>это временно</b></span></div>
+    <div class="item"><span class="n">03</span><span><b>Не сравнивайте</b> себя с фото «после» из интернета</span></div>
+  </div>
+  <div class="bottom"><span class="handle" data-ig>@dr_kudryakov</span><span class="script" style="font-size:96px;margin-top:-30px">потерпите</span></div>
+</section>
+
+<!-- 5. ДЕНЬ 4 -->
+<section class="slide" id="s5">
+  <div class="top"><div class="dots"></div><span class="count">05 / 10</span></div>
+  <div class="bignum">04</div>
+  <div class="head"><div class="label">перелом</div><h2 style="margin-top:14px">День 4</h2><div class="sub">Отёк начинает уходить</div></div>
+  <div class="card"><svg class="eye" data-s="0.6" data-b="0.6" data-hue="yellow" data-sut="1"></svg>
+    <div class="meter" data-otek="6" data-sin="5"></div></div>
+  <div class="list">
+    <div class="item"><span class="n">01</span><span>Синяки меняют цвет: <b>фиолетовый → жёлто-зелёный</b></span></div>
+    <div class="item"><span class="n">02</span><span>Глаза открываются <b>свободнее</b></span></div>
+    <div class="item"><span class="n">03</span><span>Можно <b>короткие прогулки</b> — в солнечных очках</span></div>
+  </div>
+  <div class="bottom"><span class="handle" data-ig>@dr_kudryakov</span><span class="pill">уже легче</span></div>
+</section>
+
+<!-- 6. ДЕНЬ 5–6 -->
+<section class="slide" id="s6">
+  <div class="top"><div class="dots"></div><span class="count">06 / 10</span></div>
+  <div class="bignum">5–6</div>
+  <div class="head"><div class="label">контроль у хирурга</div><h2 style="margin-top:14px">День 5–6</h2><div class="sub">Снимаем швы</div></div>
+  <div class="card"><svg class="eye" data-s="0.4" data-b="0.35" data-hue="yellow" data-scar="1"></svg>
+    <div class="meter" data-otek="4" data-sin="3"></div></div>
+  <div class="list">
+    <div class="item"><span class="n">01</span><span>Снятие швов занимает <b>5–10 минут</b> и почти не больно</span></div>
+    <div class="item"><span class="n">02</span><span>После — <b>заметно легче</b>, веки «отпускает»</span></div>
+    <div class="item"><span class="n">03</span><span>Точный день зависит от шва — <b>его назовёт хирург</b></span></div>
+  </div>
+  <div class="bottom"><span class="handle" data-ig>@dr_kudryakov</span><span class="pill ghost">швы сняты ✓</span></div>
+</section>
+
+<!-- 7. ДЕНЬ 7 -->
+<section class="slide" id="s7">
+  <div class="top"><div class="dots"></div><span class="count">07 / 10</span></div>
+  <div class="bignum">07</div>
+  <div class="head"><div class="label">неделя позади</div><h2 style="margin-top:14px">День 7</h2><div class="sub">Можно выходить в люди</div></div>
+  <div class="card"><svg class="eye" data-s="0.18" data-b="0.12" data-hue="yellow" data-scar="1"></svg>
+    <div class="meter" data-otek="2" data-sin="1"></div></div>
+  <div class="list">
+    <div class="item"><span class="n">01</span><span>Большая часть отёка <b>ушла</b></span></div>
+    <div class="item"><span class="n">02</span><span>Можно за компьютер и <b>на работу</b></span></div>
+    <div class="item"><span class="n">03</span><span>Макияж, спорт, баня — <b>пока нет</b>, сроки скажет хирург</span></div>
+  </div>
+  <div class="bottom"><span class="handle" data-ig>@dr_kudryakov</span><span class="pill">итог — к 3 месяцам</span></div>
+</section>
+
+<!-- 8. ГРАФИК ОТЁКА -->
+<section class="slide" id="s8">
+  <div class="top"><div class="dots"></div><span class="count">08 / 10</span></div>
+  <div class="head"><div class="label">вся неделя на одном графике</div><h2 style="margin-top:14px;font-size:112px">Как уходит<br>отёк</h2></div>
+  <svg id="chart" style="position:absolute;left:40px;top:470px;width:1000px;height:620px"></svg>
+  <div style="position:absolute;left:64px;right:64px;top:1120px;font-size:33px;line-height:1.3;font-weight:500">
+    Самое страшное — <b>2–3 день</b>. Дальше с каждым днём<br>лучше, даже если кажется, что ничего не меняется
+  </div>
+  <div class="bottom"><span class="handle" data-ig>@dr_kudryakov</span><span class="count">сохраните ↓</span></div>
+</section>
+
+<!-- 9. КОГДА ЗВОНИТЬ -->
+<section class="slide dark" id="s9">
+  <div class="top"><div class="dots"></div><span class="count">09 / 10</span></div>
+  <div class="head"><div class="label">важно</div><h2 style="margin-top:14px;font-size:112px">Сразу<br>звоните врачу,<br>если:</h2></div>
+  <div class="list" style="top:640px;gap:22px">
+    <div class="item" style="font-size:36px"><span class="n">01</span><span><b>Сильная боль с одной стороны</b>, глаз будто распирает</span></div>
+    <div class="item" style="font-size:36px"><span class="n">02</span><span><b>Синяк быстро растёт</b>, веко твердеет</span></div>
+    <div class="item" style="font-size:36px"><span class="n">03</span><span><b>Ухудшилось зрение</b> или двоится в глазах</span></div>
+    <div class="item" style="font-size:36px"><span class="n">04</span><span><b>Температура выше 38 °C</b>, гной из шва</span></div>
+  </div>
+  <div class="bottom"><span class="handle" data-ig>@dr_kudryakov</span><span class="script" style="font-size:100px;margin-top:-30px">не ждите</span></div>
+</section>
+
+<!-- 10. CTA -->
+<section class="slide" id="s10">
+  <div class="top"><div class="dots"></div><span class="count">10 / 10</span></div>
+  <div class="head">
+    <h2 style="font-size:150px">Сохраните</h2>
+    <div class="script" style="font-size:120px;margin:0 0 0 120px;transform:rotate(-4deg)">и перечитайте</div>
+    <div class="sub" style="font-size:44px;margin-top:20px">на 3-й день, когда станет страшно</div>
+  </div>
+  <svg class="eye" data-s="0" data-b="0" style="position:absolute;left:210px;top:580px;width:660px;height:400px"></svg>
+  <div style="position:absolute;left:64px;right:64px;top:960px;background:var(--navy);color:var(--beige);border-radius:36px;padding:36px 44px">
+    <div style="font-size:36px;line-height:1.3;font-weight:500">Напишите <b style="font-family:Head;font-weight:900;font-size:44px">«ВЕКИ»</b> в директ — расскажу, подходит ли вам операция</div>
+  </div>
+  <div style="position:absolute;left:64px;right:64px;bottom:130px;font-size:22px;line-height:1.35;opacity:.6">Сроки примерные, у каждого пациента по-своему. Ориентируйтесь на рекомендации своего хирурга.</div>
+  <div class="bottom"><span class="handle" data-ig>@dr_kudryakov</span><span class="pill ghost">перешлите подруге</span></div>
+</section>
+
+<script>
+const NAVY='#082052', BEIGE='#F8F0E5';
+const NS='http://www.w3.org/2000/svg';
+let uid=0;
+function q(p0,c,p1,t){const u=1-t;return [u*u*p0[0]+2*u*t*c[0]+t*t*p1[0], u*u*p0[1]+2*u*t*c[1]+t*t*p1[1]];}
+function qd(p0,c,p1,t){return [2*(1-t)*(c[0]-p0[0])+2*t*(p1[0]-c[0]), 2*(1-t)*(c[1]-p0[1])+2*t*(p1[1]-c[1])];}
+
+function drawEye(svg){
+  const dark=svg.closest('.slide').classList.contains('dark');
+  const ink=dark?BEIGE:NAVY;
+  const s=+svg.dataset.s||0, b=+svg.dataset.b||0;
+  const hue=svg.dataset.hue==='yellow'?['#B9A24A','#7C8F52']:['#5B3B78','#7A3B5E'];
+  const id='e'+(uid++);
+  svg.setAttribute('viewBox','0 -70 600 400');
+  const L=[70,175],R=[530,175];
+  const uy=20+s*150, ly=300-s*45;
+  const up=[300,uy], lo=[300,ly];
+  const crease=[[95,150],[300,-30+s*40],[505,150]];
+  let h='';
+  h+=`<defs>
+    <clipPath id="${id}c"><path d="M${L} Q${up} ${R} Q${lo} ${L}Z"/></clipPath>
+    <filter id="${id}f" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="22"/></filter>
+    <radialGradient id="${id}g"><stop offset="0" stop-color="${hue[0]}"/><stop offset="1" stop-color="${hue[1]}" stop-opacity="0"/></radialGradient>
+  </defs>`;
+  // синяки
+  if(b>0){
+    h+=`<g filter="url(#${id}f)" opacity="${Math.min(1,b*1.1).toFixed(2)}">
+      <ellipse cx="300" cy="${ly-10+25}" rx="${170+b*40}" ry="${38+b*22}" fill="url(#${id}g)"/>
+      <ellipse cx="300" cy="${85+s*30}" rx="${150+b*40}" ry="${28+b*18}" fill="url(#${id}g)" opacity=".8"/>
+    </g>`;
+  }
+  // бровь
+  h+=`<path d="M40,30 Q280,-80 570,20" fill="none" stroke="${ink}" stroke-width="16" stroke-linecap="round" opacity=".9"/>`;
+  // отёк верхнего века: заливка + контур
+  if(s>0.05){
+    h+=`<path d="M78,172 Q300,${-10+s*30} 522,172 Q300,${uy} 78,172Z" fill="${ink}" opacity="${(s*0.16).toFixed(2)}"/>`;
+    h+=`<path d="M85,165 Q300,${-20+s*40} 515,165" fill="none" stroke="${ink}" stroke-width="3" opacity="${(s*0.8).toFixed(2)}" stroke-dasharray="2 10" stroke-linecap="round"/>`;
+    h+=`<path d="M110,200 Q300,${ly+30+s*55} 490,200" fill="none" stroke="${ink}" stroke-width="3.5" opacity="${(s*0.9).toFixed(2)}" stroke-linecap="round"/>`;
+  }
+  // складка века (линия разреза)
+  const sut=svg.dataset.sut, scar=svg.dataset.scar;
+  const cp=`M${crease[0]} Q${crease[1]} ${crease[2]}`;
+  if(sut){
+    h+=`<path d="${cp}" fill="none" stroke="${ink}" stroke-width="3" opacity=".85"/>`;
+    for(let i=1;i<=9;i++){const t=0.1+i*0.08;const p=q(...crease,t),d=qd(...crease,t);const m=Math.hypot(...d);const nx=-d[1]/m,ny=d[0]/m;
+      h+=`<line x1="${(p[0]-nx*12).toFixed(1)}" y1="${(p[1]-ny*12).toFixed(1)}" x2="${(p[0]+nx*12).toFixed(1)}" y2="${(p[1]+ny*12).toFixed(1)}" stroke="${ink}" stroke-width="3.5" stroke-linecap="round"/>`;}
+  } else if(scar){
+    h+=`<path d="${cp}" fill="none" stroke="${ink}" stroke-width="2.5" opacity=".45"/>`;
+  } else {
+    h+=`<path d="${cp}" fill="none" stroke="${ink}" stroke-width="4" stroke-linecap="round" opacity=".9"/>`;
+  }
+  // белок + радужка
+  h+=`<g clip-path="url(#${id}c)">
+    <rect x="0" y="0" width="600" height="320" fill="${dark?'rgba(248,240,229,.10)':'#FFFFFF'}"/>
+    <circle cx="300" cy="172" r="78" fill="${ink}" opacity=".16"/>
+    <circle cx="300" cy="172" r="78" fill="none" stroke="${ink}" stroke-width="4"/>
+    <circle cx="300" cy="172" r="54" fill="none" stroke="${ink}" stroke-width="1.5" opacity=".5"/>
+    <circle cx="300" cy="172" r="32" fill="${ink}"/>
+    <circle cx="322" cy="150" r="11" fill="${dark?NAVY:'#FFFFFF'}"/>
+  </g>`;
+  // контуры век
+  h+=`<path d="M${L} Q${up} ${R}" fill="none" stroke="${ink}" stroke-width="7" stroke-linecap="round"/>`;
+  h+=`<path d="M${L} Q${lo} ${R}" fill="none" stroke="${ink}" stroke-width="3.5" stroke-linecap="round"/>`;
+  // ресницы
+  for(let i=0;i<11;i++){const t=0.14+i*0.072;const p=q(L,up,R,t),d=qd(L,up,R,t);const m=Math.hypot(...d);let nx=d[1]/m,ny=-d[0]/m;
+    const lean=(t-0.5)*0.9;const len=26-Math.abs(t-0.5)*16;
+    const ex=p[0]+(nx+lean)*len, ey=p[1]+ny*len;
+    h+=`<path d="M${p[0].toFixed(1)},${p[1].toFixed(1)} Q${(p[0]+nx*len*0.6).toFixed(1)},${(p[1]+ny*len*0.6).toFixed(1)} ${ex.toFixed(1)},${ey.toFixed(1)}" fill="none" stroke="${ink}" stroke-width="3.5" stroke-linecap="round"/>`;}
+  svg.innerHTML=h;
+}
+
+function meter(el){
+  const mk=(name,v)=>`<div class="row"><div class="k"><span>${name}</span><span>${v}/10</span></div><div class="bars">${Array.from({length:10},(_,i)=>`<b class="${i<v?'on':''}"></b>`).join('')}</div></div>`;
+  el.innerHTML=mk('ОТЁК',+el.dataset.otek)+mk('СИНЯКИ',+el.dataset.sin);
+}
+
+function chart(){
+  const svg=document.getElementById('chart');
+  const W=1000,H=620,x0=90,x1=960,y0=520,y1=40;
+  const days=[0,1,2,3,4,5,6,7], v=[3,6,9,8.6,6,4.3,3,2];
+  const X=d=>x0+(x1-x0)*d/7, Y=val=>y0-(y0-y1)*val/10;
+  const P=days.map((d,i)=>[X(d),Y(v[i])]);
+  // catmull-rom → bezier
+  let path=`M${P[0]}`;
+  for(let i=0;i<P.length-1;i++){const p0=P[i-1]||P[i],p1=P[i],p2=P[i+1],p3=P[i+2]||p2;
+    const c1=[p1[0]+(p2[0]-p0[0])/6,p1[1]+(p2[1]-p0[1])/6],c2=[p2[0]-(p3[0]-p1[0])/6,p2[1]-(p3[1]-p1[1])/6];
+    path+=` C${c1} ${c2} ${p2}`;}
+  let h=`<defs><linearGradient id="ar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${NAVY}" stop-opacity=".22"/><stop offset="1" stop-color="${NAVY}" stop-opacity="0"/></linearGradient></defs>`;
+  // зона пика
+  h+=`<rect x="${X(1.6)}" y="${y1-10}" width="${X(3.4)-X(1.6)}" height="${y0-y1+10}" rx="24" fill="${NAVY}" opacity=".07"/>`;
+  for(let g=0;g<=10;g+=5){h+=`<line x1="${x0}" x2="${x1}" y1="${Y(g)}" y2="${Y(g)}" stroke="${NAVY}" stroke-opacity=".15" stroke-width="2" stroke-dasharray="4 8"/>`;}
+  h+=`<path d="${path} L${X(7)},${y0} L${X(0)},${y0}Z" fill="url(#ar)"/>`;
+  h+=`<path d="${path}" fill="none" stroke="${NAVY}" stroke-width="7" stroke-linecap="round"/>`;
+  P.forEach(([x,y],i)=>{h+=`<circle cx="${x}" cy="${y}" r="13" fill="#F8F0E5" stroke="${NAVY}" stroke-width="5"/>`;
+    h+=`<text x="${x}" y="${y0+52}" text-anchor="middle" font-family="Mono" font-size="24" fill="${NAVY}" opacity=".75">${i===0?'ОП':'Д'+i}</text>`;});
+  const note=(x,y,t,anchor='middle')=>`<g><rect x="${x-110}" y="${y-30}" width="220" height="54" rx="27" fill="${NAVY}"/><text x="${x}" y="${y+6}" text-anchor="${anchor}" font-family="Body" font-weight="700" font-size="24" fill="#F8F0E5">${t}</text></g>`;
+  h+=note(X(2.5),Y(10)-14,'ПИК ОТЁКА');
+  h+=note(X(5.2),Y(4.3)-150,'ШВЫ СНЯТЫ');
+  h+=note(X(6.3),Y(2)-130,'В ЛЮДИ');
+  h+=`<text x="${x0-20}" y="${Y(10)+8}" text-anchor="end" font-family="Mono" font-size="22" fill="${NAVY}" opacity=".6">10</text>`;
+  h+=`<text x="${x0-20}" y="${Y(0)+8}" text-anchor="end" font-family="Mono" font-size="22" fill="${NAVY}" opacity=".6">0</text>`;
+  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);svg.innerHTML=h;
+}
+
+const IG=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>`;
+document.querySelectorAll('[data-ig]').forEach(e=>e.innerHTML=IG+e.innerHTML);
+document.querySelectorAll('svg.eye').forEach(drawEye);
+document.querySelectorAll('.meter').forEach(meter);
+document.querySelectorAll('.slide').forEach((sl,i)=>{const d=sl.querySelector('.dots');if(d)d.innerHTML=Array.from({length:10},(_,k)=>`<i class="${k===i?'on':''}"></i>`).join('');});
+chart();
+</script>
+</body>
+</html>
