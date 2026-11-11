@@ -21,7 +21,6 @@ import {
   Heartbeat,
   JitterPills,
   LampBeam,
-  MorningArc,
   NoStamp,
   ReadyRing,
   RgbSplit,
@@ -44,7 +43,7 @@ const CUTS = [2.92, 8.58, 16.58, 18.2, 32.42, 36.84, 63.3, 65.7, 75.97, 78.49, 7
 const HOOK_END = 3.0;
 const HIT = 1.02; // «сбежала»
 export const FEAR_SECONDS = 82.0;
-const CAPTION_TOP = 1400;
+const CAPTION_TOP = 950; // голубая полоса маски: по центру, чуть ниже головы
 const CAPTION_OFF = [
   [0, HOOK_END],
   [26.2, 29.1], // кардиограмма «страх»
@@ -99,7 +98,7 @@ const Captions: React.FC = () => {
     return null;
   }
   return (
-    <div style={{position: 'absolute', top: CAPTION_TOP, left: 64, right: 64, textAlign: 'center', fontFamily: FONTS.body, fontWeight: 400, fontSize: 46, color: COLORS.white, textShadow: '0 2px 14px rgba(0, 0, 0, 0.6)'}}>
+    <div style={{position: 'absolute', top: CAPTION_TOP, left: 100, right: 100, textAlign: 'center', fontFamily: FONTS.body, fontWeight: 400, fontSize: 36, color: COLORS.white, textShadow: '0 2px 12px rgba(0, 0, 0, 0.7)'}}>
       {PAGES[index].words.map((word, wi) => {
         const st = Math.round(word.start * fps);
         const v = interpolate(frame, [st, st + 5], [0, 1], {...clamp, easing: EASE.out});
@@ -124,9 +123,8 @@ const SoundTrack: React.FC = () => {
     <>
       <Audio src={staticFile('source.mp4')} />
       <Audio
-        src={staticFile('music/calm_pad_45.wav')}
-        loop
-        volume={(f) => interpolate(f, [durationInFrames - 1.5 * fps, durationInFrames - 1], [1, 0], clamp)}
+        src={staticFile('music/warm_keys_90.wav')}
+        volume={(f) => 0.24 * interpolate(f, [durationInFrames - 1.5 * fps, durationInFrames - 1], [1, 0], clamp)}
       />
       {/* хук: свуш на влёте, удар и блеск на «сбежала» */}
       {sfx('whoosh', 0, 0.16, 0.6)}
@@ -157,24 +155,23 @@ export const Fear: React.FC = () => {
       <RgbSplit at={HIT}>{(style) => <FootageLayer extra={style} />}</RgbSplit>
       <FlashCut at={HIT} />
 
-      <RunAwayTitle at={0.45} hitAt={HIT} tailAt={1.52} until={HOOK_END + 0.1} top={1060} />
+      <RunAwayTitle at={0.45} hitAt={HIT} tailAt={1.52} until={HOOK_END + 0.1} top={1090} />
 
-      <MorningArc at={3.5} until={8.5} x={64} y={430} />
-      <JitterPills items={[{text: 'разочарован', at: 14.1}, {text: 'злой', at: 16.02}]} until={17.0} x={1016} y={440} />
-      <ChatBubble at={17.2} textAt={18.44} until={22.1} x={1016} y={400} who="МЕНЕДЖЕР" text="Пациентка хочет отказаться от операции" />
-      <Heartbeat at={26.3} until={29.1} top={1090} />
-      <Countdown at={29.3} until={32.6} x={790} y={400} />
-      <TypedQuote at={35.2} until={37.6} text="Я оперироваться не буду" top={1090} cps={24} />
-      <StruckPills items={[{text: 'убеждать', at: 43.22}, {text: 'уговаривать', at: 44.56}]} strikeAt={45.1} until={45.9} x={64} y={430} />
+      <JitterPills items={[{text: 'разочарован', at: 14.1}, {text: 'злой', at: 16.02}]} until={17.0} x={980} y={430} />
+      <ChatBubble at={17.2} textAt={18.44} until={22.1} x={980} y={400} who="МЕНЕДЖЕР" text="Пациентка хочет отказаться от операции" />
+      <Heartbeat at={26.3} until={29.1} top={1100} />
+      <Countdown at={29.3} until={32.6} x={785} y={400} />
+      <TypedQuote at={35.2} until={37.6} text="Я оперироваться не буду" top={1100} cps={24} />
+      <StruckPills items={[{text: 'убеждать', at: 43.22}, {text: 'уговаривать', at: 44.56}]} strikeAt={45.1} until={45.9} x={100} y={430} />
       <DecodeTitle at={45.94} until={48.0} lines={['Страх — это', 'нормально']} top={1100} />
       <WorryGauge at={48.0} edgeAt={49.5} forkA={52.66} forkB={54.74} until={55.4} top={1110} />
-      <ReadyRing at={55.5} fullAt={59.7} until={61.6} x={790} y={400} />
-      <FlipBoard at={63.4} flipAt={64.7} until={68.5} x={64} y={430} from="операция" to="отменена" />
-      <NoStamp items={[{text: 'расстроится', at: 70.54}, {text: 'огорчится', at: 71.72}, {text: 'будет ругаться', at: 72.38}]} stampAt={73.06} until={75.9} x={1016} y={400} />
+      <ReadyRing at={55.5} fullAt={59.7} until={61.6} x={785} y={400} />
+      <FlipBoard at={63.4} flipAt={64.7} until={68.5} x={100} y={430} from="операция" to="отменена" />
+      <NoStamp items={[{text: 'расстроится', at: 70.54}, {text: 'огорчится', at: 71.72}, {text: 'будет ругаться', at: 72.38}]} stampAt={73.06} until={75.9} x={980} y={400} />
       <LampBeam at={77.6} titleAt={78.8} until={FEAR_SECONDS} lamp={[440, 360]} top={1110} lines={['Это выбор', 'пациента']} />
 
       <Captions />
-      <AbsoluteFill style={{top: 'auto', bottom: 170, height: 'auto', alignItems: 'center'}}>
+      <AbsoluteFill style={{top: 1440, left: 100, right: 1080 - 866, height: 'auto', alignItems: 'center'}}>
         <InstagramHandle handle="dr_kudryakov" />
       </AbsoluteFill>
       <SoundTrack />

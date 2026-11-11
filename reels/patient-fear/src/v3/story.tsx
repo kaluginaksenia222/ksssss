@@ -26,6 +26,11 @@ const glass: React.CSSProperties = {
 };
 
 const shadow = '0 2px 12px rgba(0,0,0,0.6)';
+
+// Рабочая зона Reels (маска заказчика, пересчитана на 1080×1920):
+// всё — между x 100 и 980, y 330 и 1500; ниже 1067 правая граница 866 (кнопки Instagram).
+export const SAFE = {left: 100, right: 980, lowRight: 866, top: 330, bottom: 1500};
+const titleBox: React.CSSProperties = {position: 'absolute', left: SAFE.left, right: 1080 - SAFE.lowRight};
 const mono: React.CSSProperties = {fontFamily: FONTS.mono, fontSize: 20, letterSpacing: '0.22em', color: 'rgba(255,255,255,0.85)', textShadow: shadow};
 
 const useT = () => {
@@ -87,7 +92,7 @@ export const RunAwayTitle: React.FC<{at: number; hitAt: number; tailAt: number; 
   const streak = interpolate(frame, [hitAt * fps, (hitAt + 0.2) * fps, (hitAt + 0.9) * fps], [0, 1, 0], clamp);
   const thin: React.CSSProperties = {fontFamily: FONTS.body, fontWeight: 400, fontSize: 38, letterSpacing: '0.24em', textTransform: 'uppercase', color: COLORS.white, textShadow: shadow};
   return (
-    <div style={{position: 'absolute', top, left: 0, right: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', opacity: show}}>
+    <div style={{...titleBox, top, display: 'flex', flexDirection: 'column', alignItems: 'center', opacity: show}}>
       <div style={{...thin, opacity: a, translate: `0px ${(1 - a) * 14}px`}}>пациентка</div>
       <div style={{position: 'relative', marginTop: 6, height: 96}}>
         {/* полосы скорости: тянутся влево за словом */}
@@ -190,13 +195,13 @@ export const ChatBubble: React.FC<{at: number; textAt: number; until: number; x:
           borderRadius: 30,
           borderBottomRightRadius: 8,
           padding: typed ? '16px 24px' : '18px 22px',
-          maxWidth: 360,
+          maxWidth: 270,
           scale: String(0.6 + pop * 0.4),
           transformOrigin: '100% 100%',
         }}
       >
         {typed ? (
-          <span style={{fontFamily: FONTS.body, fontWeight: 500, fontSize: 31, lineHeight: 1.25, color: COLORS.white, opacity: grow, display: 'block'}}>{text}</span>
+          <span style={{fontFamily: FONTS.body, fontWeight: 500, fontSize: 27, lineHeight: 1.25, color: COLORS.white, opacity: grow, display: 'block'}}>{text}</span>
         ) : (
           <div style={{display: 'flex', gap: 8}}>
             {[0, 1, 2].map((i) => (
@@ -213,7 +218,7 @@ export const ChatBubble: React.FC<{at: number; textAt: number; until: number; x:
 export const Heartbeat: React.FC<{at: number; until: number; top: number}> = ({at, until, top}) => {
   const {frame, fps, t} = useT();
   const show = useInOut(at, until);
-  const W = 900;
+  const W = 760;
   const speed = interpolate(t, [at, until], [1, 2.2], clamp);
   const phase = (t - at) * 260 * speed;
   // ломаная кардиограммы: повторяющийся «удар»
@@ -231,7 +236,7 @@ export const Heartbeat: React.FC<{at: number; until: number; top: number}> = ({a
   const reveal = ramp(frame, fps, at, at + 0.6, EASE.inOut);
   const label = ramp(frame, fps, at + 0.6, at + 1.0);
   return (
-    <div style={{position: 'absolute', top, left: 90, width: W, opacity: show}}>
+    <div style={{position: 'absolute', top, left: SAFE.left, width: W, opacity: show}}>
       <svg width={W} height={110} style={{overflow: 'visible', filter: 'drop-shadow(0 0 8px rgba(255,120,110,0.6))', maskImage: 'linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent)', WebkitMaskImage: 'linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent)'}}>
         <polyline points={pts.join(' ')} fill="none" stroke="#FFD9D2" strokeWidth={3.5} strokeLinejoin="round" style={{clipPath: `inset(0 ${(1 - reveal) * 100}% 0 0)`}} />
       </svg>
@@ -241,7 +246,7 @@ export const Heartbeat: React.FC<{at: number; until: number; top: number}> = ({a
 };
 
 // Круглая стеклянная шкала (кольцо, число в центре, подпись под кругом)
-const Ring: React.FC<{p: number; center: React.ReactNode; label: string; size?: number}> = ({p, center, label, size = 210}) => {
+const Ring: React.FC<{p: number; center: React.ReactNode; label: string; size?: number}> = ({p, center, label, size = 190}) => {
   const r = size / 2 - 12;
   const c = 2 * Math.PI * r;
   return (
@@ -282,7 +287,7 @@ export const TypedQuote: React.FC<{at: number; until: number; text: string; top:
   const n = Math.max(0, Math.min(text.length, Math.floor(((frame - at * fps) / fps) * cps)));
   const caret = Math.floor(frame / 8) % 2 === 0 || n < text.length;
   return (
-    <div style={{position: 'absolute', top, left: 70, right: 70, textAlign: 'center', opacity: show}}>
+    <div style={{...titleBox, top, textAlign: 'center', opacity: show}}>
       <div style={{...mono, marginBottom: 14}}>ПАЦИЕНТКА</div>
       <span style={{fontFamily: FONTS.body, fontWeight: 500, fontSize: 54, lineHeight: 1.2, color: COLORS.white, textShadow: shadow}}>
         <span style={{color: COLORS.beige}}>«</span>
@@ -324,7 +329,7 @@ export const DecodeTitle: React.FC<{at: number; until: number; lines: string[]; 
   const total = lines.join('').length;
   let k = 0;
   return (
-    <div style={{position: 'absolute', top, left: 40, right: 40, textAlign: 'center', opacity: show}}>
+    <div style={{...titleBox, top, textAlign: 'center', opacity: show}}>
       {lines.map((line, li) => (
         <div key={li} style={{fontFamily: FONTS.heading, fontWeight: 900, fontSize: size, lineHeight: 1.08, textTransform: 'uppercase', ...metal}}>
           {line.split('').map((ch, ci) => {
@@ -352,7 +357,7 @@ export const WorryGauge: React.FC<{at: number; edgeAt: number; forkA: number; fo
   const bar = ramp(frame, fps, at, at + 0.5, EASE.inOut);
   const pos = interpolate(frame, [at * fps, (at + 0.6) * fps, edgeAt * fps, (edgeAt + 0.6) * fps], [0.08, 0.45, 0.45, 0.95], {...clamp, easing: EASE.inOut});
   const alarm = frame > edgeAt * fps ? 0.5 + 0.5 * Math.sin(t * 14) : 0;
-  const W = 640;
+  const W = 600;
   const a = ramp(frame, fps, forkA, forkA + 0.35);
   const b = ramp(frame, fps, forkB, forkB + 0.35);
   const pill = (text: string, v: number) => (
@@ -361,7 +366,7 @@ export const WorryGauge: React.FC<{at: number; edgeAt: number; forkA: number; fo
     </div>
   );
   return (
-    <div style={{position: 'absolute', top, left: (1080 - W) / 2, width: W, opacity: show}}>
+    <div style={{position: 'absolute', top, left: SAFE.left + (SAFE.lowRight - SAFE.left - W) / 2, width: W, opacity: show}}>
       <div style={{display: 'flex', justifyContent: 'space-between', ...mono, marginBottom: 12}}>
         <span>СПОКОЙНО</span>
         <span style={{color: alarm ? `rgba(255,190,180,${0.6 + alarm * 0.4})` : undefined}}>НА ГРАНИ</span>
@@ -398,15 +403,15 @@ export const FlipBoard: React.FC<{at: number; flipAt: number; until: number; x: 
   return (
     <div style={{position: 'absolute', left: x, top: y, opacity: show}}>
       <div style={{...mono, marginBottom: 12}}>РАСПИСАНИЕ</div>
-      <div style={{display: 'flex', gap: 4}}>
+      <div style={{display: 'flex', gap: 3}}>
         {Array.from({length: n}, (_, i) => {
           const s = (flipAt + i * 0.05) * fps;
           const p = interpolate(frame, [s, s + 6], [0, 1], clamp);
           const ch = (p < 0.5 ? from[i] : to[i]) ?? ' ';
           const fold = p < 0.5 ? 1 - p * 2 : (p - 0.5) * 2;
           return (
-            <div key={i} style={{width: 36, height: 54, borderRadius: 6, backgroundColor: 'rgba(10,10,14,0.72)', border: '1px solid rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden'}}>
-              <span style={{fontFamily: FONTS.mono, fontSize: 32, color: p >= 0.5 && to !== from ? '#FFC2B8' : COLORS.white, scale: `1 ${Math.max(0.05, fold)}`}}>{ch.toUpperCase()}</span>
+            <div key={i} style={{width: 29, height: 46, borderRadius: 5, backgroundColor: 'rgba(10,10,14,0.72)', border: '1px solid rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden'}}>
+              <span style={{fontFamily: FONTS.mono, fontSize: 27, color: p >= 0.5 && to !== from ? '#FFC2B8' : COLORS.white, scale: `1 ${Math.max(0.05, fold)}`}}>{ch.toUpperCase()}</span>
               <div style={{position: 'absolute', left: 0, right: 0, top: '50%', height: 1, backgroundColor: 'rgba(0,0,0,0.6)'}} />
             </div>
           );
@@ -423,13 +428,13 @@ export const NoStamp: React.FC<{items: {text: string; at: number}[]; stampAt: nu
   const st = ramp(frame, fps, stampAt, stampAt + 0.18, EASE.in);
   const fadeItems = ramp(frame, fps, stampAt, stampAt + 0.4);
   return (
-    <div style={{position: 'absolute', right: 1080 - x, top: y, opacity: show, width: 330, height: 280}}>
+    <div style={{position: 'absolute', right: 1080 - x, top: y, opacity: show, width: 270, height: 260}}>
       <div style={{display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 10}}>
         <div style={{...mono}}>ХИРУРГ…</div>
         {items.map((it, i) => {
           const v = ramp(frame, fps, it.at, it.at + 0.3);
           return (
-            <div key={i} style={{fontFamily: FONTS.body, fontWeight: 400, fontSize: 34, color: COLORS.white, textShadow: shadow, opacity: v * (1 - fadeItems * 0.6), translate: `${(1 - v) * 20}px 0px`}}>
+            <div key={i} style={{fontFamily: FONTS.body, fontWeight: 400, fontSize: 30, color: COLORS.white, textShadow: shadow, opacity: v * (1 - fadeItems * 0.6), translate: `${(1 - v) * 20}px 0px`}}>
               {it.text}
             </div>
           );
@@ -438,14 +443,14 @@ export const NoStamp: React.FC<{items: {text: string; at: number}[]; stampAt: nu
       <div
         style={{
           position: 'absolute',
-          left: 40,
+          left: 30,
           top: 70,
-          padding: '6px 26px',
+          padding: '4px 22px',
           border: `5px solid ${COLORS.beige}`,
           borderRadius: 14,
           fontFamily: FONTS.heading,
           fontWeight: 900,
-          fontSize: 74,
+          fontSize: 64,
           letterSpacing: '0.08em',
           color: COLORS.beige,
           rotate: '-12deg',
@@ -482,9 +487,9 @@ export const LampBeam: React.FC<{at: number; titleAt: number; until: number; lam
             <feGaussianBlur stdDeviation="14" />
           </filter>
         </defs>
-        <polygon points={`${lx - 60},${ly} ${lx + 60},${ly} ${540 + spread},${bottom} ${540 - spread},${bottom}`} fill="url(#beam)" filter="url(#soft)" opacity={0.5 * beam} />
+        <polygon points={`${lx - 60},${ly} ${lx + 60},${ly} ${483 + spread},${bottom} ${483 - spread},${bottom}`} fill="url(#beam)" filter="url(#soft)" opacity={0.5 * beam} />
       </svg>
-      <div style={{position: 'absolute', top, left: 40, right: 40, textAlign: 'center', opacity: title, filter: `blur(${(1 - title) * 8}px)`}}>
+      <div style={{...titleBox, top, textAlign: 'center', opacity: title, filter: `blur(${(1 - title) * 8}px)`}}>
         {lines.map((l, i) => (
           <div key={i} style={{fontFamily: FONTS.heading, fontWeight: 900, fontSize: 70, lineHeight: 1.06, textTransform: 'uppercase', ...metal, filter: 'drop-shadow(0 3px 14px rgba(0,0,0,0.85))'}}>
             {l}
