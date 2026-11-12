@@ -3,7 +3,7 @@ import {Audio, Video} from '@remotion/media';
 import {AbsoluteFill, continueRender, delayRender, interpolate, Sequence, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
 import {fontsLoaded} from '../design/fonts';
 import {COLORS, EASE, FONTS} from '../design/tokens';
-import {DecisionTree, LensCheck, MixCircles, PillHook, PillTimeline, PollSticker, SAFE, SelfLoop, SwingBadge} from './pills';
+import {DecisionTree, PillHook, PillTimeline, PollSticker, SAFE} from './pills';
 import {PAGES} from './transcript';
 import {InstagramHandle} from './ui';
 
@@ -15,16 +15,15 @@ import {InstagramHandle} from './ui';
 const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
 
 const FACE = {cx: 530, cy: 690};
-const CUTS = [2.86, 8.86, 10.38, 21.18, 23.86, 33.5, 36.02];
-const HOOK_END = 2.9;
-const BANG = 2.26; // «операцию?»
-export const MEDS_SECONDS = 47.5;
+// стыки нарезки; смену крупности делаем не чаще раза в 2,5 с, чтобы кадр не дёргался
+const ALL_CUTS = [1.23, 2.72, 3.94, 7.66, 7.97, 9.49, 9.61, 12.71, 19.66, 19.8, 22.02, 27.7, 29.35, 30.77, 33.29, 35.94];
+const CUTS = ALL_CUTS.reduce<number[]>((acc, c) => (c - (acc[acc.length - 1] ?? 0) >= 2.5 ? [...acc, c] : acc), []);
+const HOOK_END = 2.85;
+const BANG = 2.14; // «операцию?»
+export const MEDS_SECONDS = 44.0;
 const CAPTION_TOP = 950;
-const CAPTION_OFF = [
-  [0, HOOK_END],
-  [23.9, 33.3], // дерево решений повторяет речь
-  [34.7, 36.0], // бейдж «анестезиолог»
-];
+const ANIM_TOP = 1090;
+// субтитры — весь ролик, без пропусков
 
 const Footage: React.FC = () => {
   const frame = useCurrentFrame();
@@ -78,9 +77,6 @@ const Captions: React.FC = () => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const t = frame / fps;
-  if (CAPTION_OFF.some(([a, b]) => t >= a && t < b)) {
-    return null;
-  }
   const index = PAGES.findIndex((page, i) => {
     const next = PAGES[i + 1];
     const from = page.words[0].start - 0.05;
@@ -116,19 +112,12 @@ const SoundTrack: React.FC = () => {
     <>
       <Audio src={staticFile('source.mp4')} />
       <Audio src={staticFile('music/warm_keys_90.wav')} volume={(f) => 0.24 * interpolate(f, [durationInFrames - 1.5 * fps, durationInFrames - 1], [1, 0], clamp)} />
-      {sfx('whoosh', 0, 0.18, 0.6)}
-      {sfx('pop', 0.35, 0.08, 0.2)}
-      {sfx('impact', BANG, 0.28, 1.0)}
-      {sfx('shimmer', BANG + 0.2, 0.16, 1.1)}
-      {sfx('pop', 3.0, 0.06, 0.2)}
-      {sfx('tick', 8.58, 0.07, 0.3)}
-      {[11.06, 12.84, 14.54].map((at) => sfx('pop', at, 0.05, 0.2))}
-      {sfx('tick', 17.0, 0.05, 0.3)}
-      {[23.32, 23.98, 25.42, 27.66].map((at) => sfx('pop', at, 0.05, 0.2))}
-      {sfx('whoosh', 34.6, 0.08, 0.6)}
-      {[38.14, 39.62].map((at) => sfx('pop', at, 0.05, 0.2))}
-      {sfx('whoosh', 42.4, 0.07, 0.6)}
-      {sfx('shimmer', 45.96, 0.14, 1.1)}
+      {/* звуков вдвое меньше: только хук и по одному на каждую анимацию */}
+      {sfx('whoosh', 0, 0.14, 0.6)}
+      {sfx('impact', BANG, 0.22, 1.0)}
+      {sfx('tick', 7.86, 0.06, 0.3)}
+      {sfx('pop', 21.54, 0.05, 0.2)}
+      {sfx('whoosh', 39.08, 0.06, 0.6)}
     </>
   );
 };
@@ -143,23 +132,20 @@ export const Meds: React.FC = () => {
       <Footage />
       <Flash at={BANG} />
 
-      <PillHook until={HOOK_END + 0.1} top={1075} word="антидепрессанты" dropAt={0.35} tailAt={1.5} />
-      <PollSticker at={3.0} answerAt={8.58} until={9.6} top={1090} />
-      <LensCheck items={[{text: 'препарат', at: 11.06}, {text: 'дозировка', at: 12.84}, {text: 'кто назначил', at: 14.54}]} until={16.2} y={400} />
-      <SelfLoop at={16.4} until={21.4} x={SAFE.left} y={420} />
+      {/* все анимации — в одном месте: по центру на футболке (зелёная зона маски), top 1090 */}
+      <PillHook until={HOOK_END + 0.1} top={ANIM_TOP - 15} word="антидепрессанты" dropAt={0.3} tailAt={1.3} />
+      <PollSticker at={2.95} answerAt={7.86} until={9.3} top={ANIM_TOP} />
       <DecisionTree
-        rootAt={23.0}
+        rootAt={21.2}
         leaves={[
-          {text: 'перенести операцию', at: 23.98},
-          {text: 'отменить препараты', at: 25.42},
-          {text: 'оперировать на препаратах', at: 27.66},
+          {text: 'перенести операцию', at: 22.22},
+          {text: 'отменить препараты', at: 23.64},
+          {text: 'оперировать на препаратах', at: 25.88},
         ]}
-        until={33.3}
-        top={1090}
+        until={30.3}
+        top={ANIM_TOP}
       />
-      <SwingBadge at={34.6} until={36.1} x={720} />
-      <MixCircles aAt={38.14} bAt={39.62} until={41.6} top={1110} />
-      <PillTimeline at={41.7} offAt={42.4} backAt={45.96} until={MEDS_SECONDS} top={1110} />
+      <PillTimeline at={38.0} offAt={39.08} backAt={42.64} until={MEDS_SECONDS} top={ANIM_TOP} />
 
       <Captions />
       <AbsoluteFill style={{top: 1440, left: SAFE.left, right: 1080 - SAFE.lowRight, width: 'auto', height: 'auto', alignItems: 'center'}}>
