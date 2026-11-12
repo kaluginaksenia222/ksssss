@@ -3,7 +3,7 @@ import {Audio, Video} from '@remotion/media';
 import {AbsoluteFill, continueRender, delayRender, interpolate, Sequence, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
 import {fontsLoaded} from '../design/fonts';
 import {COLORS, EASE, FONTS} from '../design/tokens';
-import {CapsuleHook, DecisionTree, PillTimeline, PollSticker, SAFE} from './pills';
+import {CapsuleHook, DecisionTree, PillTimeline, PollSticker, SAFE, SelfLoop} from './pills';
 import {PAGES} from './transcript';
 import {InstagramHandle} from './ui';
 
@@ -16,11 +16,11 @@ const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
 
 const FACE = {cx: 530, cy: 690};
 // стыки нарезки; смену крупности делаем не чаще раза в 2,5 с, чтобы кадр не дёргался
-const ALL_CUTS = [1.23, 2.72, 3.94, 7.66, 7.97, 9.49, 9.61, 12.71, 19.66, 19.8, 22.02, 27.7, 29.35, 30.77, 33.29, 35.94];
+const ALL_CUTS = [1.23, 2.72, 3.94, 7.66, 7.97, 9.49, 9.61, 12.71, 19.66, 19.8, 22.02, 27.7, 29.35, 30.77, 33.29, 35.94, 43.97, 46.05, 49.55, 52.9, 54.21, 54.5, 55.2, 55.31, 55.87, 56.63];
 const CUTS = ALL_CUTS.reduce<number[]>((acc, c) => (c - (acc[acc.length - 1] ?? 0) >= 2.5 ? [...acc, c] : acc), []);
 const HOOK_END = 2.85;
 const BANG = 2.14; // «операцию?»
-export const MEDS_SECONDS = 44.0;
+export const MEDS_SECONDS = 58.8;
 const CAPTION_TOP = 950;
 const ANIM_TOP = 1090;
 // субтитры — весь ролик, без пропусков
@@ -120,6 +120,7 @@ const SoundTrack: React.FC = () => {
       {sfx('shimmer', 0.55, 0.16, 1.1)}
       {sfx('whoosh', 1.0, 0.14, 0.6)}
       {sfx('tick', 7.86, 0.06, 0.3)}
+      {sfx('tick', 18.3, 0.05, 0.3)}
       {sfx('pop', 21.54, 0.05, 0.2)}
       {sfx('whoosh', 39.08, 0.06, 0.6)}
     </>
@@ -151,7 +152,8 @@ export const Meds: React.FC = () => {
         until={30.3}
         top={ANIM_TOP}
       />
-      <PillTimeline at={38.0} offAt={39.08} backAt={42.64} until={MEDS_SECONDS} top={ANIM_TOP} />
+      <SelfLoop at={14.6} until={19.9} x={SAFE.left + (SAFE.lowRight - SAFE.left - 270) / 2} y={ANIM_TOP - 10} />
+      <PillTimeline at={38.0} offAt={39.08} backAt={42.66} until={44.1} top={ANIM_TOP} />
 
       <Captions />
       <AbsoluteFill style={{top: 1440, left: SAFE.left, right: 1080 - SAFE.lowRight, width: 'auto', height: 'auto', alignItems: 'center'}}>

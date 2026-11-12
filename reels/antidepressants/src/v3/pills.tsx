@@ -99,7 +99,7 @@ export const PollSticker: React.FC<{at: number; answerAt: number; until: number;
     </div>
   );
   return (
-    <div style={{position: 'absolute', top, left: SAFE.left + (LOW_W - W) / 2, width: W, opacity: show, scale: String(0.7 + pop * 0.3), rotate: `${(1 - pop) * -6 - 2}deg`}}>
+    <div style={{position: 'absolute', top, left: SAFE.left + (LOW_W - W) / 2, width: W, opacity: show, scale: String(0.7 + pop * 0.3)}}>
       <div style={{...glass, borderRadius: 26, padding: '22px 22px 24px', display: 'flex', flexDirection: 'column', gap: 12}}>
         <div style={{...body(32), fontWeight: 700, textAlign: 'center', marginBottom: 4, textShadow: shadow}}>Отказ в операции?</div>
         {row('Да', 0, false)}
