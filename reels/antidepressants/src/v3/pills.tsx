@@ -310,3 +310,74 @@ export const PillTimeline: React.FC<{at: number; offAt: number; backAt: number; 
     </div>
   );
 };
+
+// ── ХУК v2: капсула влетает, раскрывается, а между половинками — «ОТКАЖУТ в операции?» ──
+const Half: React.FC<{side: 'l' | 'r'; h: number}> = ({side, h}) => (
+  <svg width={h * 1.05} height={h} viewBox="0 0 105 100" style={{overflow: 'visible', filter: 'drop-shadow(0 6px 18px rgba(0,0,0,0.55))'}}>
+    {side === 'l' ? (
+      <>
+        <path d="M50 0 H105 V100 H50 A50 50 0 0 1 50 0 Z" fill={COLORS.beige} />
+        <path d="M22 22 Q34 10 52 12" stroke="rgba(255,255,255,0.85)" strokeWidth={6} fill="none" strokeLinecap="round" />
+      </>
+    ) : (
+      <>
+        <path d="M0 0 H55 A50 50 0 0 1 55 100 H0 Z" fill="#FFFFFF" />
+        <path d="M10 14 Q30 9 50 13" stroke="rgba(200,206,218,0.9)" strokeWidth={6} fill="none" strokeLinecap="round" />
+      </>
+    )}
+  </svg>
+);
+
+export const CapsuleHook: React.FC<{until: number; top: number; landAt: number; openAt: number; tailAt: number}> = ({until, top, landAt, openAt, tailAt}) => {
+  const {frame, fps, t} = useT();
+  const out = 1 - ramp(frame, fps, until - 0.3, until, EASE.inOut);
+  // полёт капсулы: сверху с вращением, приземление с пружиной
+  const fly = spring({frame, fps, config: {damping: 12, stiffness: 150, mass: 0.8}, durationInFrames: Math.round(landAt * fps)});
+  const open = spring({frame: frame - openAt * fps, fps, config: {damping: 15, stiffness: 120}});
+  const word = ramp(frame, fps, openAt + 0.05, openAt + 0.35);
+  const tail = ramp(frame, fps, tailAt, tailAt + 0.3);
+  const glow = interpolate(frame, [openAt * fps, (openAt + 0.15) * fps, (openAt + 0.8) * fps], [0, 1, 0.35], clamp);
+  const H = 100;
+  const gapW = 530 * open; // половинки разъезжаются на ширину слова
+  const pulse = frame > (tailAt + 0.3) * fps ? 1 + 0.04 * Math.sin((t - tailAt) * 9) : 1;
+  return (
+    <div style={{position: 'absolute', top, left: SAFE.left, width: LOW_W, display: 'flex', flexDirection: 'column', alignItems: 'center', opacity: out}}>
+      <div style={{position: 'relative', height: H, width: LOW_W, translate: `0px ${(1 - fly) * -700}px`, rotate: `${(1 - fly) * -320}deg`}}>
+        {/* свечение из раскрытой капсулы */}
+        <div style={{position: 'absolute', left: LOW_W / 2 - 260, top: -40, width: 520, height: H + 80, borderRadius: '50%', background: 'radial-gradient(closest-side, rgba(255,240,220,0.75), rgba(255,240,220,0))', opacity: glow}} />
+        <div style={{position: 'absolute', top: 0, left: LOW_W / 2 - gapW / 2 - H * 1.05 + 2}}>
+          <Half side="l" h={H} />
+        </div>
+        <div style={{position: 'absolute', top: 0, left: LOW_W / 2 + gapW / 2 - 2}}>
+          <Half side="r" h={H} />
+        </div>
+        <div
+          style={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            top: 0,
+            height: H,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontFamily: FONTS.heading,
+            fontWeight: 900,
+            fontSize: 80,
+            letterSpacing: '0.02em',
+            textTransform: 'uppercase',
+            ...metal,
+            opacity: word,
+            scale: String((0.6 + word * 0.4) * pulse),
+            filter: `${metal.filter} blur(${(1 - word) * 10}px)`,
+          }}
+        >
+          откажут
+        </div>
+      </div>
+      <div style={{marginTop: 18, fontFamily: FONTS.body, fontWeight: 500, fontSize: 46, letterSpacing: '0.06em', textTransform: 'uppercase', color: COLORS.white, textShadow: shadow, opacity: tail, translate: `0px ${(1 - tail) * 18}px`}}>
+        в операции<span style={{color: COLORS.beige}}>?</span>
+      </div>
+    </div>
+  );
+};

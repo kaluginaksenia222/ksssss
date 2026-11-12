@@ -3,7 +3,7 @@ import {Audio, Video} from '@remotion/media';
 import {AbsoluteFill, continueRender, delayRender, interpolate, Sequence, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
 import {fontsLoaded} from '../design/fonts';
 import {COLORS, EASE, FONTS} from '../design/tokens';
-import {DecisionTree, PillHook, PillTimeline, PollSticker, SAFE} from './pills';
+import {CapsuleHook, DecisionTree, PillTimeline, PollSticker, SAFE} from './pills';
 import {PAGES} from './transcript';
 import {InstagramHandle} from './ui';
 
@@ -36,7 +36,10 @@ const Footage: React.FC = () => {
   const base = idx === 0 ? 1.04 : interpolate(k, [0, 1], [idx === 1 ? 1.04 : scaleOf(idx - 1), scaleOf(idx)]);
   const drift = interpolate(t - cutAt, [0, 8], [0, 0.03], {extrapolateRight: 'clamp'});
   // хук: кадр «въезжает» вбок с размытием по горизонтали (whip-pan) и толчок на «операцию»
-  const whip = interpolate(frame, [0, 0.32 * fps], [0, 1], {...clamp, easing: EASE.out});
+  const whip = 1;
+  const pull = interpolate(frame, [1.0 * fps, 1.3 * fps], [0, 1], {...clamp, easing: EASE.inOut});
+  const close = (1 - pull) * (0.42 + interpolate(frame, [0, 1.0 * fps], [0, 0.05], clamp));
+  const gray = 1 - interpolate(frame, [1.05 * fps, 1.35 * fps], [0, 1], clamp);
   const punch = interpolate(frame, [BANG * fps, (BANG + 0.07) * fps, (BANG + 0.45) * fps], [0, 0.05, 0], clamp);
   const hb = (1 - whip) * 40;
   return (
@@ -54,9 +57,9 @@ const Footage: React.FC = () => {
           width: 1080,
           height: 1920,
           transformOrigin: `${(FACE.cx / 1080) * 100}% ${(FACE.cy / 1920) * 100}%`,
-          scale: String(base + drift + punch),
+          scale: String(base + drift + punch + close),
           translate: `${(1 - whip) * 520}px 0px`,
-          filter: hb > 0.5 ? 'url(#hblur)' : undefined,
+          filter: [hb > 0.5 ? 'url(#hblur)' : '', gray > 0.01 ? `grayscale(${gray}) contrast(${1 + gray * 0.15})` : ''].join(' ').trim() || undefined,
         }}
       />
     </AbsoluteFill>
@@ -113,8 +116,9 @@ const SoundTrack: React.FC = () => {
       <Audio src={staticFile('source.mp4')} />
       <Audio src={staticFile('music/warm_keys_90.wav')} volume={(f) => 0.24 * interpolate(f, [durationInFrames - 1.5 * fps, durationInFrames - 1], [1, 0], clamp)} />
       {/* звуков вдвое меньше: только хук и по одному на каждую анимацию */}
-      {sfx('whoosh', 0, 0.14, 0.6)}
-      {sfx('impact', BANG, 0.22, 1.0)}
+      {sfx('impact', 0, 0.22, 1.0)}
+      {sfx('shimmer', 0.55, 0.16, 1.1)}
+      {sfx('whoosh', 1.0, 0.14, 0.6)}
       {sfx('tick', 7.86, 0.06, 0.3)}
       {sfx('pop', 21.54, 0.05, 0.2)}
       {sfx('whoosh', 39.08, 0.06, 0.6)}
@@ -130,10 +134,12 @@ export const Meds: React.FC = () => {
   return (
     <AbsoluteFill style={{backgroundColor: '#1a0605'}}>
       <Footage />
-      <Flash at={BANG} />
+      <Flash at={0} strength={0.3} />
+      <Flash at={0.55} strength={0.3} />
+      <Flash at={BANG} strength={0.25} />
 
       {/* все анимации — в одном месте: по центру на футболке (зелёная зона маски), top 1090 */}
-      <PillHook until={HOOK_END + 0.1} top={ANIM_TOP - 15} word="антидепрессанты" dropAt={0.3} tailAt={1.3} />
+      <CapsuleHook until={HOOK_END + 0.1} top={ANIM_TOP} landAt={0.4} openAt={0.55} tailAt={1.05} />
       <PollSticker at={2.95} answerAt={7.86} until={9.3} top={ANIM_TOP} />
       <DecisionTree
         rootAt={21.2}
