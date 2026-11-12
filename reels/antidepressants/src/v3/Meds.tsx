@@ -3,7 +3,7 @@ import {Audio, Video} from '@remotion/media';
 import {AbsoluteFill, continueRender, delayRender, interpolate, Sequence, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
 import {fontsLoaded} from '../design/fonts';
 import {COLORS, EASE, FONTS} from '../design/tokens';
-import {CapsuleHook, DecisionTree, PillTimeline, PollSticker, SAFE, SelfLoop} from './pills';
+import {CapsuleHook, DecisionTree, LensCheck, MixCircles, PillTimeline, PollSticker, SAFE, SelfLoop, SwingBadge} from './pills';
 import {PAGES} from './transcript';
 import {InstagramHandle} from './ui';
 
@@ -23,6 +23,7 @@ const BANG = 2.14; // «операцию?»
 export const MEDS_SECONDS = 58.8;
 const CAPTION_TOP = 950;
 const ANIM_TOP = 1090;
+const CENTER_X = (SAFE.left + SAFE.lowRight) / 2; // центр зелёной зоны маски
 // субтитры — весь ролик, без пропусков
 
 const Footage: React.FC = () => {
@@ -120,8 +121,11 @@ const SoundTrack: React.FC = () => {
       {sfx('shimmer', 0.55, 0.16, 1.1)}
       {sfx('whoosh', 1.0, 0.14, 0.6)}
       {sfx('tick', 7.86, 0.06, 0.3)}
+      {sfx('pop', 9.9, 0.04, 0.2)}
       {sfx('tick', 18.3, 0.05, 0.3)}
       {sfx('pop', 21.54, 0.05, 0.2)}
+      {sfx('whoosh', 31.0, 0.06, 0.6)}
+      {sfx('pop', 36.3, 0.04, 0.2)}
       {sfx('whoosh', 39.08, 0.06, 0.6)}
     </>
   );
@@ -152,7 +156,10 @@ export const Meds: React.FC = () => {
         until={30.3}
         top={ANIM_TOP}
       />
+      <LensCheck items={[{text: 'препарат', at: 9.9}, {text: 'дозировка', at: 11.7}, {text: 'кто назначил', at: 13.1}]} until={14.45} y={ANIM_TOP - 20} x={CENTER_X - 135 + 20} />
       <SelfLoop at={14.6} until={19.9} x={SAFE.left + (SAFE.lowRight - SAFE.left - 270) / 2} y={ANIM_TOP - 10} />
+      <SwingBadge at={31.0} until={33.4} x={CENTER_X - 125} y={ANIM_TOP - 95} />
+      <MixCircles aAt={35.36} bAt={36.3} until={38.0} top={ANIM_TOP} />
       <PillTimeline at={38.0} offAt={39.08} backAt={42.66} until={44.1} top={ANIM_TOP} />
 
       <Captions />

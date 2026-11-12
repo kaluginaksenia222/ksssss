@@ -110,7 +110,7 @@ export const PollSticker: React.FC<{at: number; answerAt: number; until: number;
 };
 
 // ── 2. Лупа проверяет три пункта ────────────────────────────────────────────
-export const LensCheck: React.FC<{items: {text: string; at: number}[]; until: number; y: number}> = ({items, until, y}) => {
+export const LensCheck: React.FC<{items: {text: string; at: number}[]; until: number; y: number; x?: number}> = ({items, until, y, x}) => {
   const {frame, fps} = useT();
   const show = useInOut(items[0].at - 0.3, until);
   const rowH = 78;
@@ -119,7 +119,7 @@ export const LensCheck: React.FC<{items: {text: string; at: number}[]; until: nu
   const output = items.flatMap((_, i) => [Math.max(0, i - 1), i]);
   const idx = interpolate(frame, input, output, {...clamp, easing: EASE.inOut});
   return (
-    <div style={{position: 'absolute', top: y, right: 1080 - SAFE.right, width: 270, opacity: show}}>
+    <div style={{position: 'absolute', top: y, ...(x === undefined ? {right: 1080 - SAFE.right} : {left: x}), width: 270, opacity: show}}>
       <div style={{...mono, textAlign: 'right', marginBottom: 14}}>ПРОВЕРЯЕМ</div>
       <div style={{position: 'relative'}}>
         {items.map((it, i) => {
@@ -134,7 +134,7 @@ export const LensCheck: React.FC<{items: {text: string; at: number}[]; until: nu
           );
         })}
         {/* лупа слева от пункта */}
-        <svg width={70} height={70} style={{position: 'absolute', left: -6, top: idx * rowH + 4, filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.5))', opacity: ramp(frame, fps, items[0].at, items[0].at + 0.3)}}>
+        <svg width={70} height={70} style={{position: 'absolute', left: -56, top: idx * rowH + 4, filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.5))', opacity: ramp(frame, fps, items[0].at, items[0].at + 0.3)}}>
           <circle cx={28} cy={28} r={18} fill="rgba(255,255,255,0.18)" stroke={COLORS.white} strokeWidth={4} />
           <line x1={41} y1={41} x2={58} y2={58} stroke={COLORS.white} strokeWidth={6} strokeLinecap="round" />
         </svg>
@@ -230,13 +230,13 @@ export const DecisionTree: React.FC<{rootAt: number; leaves: {text: string; at: 
 };
 
 // ── 5. Бейдж анестезиолога на ленте: качается и успокаивается ─────────────────
-export const SwingBadge: React.FC<{at: number; until: number; x: number}> = ({at, until, x}) => {
+export const SwingBadge: React.FC<{at: number; until: number; x: number; y?: number}> = ({at, until, x, y = SAFE.top}) => {
   const {frame, fps, t} = useT();
   const show = useInOut(at, until, 0.2);
   const drop = spring({frame: frame - at * fps, fps, config: {damping: 12, stiffness: 120}});
   const ang = frame > at * fps ? Math.sin((t - at) * 5.5) * 16 * Math.exp(-(t - at) * 1.3) : 0;
   return (
-    <div style={{position: 'absolute', left: x, top: SAFE.top, width: 250, height: 330, opacity: show, transformOrigin: '50% 0%', rotate: `${ang}deg`, translate: `0px ${(1 - drop) * -320}px`}}>
+    <div style={{position: 'absolute', left: x, top: y, width: 250, height: 330, opacity: show, transformOrigin: '50% 0%', rotate: `${ang}deg`, translate: `0px ${(1 - drop) * -320}px`}}>
       <div style={{position: 'absolute', left: 117, top: 0, width: 16, height: 120, background: `repeating-linear-gradient(180deg, ${COLORS.beige} 0 10px, #E7DCCB 10px 20px)`, borderRadius: 3}} />
       <div style={{position: 'absolute', left: 105, top: 112, width: 40, height: 22, borderRadius: 6, border: '4px solid #C9CFDA'}} />
       <div style={{...glass, position: 'absolute', left: 0, top: 130, width: 250, borderRadius: 22, padding: '18px 16px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, backgroundColor: 'rgba(255,255,255,0.18)'}}>
