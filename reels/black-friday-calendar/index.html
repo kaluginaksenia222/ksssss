@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="ru" data-resolution="square">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1080" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Onest BF"; font-weight: 500; src: url("assets/fonts/onest-latin-500-normal.woff2") format("woff2"); unicode-range: U+0000-00FF, U+2000-206F; }
+      @font-face { font-family: "Onest BF"; font-weight: 500; src: url("assets/fonts/onest-cyrillic-500-normal.woff2") format("woff2"); unicode-range: U+0400-04FF; }
+      @font-face { font-family: "Onest BF"; font-weight: 800; src: url("assets/fonts/onest-latin-800-normal.woff2") format("woff2"); unicode-range: U+0000-00FF, U+2000-206F; }
+      @font-face { font-family: "Onest BF"; font-weight: 800; src: url("assets/fonts/onest-cyrillic-800-normal.woff2") format("woff2"); unicode-range: U+0400-04FF; }
+
+      :root { --ink: #f4f2ee; --ink-2: #8a8884; --dim: #3a3937; --red: #e0212b; --line: rgba(244, 242, 238, 0.2); }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1080px; overflow: hidden; background: #000; }
+      #root { position: absolute; inset: 0; background: #000; }
+      #scene { position: absolute; left: 0; top: 0; width: 1080px; height: 1080px; overflow: hidden; font-family: "Onest BF", sans-serif; color: var(--ink); }
+
+      /* ---------- календарь ---------- */
+      #cal { position: absolute; left: 0; top: 0; width: 1080px; height: 1080px; transform-origin: 540px 540px; }
+      #month { position: absolute; left: 0; right: 0; top: 168px; text-align: center; font-weight: 500; font-size: 24px; letter-spacing: 0.4em; color: var(--ink-2); }
+      .wd { position: absolute; top: 246px; width: 104px; text-align: center; font-weight: 500; font-size: 18px; letter-spacing: 0.2em; color: var(--ink-2); }
+      .day { position: absolute; width: 104px; height: 84px; display: flex; align-items: center; justify-content: center; }
+      .num { font-weight: 500; font-size: 36px; color: var(--ink); }
+      .strike { position: absolute; left: 30px; right: 30px; top: 41px; height: 2px; background: var(--ink-2); transform-origin: 0 50%; transform: scaleX(0); }
+      #ring { position: absolute; overflow: visible; }
+
+      /* ---------- текст ---------- */
+      #msg { position: absolute; left: 0; right: 0; top: 0; bottom: 0; text-align: center; }
+      #logo { position: absolute; left: 50%; top: 72px; width: 130px; margin-left: -65px; opacity: 0; }
+      #bf { position: absolute; left: 0; right: 0; top: 262px; font-weight: 800; font-size: 72px; line-height: 1; letter-spacing: 0.02em; opacity: 0; }
+      #accent { position: absolute; left: 50%; top: 366px; width: 56px; height: 3px; margin-left: -28px; background: var(--red); transform: scaleX(0); }
+      #sub { position: absolute; left: 0; right: 0; top: 400px; font-weight: 500; font-size: 20px; letter-spacing: 0.28em; color: var(--ink-2); opacity: 0; }
+      #until { position: absolute; left: 0; right: 0; top: 452px; font-weight: 800; font-size: 34px; letter-spacing: 0.06em; opacity: 0; }
+      #jk { position: absolute; left: 150px; right: 150px; top: 590px; display: grid; grid-template-columns: 1fr 1fr 1fr; }
+      .c { opacity: 0; }
+      .c + .c { border-left: 1px solid var(--line); }
+      .c small { display: block; font-weight: 500; font-size: 14px; letter-spacing: 0.4em; color: var(--ink-2); }
+      .c b { display: block; margin-top: 12px; font-weight: 800; font-size: 22px; line-height: 1.25; letter-spacing: 0.03em; }
+      #phone { position: absolute; left: 0; right: 0; top: 812px; font-weight: 800; font-size: 64px; line-height: 1; letter-spacing: 0.02em; opacity: 0; }
+      #cta { position: absolute; left: 0; right: 0; top: 896px; font-weight: 500; font-size: 18px; letter-spacing: 0.22em; color: var(--ink-2); opacity: 0; }
+      #fade { position: absolute; inset: 0; background: #000; opacity: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="15" data-width="1080" data-height="1080">
+      <div id="scene" class="clip" data-start="0" data-duration="15" data-track-index="0" data-track-kind="graphics" data-layout-ignore>
+        <div id="cal">
+          <div id="month">НОЯБРЬ 2026</div>
+          <div id="grid"></div>
+          <svg id="ring" width="1080" height="1080" viewBox="0 0 1080 1080">
+            <circle id="circle" r="46" fill="none" stroke="#e0212b" stroke-width="4" stroke-linecap="round" />
+          </svg>
+        </div>
+        <div id="msg">
+          <img id="logo" src="assets/img/vysotsky-white.png" alt="" />
+          <div id="bf">ЧЁРНАЯ ПЯТНИЦА</div>
+          <div id="accent"></div>
+          <div id="sub">ВО ВСЕХ НАШИХ ЖИЛЫХ КОМПЛЕКСАХ</div>
+          <div id="until">ДО 15 НОЯБРЯ</div>
+          <div id="jk">
+            <div class="c"><small>ЖК</small><b>ЛУВР</b></div>
+            <div class="c"><small>ЖК</small><b>9 КОСМОНАВТОВ</b></div>
+            <div class="c"><small>ЖК</small><b>БОЛЬШОЙ<br />КАРЕТНЫЙ</b></div>
+          </div>
+          <div id="phone">303-99-99</div>
+          <div id="cta">ПОДРОБНОСТИ В ОТДЕЛЕ ПРОДАЖ</div>
+        </div>
+        <div id="fade"></div>
+      </div>
+    </div>
+    <script>
+      // ноябрь 2026: 1-е — воскресенье
+      const FIRST_WD = 6, DAYS = 30, DEADLINE = 15;
+      const CW = 104, CH = 84, X0 = 176, Y0 = 290;
+      const T = { grid: 0.2, strike0: 1.1, strike1: 4.4, ring: 4.7, calOut: 6.0, logo: 6.4, bf: 6.6, until: 7.6, jk: 8.4, phone: 9.8, fade: 14.2, end: 15 };
+
+      const grid = document.getElementById("grid");
+      ["ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ", "ВС"].forEach((w, i) => {
+        const el = document.createElement("div"); el.className = "wd"; el.textContent = w;
+        el.style.left = X0 + i * CW + "px"; grid.appendChild(el);
+      });
+      const cells = [];
+      for (let d = 1; d <= DAYS; d++) {
+        const k = FIRST_WD + d - 1, col = k % 7, row = Math.floor(k / 7);
+        const el = document.createElement("div"); el.className = "day";
+        el.style.left = X0 + col * CW + "px"; el.style.top = Y0 + row * CH + "px";
+        const n = document.createElement("span"); n.className = "num"; n.textContent = d;
+        const s = document.createElement("div"); s.className = "strike";
+        el.append(n, s); grid.appendChild(el);
+        cells.push({ d, el, n, s, x: X0 + col * CW + CW / 2, y: Y0 + row * CH + CH / 2, row });
+      }
+      // кружок вокруг 15-го
+      const c15 = cells[DEADLINE - 1];
+      const circle = document.getElementById("circle");
+      circle.setAttribute("cx", c15.x); circle.setAttribute("cy", c15.y);
+      circle.setAttribute("transform", `rotate(-90 ${c15.x} ${c15.y})`);
+      const L = 2 * Math.PI * 46;
+      circle.setAttribute("stroke-dasharray", L); circle.setAttribute("stroke-dashoffset", L);
+
+      const tl = gsap.timeline({ paused: true });
+      // сетка появляется по строкам
+      tl.fromTo(["#month", ".wd"], { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power1.out" }, T.grid);
+      cells.forEach((c) => tl.fromTo(c.el, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" }, T.grid + 0.1 + c.row * 0.08));
+      // дни 1–14 зачёркиваются всё быстрее
+      for (let d = 1; d < DEADLINE; d++) {
+        const c = cells[d - 1];
+        const t = T.strike0 + (T.strike1 - T.strike0) * Math.pow((d - 1) / (DEADLINE - 2), 0.55);
+        tl.fromTo(c.s, { scaleX: 0 }, { scaleX: 1, duration: 0.16, ease: "power2.out" }, t);
+        tl.fromTo(c.n, { color: "#f4f2ee" }, { color: "#3a3937", duration: 0.2, ease: "none" }, t + 0.05);
+      }
+      // 15-е обводится красным, остальные дни гаснут
+      tl.to(circle, { attr: { "stroke-dashoffset": 0 }, duration: 0.6, ease: "power2.inOut" }, T.ring);
+      tl.fromTo(c15.n, { fontWeight: 500 }, { fontWeight: 800, duration: 0.01 }, T.ring + 0.3);
+      tl.to(cells.filter((c) => c.d > DEADLINE).map((c) => c.el), { opacity: 0.25, duration: 0.5, ease: "power1.inOut" }, T.ring + 0.2);
+      // календарь уходит
+      tl.to("#cal", { opacity: 0, scale: 0.94, duration: 0.6, ease: "power2.in" }, T.calOut);
+      // текст акции
+      tl.fromTo("#logo", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power1.out" }, T.logo);
+      tl.fromTo("#bf", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, T.bf);
+      tl.to("#accent", { scaleX: 1, duration: 0.5, ease: "power2.out" }, T.bf + 0.45);
+      tl.fromTo("#sub", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power1.out" }, T.bf + 0.6);
+      tl.fromTo("#until", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, T.until);
+      tl.fromTo(".c", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out", stagger: 0.25 }, T.jk);
+      tl.fromTo("#phone", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, T.phone);
+      tl.fromTo("#cta", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power1.out" }, T.phone + 0.3);
+      tl.fromTo("#msg", { scale: 1 }, { scale: 1.02, duration: T.end - T.logo, ease: "none" }, T.logo);
+      tl.fromTo("#fade", { opacity: 0 }, { opacity: 1, duration: T.end - T.fade - 0.1, ease: "power1.in" }, T.fade);
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
