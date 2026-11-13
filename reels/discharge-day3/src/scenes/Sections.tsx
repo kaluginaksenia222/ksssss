@@ -34,7 +34,7 @@ export const Hook: React.FC<{until: number}> = ({until}) => {
   const title = {
     fontFamily: FONTS.heading,
     fontWeight: 900,
-    fontSize: 54,
+    fontSize: 48,
     lineHeight: 1.02,
     letterSpacing: '-0.01em',
     textTransform: 'uppercase' as const,
@@ -46,7 +46,7 @@ export const Hook: React.FC<{until: number}> = ({until}) => {
       <div
         style={{
           position: 'absolute',
-          top: 980,
+          top: 930,
           left: LAYOUT.sidePadding,
           right: LAYOUT.sidePadding,
           display: 'flex',
@@ -72,10 +72,13 @@ export const Hook: React.FC<{until: number}> = ({until}) => {
         </MaskLine>
         <div>
           <MaskLine at={0.62}>
-            <div style={title}>5 правил</div>
+            <div style={title}>Рекомендации</div>
           </MaskLine>
           <MaskLine at={0.74}>
-            <div style={title}>после выписки</div>
+            <div style={title}>по восстановлению</div>
+          </MaskLine>
+          <MaskLine at={0.86}>
+            <div style={title}>после подтяжки лица</div>
           </MaskLine>
         </div>
       </div>
@@ -122,7 +125,7 @@ export const IntroBar: React.FC<{segments: number[]; total: number; until: numbe
           fontSize: 24,
         }}
       >
-        после операции
+        после подтяжки лица
       </div>
       <div
         style={{
@@ -186,7 +189,7 @@ const PanelScene: React.FC<{label: string; until: number; children: React.ReactN
   return (
     <div style={{position: 'absolute', inset: 0, height: PANEL_HEIGHT}}>
       <div style={{position: 'absolute', top: 340, left: 0, right: 0, display: 'flex', justifyContent: 'center'}}>
-        <Pill>после операции</Pill>
+        <Pill>после подтяжки лица</Pill>
       </div>
       <div
         style={{
