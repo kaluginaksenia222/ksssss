@@ -1,0 +1,5 @@
+.hyperframes/
+renders/
+__pycache__/
+# логотип заказчика — не в публичный репозиторий
+assets/img/louvre-logo.svg
