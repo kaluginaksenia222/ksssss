@@ -4,6 +4,8 @@ import json, sys, wave
 import numpy as np
 from faster_whisper import WhisperModel
 wav, detf, model = sys.argv[1:4]
+OUT = sys.argv[4] if len(sys.argv) > 4 else 'cuts.json'
+STORY = OUT != 'cuts.json'
 RANGES = [  # (от, до, что сказано) — секунды исходника
     (6.82, 11.62, 'у нас третьи сутки после операции, сегодня у нас выписка'),
     (20.88, 23.92, 'наши рекомендации, сейчас я пойду по списочку'),
@@ -17,6 +19,8 @@ RANGES = [  # (от, до, что сказано) — секунды исход�
     (105.48, 107.20, 'крема, где содержится ретинол'),
     (243.98, 244.74, 'в целом всё хорошо'),
 ]
+# Сторис: только начало — приветствие, самочувствие, «сейчас пройдусь по списку»
+RANGES_STORY = [(2.90, 30.30, 'так, давайте… хорошо?')]
 det = json.load(open(detf))
 w = wave.open(wav); sr = 16000
 a = np.frombuffer(w.readframes(w.getnframes()), np.int16).astype(np.float32) / 32768
@@ -31,7 +35,7 @@ def sub(segs, f, t):
         if y - t > 0.05: out.append((t, y))
     return out
 keep = []
-for f, t, text in RANGES:
+for f, t, text in (RANGES_STORY if STORY else RANGES):
     segs = [(f, t)]
     for sf, st in det['silence']:
         if st - sf >= 0.18 and sf > f and st < t:
@@ -45,6 +49,6 @@ for f, t, text in RANGES:
             if ok: segs = sub(segs, ff + 0.04, ft - 0.04)
     keep += segs
 json.dump({'source': 'IMG_6650.mov (GitHub, video-6, 13.11) — выписка на 3-и сутки после операции, врач проходит по рекомендациям',
-           'note': 'Взяты только общие рекомендации (нагрузки, сон, руль, тепло, косметика) и хук; личные назначения лекарств не берём. Паузы и «э-э» вырезаны (проверено распознаванием).',
-           'keep': [{'from': round(x, 2), 'to': round(y, 2)} for x, y in keep]}, open('cuts.json', 'w'), ensure_ascii=False, indent=1)
+           'note': ('Сторис: начало до «Хорошо?», паузы и «э-э» вырезаны.' if STORY else 'Взяты только общие рекомендации (нагрузки, сон, руль, тепло, косметика) и хук; личные назначения лекарств не берём. Паузы и «э-э» вырезаны (проверено распознаванием).'),
+           'keep': [{'from': round(x, 2), 'to': round(y, 2)} for x, y in keep]}, open(OUT, 'w'), ensure_ascii=False, indent=1)
 print(len(keep), 'pieces', round(sum(y - x for x, y in keep), 2), 's')

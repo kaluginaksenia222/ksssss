@@ -9,3 +9,4 @@ out
 # Видео не храним в репозитории
 public/source.mp4
 out/
+public/source_story.mp4

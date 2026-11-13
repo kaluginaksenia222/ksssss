@@ -2,8 +2,9 @@
 # Запуск: python3 -I scripts/cut_pieces.py <исходник> <выход.mp4> <папка для кусков>
 import json, subprocess, sys, os
 src, out, tmp = sys.argv[1:4]
+CUTS = sys.argv[4] if len(sys.argv) > 4 else 'cuts.json'
 os.makedirs(tmp, exist_ok=True)
-keep = json.load(open('cuts.json'))['keep']
+keep = json.load(open(CUTS))['keep']
 FADE = 0.015
 names = []
 for i, k in enumerate(keep):
