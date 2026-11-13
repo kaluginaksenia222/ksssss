@@ -14,7 +14,7 @@ import {Captions} from './components/Captions';
 import {DotGrid, InstagramHandle} from './components/ui';
 import {fontsLoaded} from './design/fonts';
 import {COLORS, LAYOUT, PANEL_HEIGHT, SPLIT_SOURCE_Y} from './design/tokens';
-import {Cosmetics, Drive, Heat, Hook, IntroBar, Load, POP_TIMES, Sleep, TYPING} from './scenes/Sections';
+import {Bandage, Cosmetics, Detralex, Drive, Heat, Hook, IntroBar, Load, POP_TIMES, Sleep, Sutures, TYPING, Visit} from './scenes/Sections';
 import {SCENES, SECTIONS, TRANSITIONS, useSplit} from './timeline';
 
 const HOOK_UNTIL = 6.76;
@@ -36,6 +36,7 @@ const Footage: React.FC = () => {
     <AbsoluteFill style={{translate: `0px ${split * (PANEL_HEIGHT - SPLIT_SOURCE_Y)}px`}}>
       <Video
         src={staticFile('source.mp4')}
+        volume={(f) => interpolate(f, [71.1 * fps, 71.5 * fps], [1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})}
         style={{
           width: LAYOUT.width,
           height: LAYOUT.height,
@@ -99,11 +100,17 @@ const SoundEffects: React.FC = () => {
     ...POP_TIMES.drive.map((t) => SCENES.drive + t),
     ...POP_TIMES.heat.map((t) => SCENES.heat + t),
     ...POP_TIMES.cosmetics.map((t) => SCENES.cosmetics + t),
+    ...POP_TIMES.bandage.map((t) => SCENES.bandage + t),
+    ...POP_TIMES.detralex.map((t) => SCENES.detralex + t),
+    ...POP_TIMES.sutures.map((t) => SCENES.sutures + t),
+    ...POP_TIMES.visit.map((t) => SCENES.visit + t),
   ];
-  const keys = new Array(TYPING.chars)
-    .fill(0)
-    .map((_, i) => SCENES.cosmetics + TYPING.at + i / TYPING.cps)
-    .filter((_, i) => i % 2 === 0);
+  const keys = TYPING.flatMap((ty) =>
+    new Array(ty.chars)
+      .fill(0)
+      .map((_, i) => SCENES[ty.scene] + ty.at + i / ty.cps)
+      .filter((_, i) => i % 2 === 0),
+  );
   const {durationInFrames} = useVideoConfig();
   return (
     <>
@@ -170,8 +177,20 @@ export const Reel: React.FC = () => {
         <Sequence name="04 Тепло" {...scene(SCENES.heat, SCENES.cosmetics)}>
           <Heat until={SCENES.cosmetics - SCENES.heat} />
         </Sequence>
-        <Sequence name="05 Косметика" {...scene(SCENES.cosmetics, SCENES.end)}>
-          <Cosmetics until={SCENES.end - SCENES.cosmetics + 1} />
+        <Sequence name="05 Косметика" {...scene(SCENES.cosmetics, SCENES.bandage)}>
+          <Cosmetics until={SCENES.bandage - SCENES.cosmetics} />
+        </Sequence>
+        <Sequence name="06 Бандаж" {...scene(SCENES.bandage, SCENES.detralex)}>
+          <Bandage until={SCENES.detralex - SCENES.bandage} />
+        </Sequence>
+        <Sequence name="07 Детралекс" {...scene(SCENES.detralex, SCENES.sutures)}>
+          <Detralex until={SCENES.sutures - SCENES.detralex} />
+        </Sequence>
+        <Sequence name="08 Швы" {...scene(SCENES.sutures, SCENES.visit)}>
+          <Sutures until={SCENES.visit - SCENES.sutures} />
+        </Sequence>
+        <Sequence name="Финал: приём" {...scene(SCENES.visit, SCENES.end)}>
+          <Visit until={SCENES.end - SCENES.visit + 1} />
         </Sequence>
       </Panel>
       <Captions />

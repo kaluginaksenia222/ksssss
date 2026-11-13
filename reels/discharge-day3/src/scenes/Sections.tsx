@@ -401,7 +401,7 @@ const Week: React.FC<{at: number}> = ({at}) => {
 
 // ——— 01 Нагрузки ——— (время — от начала сцены)
 export const Load: React.FC<{until: number}> = ({until}) => (
-  <PanelScene label="01 / 05" until={until}>
+  <PanelScene label="01 / 08" until={until}>
     <Window title="Нагрузки">
       <Pop at={2.5} style={{display: 'flex', gap: 14, marginBottom: 22}}>
         <Tab active={1}>2 недели</Tab>
@@ -417,7 +417,7 @@ export const Load: React.FC<{until: number}> = ({until}) => (
 
 // ——— 02 Сон ———
 export const Sleep: React.FC<{until: number}> = ({until}) => (
-  <PanelScene label="02 / 05" until={until}>
+  <PanelScene label="02 / 08" until={until}>
     <Window title="Сон" icon={<Moon />}>
       <div style={{display: 'flex', flexDirection: 'column', gap: 16}}>
         <Row at={0.1} title="На животе" mark={<Cross at={0.75} size={40} />} />
@@ -429,7 +429,7 @@ export const Sleep: React.FC<{until: number}> = ({until}) => (
 
 // ——— 03 За рулём ———
 export const Drive: React.FC<{until: number}> = ({until}) => (
-  <PanelScene label="03 / 05" until={until}>
+  <PanelScene label="03 / 08" until={until}>
     <Window title="За руль — нельзя" icon={<Wheel />}>
       <Week at={1.3} />
       <Pop at={1.3} style={{marginTop: 10, fontFamily: FONTS.mono, fontWeight: 500, fontSize: 22, color: COLORS.navy}}>
@@ -463,7 +463,7 @@ const Mini: React.FC<{at: number; title: string}> = ({at, title}) => (
 );
 
 export const Heat: React.FC<{until: number}> = ({until}) => (
-  <PanelScene label="04 / 05" until={until}>
+  <PanelScene label="04 / 08" until={until}>
     <Window title="Тепловые процедуры" icon={<Steam />}>
       <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14}}>
         <Mini at={1.6} title="Баня" />
@@ -478,7 +478,7 @@ export const Heat: React.FC<{until: number}> = ({until}) => (
 
 // ——— 05 Косметика ———
 export const Cosmetics: React.FC<{until: number}> = ({until}) => (
-  <PanelScene label="05 / 05" until={until}>
+  <PanelScene label="05 / 08" until={until}>
     <Window title="Косметика" icon={<Jar />}>
       <Pop at={0.6} style={{display: 'flex', gap: 14, marginBottom: 20}}>
         <Tab active={1}>с 10-х суток</Tab>
@@ -506,6 +506,153 @@ export const Cosmetics: React.FC<{until: number}> = ({until}) => (
   </PanelScene>
 );
 
+// ——— 06 Бандаж ———
+const Alternate: React.FC<{at: number; a: string; b: string; secondAt: number}> = ({at, a, b, secondAt}) => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const t = frame / fps;
+  // после второй фразы чипы переключаются по очереди: носим ↔ снимаем
+  const flip = t < secondAt ? 0 : Math.floor((t - secondAt) / 0.9) % 2 === 0 ? 1 : 0;
+  return (
+    <Pop at={at} style={{display: 'flex', gap: 14, alignItems: 'center'}}>
+      <div style={{fontFamily: FONTS.mono, fontWeight: 500, fontSize: 22, color: COLORS.navy, width: 90}}>ДЕНЬ</div>
+      <Tab active={1 - flip}>{a}</Tab>
+      <Pop at={secondAt}>
+        <Tab active={flip}>{b}</Tab>
+      </Pop>
+    </Pop>
+  );
+};
+
+export const Bandage: React.FC<{until: number}> = ({until}) => (
+  <PanelScene label="06 / 08" until={until}>
+    <Window title="Бандаж">
+      <Alternate at={0.7} secondAt={1.6} a="2 ч в бандаже" b="2 ч без" />
+      <div style={{marginTop: 18}}>
+        <Row at={3.1} icon={<Moon />} title="Ночью — в бандаже" skeleton={false} mark={<div style={{fontFamily: FONTS.mono, fontWeight: 500, fontSize: 24, color: COLORS.navy}}>1 мес</div>} />
+      </div>
+      <Pop at={5.4} style={{display: 'flex', gap: 14, alignItems: 'center', marginTop: 18}}>
+        <div style={{fontFamily: FONTS.mono, fontWeight: 500, fontSize: 22, color: COLORS.navy, width: 90, whiteSpace: 'nowrap'}}>10+ ДН</div>
+        <Tab active={1}>только ночью</Tab>
+      </Pop>
+    </Window>
+  </PanelScene>
+);
+
+// ——— 07 Детралекс ———
+const Pill2: React.FC = () => (
+  <svg width={48} height={30} viewBox="0 0 100 60">
+    <rect x={4} y={8} width={92} height={44} rx={22} fill="none" stroke={COLORS.navy} strokeWidth={8} />
+    <path d="M50 8 V52" stroke={COLORS.navy} strokeWidth={8} />
+    <path d="M10 30 A22 22 0 0 1 50 10 V52 A22 22 0 0 1 10 30 Z" fill={COLORS.navy} />
+  </svg>
+);
+
+const Month: React.FC<{at: number}> = ({at}) => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  return (
+    <div style={{display: 'grid', gridTemplateColumns: 'repeat(15, 1fr)', gap: 8}}>
+      {Array.from({length: 30}, (_, i) => {
+        const s = Math.round((at + i * 0.03) * fps);
+        const v = interpolate(frame, [s, s + 4], [0, 1], clamp);
+        return (
+          <div key={i} style={{width: 30, height: 30, borderRadius: 15, border: `2px solid ${COLORS.navy}`, backgroundColor: `rgba(8, 32, 82, ${v})`, scale: String(1 + Math.sin(v * Math.PI) * 0.2)}} />
+        );
+      })}
+    </div>
+  );
+};
+
+export const Detralex: React.FC<{until: number}> = ({until}) => (
+  <PanelScene label="07 / 08" until={until}>
+    <Window title="Детралекс" icon={<Pill2 />}>
+      <Pop at={1.8} style={{display: 'flex', gap: 14, marginBottom: 22}}>
+        <Tab active={1}>1 таблетка</Tab>
+        <Pop at={2.3}>
+          <Tab active={1}>1 раз в день</Tab>
+        </Pop>
+      </Pop>
+      <Pop at={3.0}>
+        <Month at={3.0} />
+        <div style={{marginTop: 12, fontFamily: FONTS.mono, fontWeight: 500, fontSize: 22, color: COLORS.navy}}>30 дней</div>
+      </Pop>
+    </Window>
+  </PanelScene>
+);
+
+// ——— 08 Обработка швов ———
+// Схема: ухо, шов перед ухом и за ухом прорисовывается, скобки в волосах
+const Ear: React.FC<{frontAt: number; backAt: number; staplesAt: number}> = ({frontAt, backAt, staplesAt}) => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const front = interpolate(frame, [frontAt * fps, (frontAt + 0.7) * fps], [1, 0], {...clamp, easing: EASE.inOut});
+  const back = interpolate(frame, [backAt * fps, (backAt + 0.7) * fps], [1, 0], {...clamp, easing: EASE.inOut});
+  return (
+    <svg width={200} height={200} viewBox="0 0 200 200">
+      {/* линия волос */}
+      <path d="M40 40 C80 18 140 16 182 34" fill="none" stroke={COLORS.beigeLine} strokeWidth={5} strokeLinecap="round" />
+      {/* щека и челюсть */}
+      <path d="M30 70 C34 120 52 160 90 186" fill="none" stroke={COLORS.beigeLine} strokeWidth={5} strokeLinecap="round" />
+      {/* ушная раковина */}
+      <path d="M100 66 C112 46 150 46 156 76 C160 100 146 112 140 126 C134 140 138 156 122 160 C108 164 102 150 100 140" fill={COLORS.card} stroke={COLORS.navy} strokeWidth={5} strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M116 78 C126 66 142 72 140 90 C138 104 128 108 126 120" fill="none" stroke={COLORS.navy} strokeWidth={3.5} strokeLinecap="round" />
+      {/* шов перед ухом: сверху вниз */}
+      <path d="M90 52 C86 80 86 116 94 158" fill="none" stroke={COLORS.navy} strokeWidth={4.5} strokeDasharray="8 7" strokeLinecap="round" style={{clipPath: `inset(0 0 ${front * 100}% 0)`}} />
+      {/* шов за ухом: снизу вверх, уходит в волосы */}
+      <path d="M126 170 C160 166 172 130 170 92 C169 70 172 52 178 40" fill="none" stroke={COLORS.navy} strokeWidth={4.5} strokeDasharray="8 7" strokeLinecap="round" style={{clipPath: `inset(${back * 100}% 0 0 0)`}} />
+      {/* скобочки в волосах */}
+      {[0, 1, 2].map((i) => {
+        const v = interpolate(frame, [(staplesAt + i * 0.12) * fps, (staplesAt + i * 0.12) * fps + 5], [0, 1], clamp);
+        return <path key={i} d={`M${104 + i * 24} ${24 - i * 2} v-12 h14 v12`} fill="none" stroke={COLORS.navy} strokeWidth={4.5} strokeLinejoin="round" opacity={v} />;
+      })}
+    </svg>
+  );
+};
+
+export const Sutures: React.FC<{until: number}> = ({until}) => (
+  <PanelScene label="08 / 08" until={until}>
+    <Window title="Обработка швов">
+      <div style={{display: 'flex', gap: 24, alignItems: 'center'}}>
+        <div style={{flex: 1, display: 'flex', flexDirection: 'column', gap: 16}}>
+          <div style={{padding: '14px 18px', borderRadius: 16, backgroundColor: '#F6F7FA', border: `1px solid ${COLORS.beigeDark}`, fontFamily: FONTS.body, fontWeight: 500, fontSize: 30, color: COLORS.navy}}>
+            <Typewriter at={1.8} text="Хлоргексидин" />
+          </div>
+          <Pop at={3.4} style={{display: 'flex', gap: 12, alignItems: 'center'}}>
+            <Tab active={0}>ватный диск</Tab>
+          </Pop>
+          <Row at={14.1} title="Наклейки — не снимать" skeleton={false} mark={<Cross at={15.1} size={36} />} />
+        </div>
+        <Pop at={4.5}>
+          <Ear frontAt={7.4} backAt={8.5} staplesAt={11.2} />
+        </Pop>
+      </div>
+    </Window>
+  </PanelScene>
+);
+
+// ——— Финал: приём в понедельник ———
+const CalIcon: React.FC = () => (
+  <svg width={30} height={30} viewBox="0 0 30 30">
+    <rect x={2} y={5} width={26} height={23} rx={5} fill="none" stroke={COLORS.navy40} strokeWidth={2.2} />
+    <path d="M2 12 H28 M9 2 V8 M21 2 V8" stroke={COLORS.navy40} strokeWidth={2.2} strokeLinecap="round" />
+  </svg>
+);
+
+export const Visit: React.FC<{until: number}> = ({until}) => (
+  <PanelScene label="Приём" until={until}>
+    <Window title="Приём в понедельник" icon={<CalIcon />}>
+      <Pop at={0.2} style={{display: 'flex', gap: 14, marginBottom: 20}}>
+        <Tab active={1}>понедельник</Tab>
+      </Pop>
+      <div style={{display: 'flex', flexDirection: 'column', gap: 14}}>
+        <Row at={3.6} title="Снимем часть швов" skeleton={false} mark={<Check at={3.9} size={38} />} />
+        <Row at={4.4} title="Всё посмотрим" skeleton={false} mark={<Check at={4.7} size={38} />} />
+      </div>
+    </Window>
+  </PanelScene>
+);
+
 // Главные появления (секунды от начала сцены) — под них тихий «поп»
 export const POP_TIMES = {
   load: [5.5],
@@ -513,7 +660,14 @@ export const POP_TIMES = {
   drive: [1.3, 5.9],
   heat: [4.1],
   cosmetics: [2.0, 5.0],
+  bandage: [1.6, 3.1],
+  detralex: [2.3, 3.0],
+  sutures: [3.4, 15.1],
+  visit: [3.9, 4.7],
 };
 
-// Печать текста в косметике — для звука клавиш
-export const TYPING = {at: 4.2, chars: 'Ретинол'.length, cps: 22};
+// Печать текста — для звука клавиш (сцена, время от её начала, длина)
+export const TYPING = [
+  {scene: 'cosmetics' as const, at: 4.2, chars: 'Ретинол'.length, cps: 22},
+  {scene: 'sutures' as const, at: 1.8, chars: 'Хлоргексидин'.length, cps: 22},
+];

@@ -1,31 +1,38 @@
 import {interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
 import {DUR, EASE} from './design/tokens';
 
-// Разделы ролика (секунды нарезки) — по расшифровке голоса: хук и 5 правил
-export const SECTIONS = [
-  {start: 0, end: 6.76},
-  {start: 6.76, end: 13.45},
-  {start: 13.45, end: 17.75},
-  {start: 17.75, end: 24.35},
-  {start: 24.35, end: 29.2},
-  {start: 29.2, end: 34.73},
-];
-
-// После хука панель со вставками держится до конца
-export const SPLITS = [{in: 6.55, out: Infinity}];
-
-// Начала вставок на панели (секунды)
+// Разделы ролика (секунды нарезки) — по расшифровке голоса: хук, 8 правил, финал
 export const SCENES = {
   load: 6.76,
   sleep: 13.45,
   drive: 17.75,
   heat: 24.35,
   cosmetics: 29.2,
-  end: 34.73,
+  bandage: 34.1,
+  detralex: 43.5,
+  sutures: 47.4,
+  visit: 63.4,
+  end: 73.3,
 };
 
+export const SECTIONS = [
+  {start: 0, end: SCENES.load},
+  {start: SCENES.load, end: SCENES.sleep},
+  {start: SCENES.sleep, end: SCENES.drive},
+  {start: SCENES.drive, end: SCENES.heat},
+  {start: SCENES.heat, end: SCENES.cosmetics},
+  {start: SCENES.cosmetics, end: SCENES.bandage},
+  {start: SCENES.bandage, end: SCENES.detralex},
+  {start: SCENES.detralex, end: SCENES.sutures},
+  {start: SCENES.sutures, end: SCENES.visit},
+  {start: SCENES.visit, end: SCENES.end},
+];
+
+// После хука панель со вставками держится до конца
+export const SPLITS = [{in: 6.55, out: Infinity}];
+
 // Моменты переходов — для свушей
-export const TRANSITIONS = [SCENES.load, SCENES.sleep, SCENES.drive, SCENES.heat, SCENES.cosmetics];
+export const TRANSITIONS = [SCENES.load, SCENES.sleep, SCENES.drive, SCENES.heat, SCENES.cosmetics, SCENES.bandage, SCENES.detralex, SCENES.sutures, SCENES.visit];
 
 // Прогресс сплита: 0 — видео на весь экран, 1 — панель + видео
 export const useSplit = () => {
