@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<style>
+  @font-face { font-family: "Onest S"; font-weight: 500; src: url("assets/onest-cyrillic-500-normal.woff2"); unicode-range: U+0400-04FF; }
+  @font-face { font-family: "Onest S"; font-weight: 500; src: url("assets/onest-latin-500-normal.woff2"); unicode-range: U+0000-00FF, U+2000-206F; }
+  @font-face { font-family: "Onest S"; font-weight: 800; src: url("assets/onest-cyrillic-800-normal.woff2"); unicode-range: U+0400-04FF; }
+  @font-face { font-family: "Onest S"; font-weight: 800; src: url("assets/onest-latin-800-normal.woff2"); unicode-range: U+0000-00FF, U+2000-206F; }
+  :root { --red: #e0212b; --ink: #f4f2ee; --ink2: #8a8884; --line: rgba(244, 242, 238, 0.2); }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1080px; height: 1080px; overflow: hidden; background: #000; }
+  body { position: relative; font-family: "Onest S", sans-serif; color: var(--ink); text-align: center; }
+  #logo { position: absolute; left: 50%; top: 96px; width: 150px; margin-left: -75px; }
+  #mid { position: absolute; left: 0; right: 0; top: 400px; }
+  #bf { font-weight: 800; font-size: 72px; letter-spacing: 0.02em; line-height: 1; }
+  #accent { width: 56px; height: 3px; background: var(--red); margin: 34px auto 0; }
+  #sub { margin-top: 32px; font-weight: 500; font-size: 22px; letter-spacing: 0.28em; color: var(--ink2); }
+  #jk { position: absolute; left: 140px; right: 140px; bottom: 150px; display: grid; grid-template-columns: 1fr 1fr 1fr; }
+  .c + .c { border-left: 1px solid var(--line); }
+  .c small { display: block; font-weight: 500; font-size: 14px; letter-spacing: 0.4em; color: var(--ink2); }
+  .c b { display: block; margin-top: 12px; font-weight: 800; font-size: 22px; line-height: 1.25; letter-spacing: 0.03em; }
+</style>
+</head>
+<body>
+  <img id="logo" src="assets/logo-white.png" alt="" />
+  <div id="mid">
+    <div id="bf">ЧЁРНАЯ ПЯТНИЦА</div>
+    <div id="accent"></div>
+    <div id="sub">ВО ВСЕХ НАШИХ ЖИЛЫХ КОМПЛЕКСАХ</div>
+  </div>
+  <div id="jk">
+    <div class="c"><small>ЖК</small><b>ЛУВР</b></div>
+    <div class="c"><small>ЖК</small><b>9 КОСМОНАВТОВ</b></div>
+    <div class="c"><small>ЖК</small><b>БОЛЬШОЙ<br />КАРЕТНЫЙ</b></div>
+  </div>
+</body>
+</html>
