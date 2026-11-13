@@ -1,0 +1,251 @@
+<title>Блефаропластика: восстановление</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/*FONTS*/
+/* Layout: лента из 7 слайдов 1080×1350, на странице уменьшены под ширину экрана; дизайн-код «Синий доктор» */
+:root{
+  --navy:#00275F; --navy-deep:#001A42; --navy-glass:#33527F; --ice:#9DC0E1; --mist:#DCE7F3;
+  --paper:#F3F5F8; --white:#FFFFFF; --graphite:#1A1D24; --page:#E6ECF4;
+  --display:"Oswald","Arial Narrow",Impact,sans-serif;
+  --heavy:"Montserrat","Arial Black",sans-serif;
+  --body:"Inter",system-ui,sans-serif;
+  --hand:"Caveat",cursive;
+}
+*{box-sizing:border-box}
+body{background:var(--page);color:var(--graphite);font-family:var(--body);margin:0;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 48px}
+.intro{max-width:1100px;margin:0 auto 20px;display:grid;gap:6px}
+.intro h1{margin:0;font:700 34px/1 var(--display);text-transform:uppercase;color:var(--navy)}
+.intro p{margin:0;color:#4A5568;font-size:14px;max-width:70ch}
+.feed{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px}
+.frame{width:100%;aspect-ratio:4/5;max-width:100%;position:relative;overflow:hidden;border-radius:14px;box-shadow:0 16px 30px -20px rgba(0,26,66,.55)}
+.frame>.slide{position:absolute;left:0;top:0;transform-origin:0 0}
+body.export{padding:0;background:var(--navy)}
+body.export .intro{display:none}
+body.export .feed{display:block;max-width:none}
+body.export .frame{width:1080px;height:1350px;border-radius:0;box-shadow:none;aspect-ratio:auto}
+body.export .frame>.slide{transform:none!important}
+
+/* ---- слайд ---- */
+.slide{width:1080px;height:1350px;position:relative;overflow:hidden;font-family:var(--body)}
+.navy{background:linear-gradient(180deg,var(--navy) 0%,var(--navy) 58%,var(--navy-deep) 100%);color:var(--white)}
+.paper{background-color:var(--paper);color:var(--navy);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 .1 0 0 0 0 .25 0 0 0 .06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.logo{position:absolute;top:54px;left:72px;font:800 24px/1 var(--heavy);letter-spacing:.14em;text-transform:uppercase}
+.logo i{display:block;font:500 17px/1.5 var(--body);font-style:normal;letter-spacing:.08em;opacity:.7;text-transform:none}
+.pager{position:absolute;top:58px;right:72px;font:600 24px/1 var(--body);opacity:.65;font-variant-numeric:tabular-nums}
+.foot{position:absolute;left:54px;right:54px;bottom:44px;height:70px;border-radius:999px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;font:600 25px/1 var(--body);z-index:5}
+.navy .foot{background:var(--navy-glass);color:var(--white)}
+.paper .foot{background:var(--navy);color:var(--white)}
+.foot .ic{display:flex;gap:16px}
+.foot svg{width:30px;height:30px}
+.eyebrow{font:800 30px/1 var(--heavy);letter-spacing:.12em;text-transform:uppercase}
+.navy .eyebrow{color:var(--ice)}
+.title{font:700 132px/.9 var(--display);text-transform:uppercase;margin:0}
+.txt{font:400 38px/1.4 var(--body);margin:0}
+.txt b{font-weight:600}
+.mark{background:var(--navy);color:var(--white);padding:0 12px;border-radius:10px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.navy .mark{background:var(--white);color:var(--navy)}
+.pill{display:inline-flex;align-items:center;gap:14px;border-radius:999px;padding:22px 34px;font:800 30px/1 var(--heavy);text-transform:uppercase;letter-spacing:.02em;white-space:nowrap}
+.hand{font:600 64px/1 var(--hand)}
+.mascot{position:absolute;background:url(MASCOT) center top/contain no-repeat;aspect-ratio:760/1017}
+.flip{transform:scaleX(-1)}
+.abs{position:absolute}
+
+/* 1 — хук */
+.s1 .eyebrow{position:absolute;left:72px;top:190px}
+.s1 .title{position:absolute;left:66px;top:244px;width:900px;font-size:150px}
+.s1 .title em{font-style:normal;color:var(--ice)}
+.s1 .sub{position:absolute;left:72px;top:880px;width:520px;font:400 34px/1.38 var(--body);opacity:.92}
+.s1 .save{position:absolute;left:72px;top:1060px;background:var(--white);color:var(--navy);font-size:26px;padding:20px 30px;white-space:normal;line-height:1.2;width:470px;border-radius:30px;z-index:4}
+.s1 .save svg{flex:none;width:34px;height:34px}
+.s1 .mascot{right:-70px;bottom:-40px;width:560px}
+.s1 .q{position:absolute;right:-120px;top:660px;width:520px;height:520px;border-radius:50%;background:var(--navy-glass);opacity:.55}
+
+/* 2 — пик отёка */
+.s2 .eyebrow{position:absolute;left:72px;top:180px}
+.s2 .title{position:absolute;left:66px;top:232px;width:940px;font-size:118px}
+.s2 .chart{position:absolute;left:52px;top:480px;width:976px;height:340px}
+.s2 .txt{position:absolute;left:72px;top:860px;width:920px;color:var(--graphite);font-size:36px}
+.s2 .corner{position:absolute;right:0;top:0;width:150px;height:150px;background:var(--navy);border-radius:0 0 0 150px}
+.s2 .pager{color:var(--white);opacity:.9;z-index:2}
+
+/* 3 — неделя 1 */
+.s3 .eyebrow{position:absolute;left:72px;top:190px}
+.s3 .title{position:absolute;left:66px;top:242px}
+.s3 .card{position:absolute;left:60px;top:440px;width:760px;background:var(--white);color:var(--navy);border-radius:44px;padding:40px 44px;display:grid;gap:30px;transform:rotate(-2deg);box-shadow:0 40px 70px -30px rgba(0,0,0,.55);z-index:3}
+.s3 .item{display:flex;gap:26px;align-items:flex-start;font:600 32px/1.25 var(--body)}
+.s3 .item small{display:block;font:400 26px/1.35 var(--body);color:#4A5568;margin-top:4px}
+.tog{flex:none;width:84px;height:46px;border-radius:999px;background:var(--navy);position:relative;margin-top:-2px}
+.tog::after{content:"";position:absolute;right:7px;top:7px;width:32px;height:32px;border-radius:50%;background:var(--white)}
+.s3 .stitch{border-top:2px dashed var(--mist);padding-top:28px}
+.s3 .cal{flex:none;width:84px;height:84px;border-radius:20px;background:var(--ice);color:var(--navy);display:grid;place-items:center;font:700 34px/1 var(--display);margin-top:-6px}
+.s3 .mascot{right:-150px;bottom:-60px;width:520px}
+
+/* 4 — неделя 2 */
+.s4 .eyebrow{position:absolute;left:72px;top:180px}
+.s4 .title{position:absolute;left:66px;top:232px;white-space:nowrap;font-size:116px}
+.s4 .days{position:absolute;left:72px;top:420px;width:936px;display:grid;grid-template-columns:repeat(7,1fr);gap:18px 18px}
+.s4 .d{aspect-ratio:1;border-radius:50%;display:grid;place-items:center;font:700 40px/1 var(--display);font-variant-numeric:tabular-nums}
+.s4 .dl{position:absolute;left:72px;top:756px;display:flex;justify-content:space-between;width:936px;font:600 26px/1 var(--body);color:#4A5568}
+.s4 .txt{position:absolute;left:72px;top:850px;width:920px;color:var(--graphite)}
+.s4 .tags{position:absolute;left:72px;top:1050px;display:flex;gap:16px;flex-wrap:wrap;width:940px}
+.s4 .tag{font-size:25px;padding:18px 26px}
+.tag-on{background:var(--navy);color:var(--white)}
+.tag-line{background:var(--white);color:var(--navy);border:4px solid var(--navy)}
+
+/* 5 — месяц */
+.s5 .eyebrow{position:absolute;left:72px;top:190px}
+.s5 .title{position:absolute;left:66px;top:242px;font-size:160px}
+.s5 .x{position:absolute;background:var(--white);color:var(--navy);font-size:44px;padding:26px 44px;overflow:visible}
+.s5 .x::after{content:"";position:absolute;left:18px;right:18px;top:50%;height:6px;background:var(--ice);border-radius:3px;transform:rotate(-4deg)}
+.s5 .why{position:absolute;left:72px;top:900px;width:900px;font:400 36px/1.4 var(--body)}
+.s5 .term{position:absolute;right:72px;top:168px;background:var(--ice);color:var(--navy);font-size:30px}
+.s5 .note{position:absolute;left:72px;top:1085px;width:900px;font:400 30px/1.4 var(--body);opacity:.8}
+
+/* 6 — тревожные признаки */
+.s6 .title{position:absolute;left:66px;top:180px;width:960px;font-size:112px}
+.s6 .card{position:absolute;left:72px;top:450px;width:690px;background:var(--white);border-radius:44px;padding:34px 40px;display:grid;gap:22px;box-shadow:0 30px 60px -36px rgba(0,26,66,.5);border:2px solid var(--mist);z-index:2}
+.s6 .row{display:flex;gap:24px;align-items:center;font:600 33px/1.25 var(--body);color:var(--graphite)}
+.s6 .n{flex:none;width:58px;height:58px;border-radius:50%;background:var(--navy);color:var(--white);display:grid;place-items:center;font:700 32px/1 var(--display)}
+.s6 .mascot{right:-130px;bottom:-30px;width:540px}
+.s6 .hand{position:absolute;left:96px;top:1100px;color:var(--navy);transform:rotate(-3deg)}
+
+/* 7 — финал */
+.s7 .eyebrow{position:absolute;left:72px;top:180px}
+.s7 .title{position:absolute;left:66px;top:232px;width:940px;font-size:122px}
+.s7 .txt{position:absolute;left:72px;top:500px;width:560px;font-size:34px;opacity:.95}
+.s7 .save{position:absolute;z-index:4;left:72px;top:860px;background:var(--white);color:var(--navy);font-size:27px;padding:22px 30px;white-space:normal;line-height:1.2;width:560px;border-radius:32px}
+.s7 .save svg{flex:none;width:40px;height:40px}
+.s7 .link{position:absolute;z-index:4;left:72px;top:1060px;background:var(--navy-glass);color:var(--white);font-size:24px;padding:18px 28px}
+.s7 .mascot{right:-90px;bottom:-40px;width:540px}
+.s7 .q{position:absolute;right:-80px;top:560px;width:600px;height:600px;border-radius:50%;background:var(--ice);opacity:.22}
+</style>
+
+<div class="intro">
+  <h1>Восстановление после блефаропластики</h1>
+  <p>7 слайдов в стиле «Синий доктор», формат 1080 × 1350. Готовые картинки для публикации лежат в проекте, в папке carousels/blepharoplasty-recovery/slides.</p>
+</div>
+
+<div class="feed">
+
+<!-- 1 -->
+<div class="frame"><div class="slide navy s1" id="s1">
+  <div class="logo">Др. Кудряков<i>пластический хирург</i></div><div class="pager">1/7</div>
+  <div class="q"></div>
+  <div class="eyebrow">После блефаропластики</div>
+  <h2 class="title">На 3 день будет <em>хуже,</em> чем после операции</h2>
+  <p class="sub">Это нормально. Рассказываю, что ждать в каждую неделю восстановления</p>
+  <span class="pill save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M6 3h12v18l-6-4.5L6 21z"/></svg>Сохраните, чтобы сверяться по дням</span>
+  <div class="mascot flip"></div>
+  FOOT
+</div></div>
+
+<!-- 2 -->
+<div class="frame"><div class="slide paper s2" id="s2">
+  <div class="corner"></div><div class="logo">Др. Кудряков<i>пластический хирург</i></div><div class="pager">2/7</div>
+  <div class="eyebrow">Первые дни</div>
+  <h2 class="title">Почему третий день пугает</h2>
+  <svg class="chart" viewBox="0 0 976 380" fill="none" aria-label="Отёк по дням: пик на 3 день, затем спад">
+    <line x1="20" y1="320" x2="956" y2="320" stroke="#DCE7F3" stroke-width="3"/>
+    <path d="M20 300 C 90 290, 150 70, 205 62 C 260 56, 300 150, 380 205 C 480 262, 640 296, 956 306 L956 320 L20 320Z" fill="#9DC0E1" fill-opacity=".45"/>
+    <path d="M20 300 C 90 290, 150 70, 205 62 C 260 56, 300 150, 380 205 C 480 262, 640 296, 956 306" stroke="#00275F" stroke-width="7" stroke-linecap="round"/>
+    <line x1="205" y1="62" x2="205" y2="320" stroke="#00275F" stroke-width="3" stroke-dasharray="8 10"/>
+    <circle cx="205" cy="62" r="16" fill="#00275F"/><circle cx="205" cy="62" r="7" fill="#FFFFFF"/>
+    <rect x="232" y="22" width="200" height="56" rx="28" fill="#00275F"/>
+    <text x="332" y="60" text-anchor="middle" fill="#FFFFFF" style="font:800 26px Montserrat,sans-serif;letter-spacing:.04em">ПИК ОТЁКА</text>
+    <g style="font:600 24px Inter,sans-serif" fill="#4A5568">
+      <text x="20" y="362">0</text><text x="205" y="362" text-anchor="middle" fill="#00275F" style="font:700 26px Inter,sans-serif">3 день</text>
+      <text x="520" y="362" text-anchor="middle">7</text><text x="956" y="362" text-anchor="end">14 дней</text>
+    </g>
+  </svg>
+  <p class="txt">Отёк и синяки сильнее всего как раз на 2 или 3 день. Глаза слезятся, веки тяжёлые, кажется, что всё пошло не так.<br><br>Это <span class="mark">нормальный пик.</span> После него становится только легче.</p>
+  FOOT
+</div></div>
+
+<!-- 3 -->
+<div class="frame"><div class="slide navy s3" id="s3">
+  <div class="logo">Др. Кудряков<i>пластический хирург</i></div><div class="pager">3/7</div>
+  <div class="eyebrow">Неделя 1</div>
+  <h2 class="title">Покой и холод</h2>
+  <div class="mascot flip"></div>
+  <div class="card">
+    <div class="item"><span class="tog"></span><div>Спите на двух подушках<small>Голова выше, отёк уходит быстрее</small></div></div>
+    <div class="item"><span class="tog"></span><div>Холод по 10 минут<small>Несколько раз в день, первые двое суток</small></div></div>
+    <div class="item"><span class="tog"></span><div>Не наклоняйтесь<small>И не поднимайте тяжёлое</small></div></div>
+    <div class="item"><span class="tog"></span><div>Меньше телефона и сериалов<small>Глаза сейчас быстро устают</small></div></div>
+    <div class="item stitch"><span class="cal">5–7</span><div>Снимаем швы<small>С 5 по 7 день, на приёме у хирурга</small></div></div>
+  </div>
+  FOOT
+</div></div>
+
+<!-- 4 -->
+<div class="frame"><div class="slide paper s4" id="s4">
+  <div class="logo">Др. Кудряков<i>пластический хирург</i></div><div class="pager">4/7</div>
+  <div class="eyebrow">Неделя 2</div>
+  <h2 class="title">Можно к людям</h2>
+  <div class="days">DAYS</div>
+  <div class="dl"><span>синяки заметны</span><span>желтеют</span><span>почти не видно</span></div>
+  <p class="txt">Синяки желтеют и к концу второй недели почти уходят. Большинство в это время <b>выходят на работу.</b></p>
+  <div class="tags">
+    <span class="pill tag tag-on">Работа</span>
+    <span class="pill tag tag-on">Солнцезащитные очки</span>
+    <span class="pill tag tag-line">Макияж и линзы после разрешения хирурга</span>
+  </div>
+  FOOT
+</div></div>
+
+<!-- 5 -->
+<div class="frame"><div class="slide navy s5" id="s5">
+  <div class="logo">Др. Кудряков<i>пластический хирург</i></div><div class="pager">5/7</div>
+  <div class="eyebrow">Первый месяц</div>
+  <h2 class="title">Пока нельзя</h2>
+  <span class="pill term">≈ 1 месяц</span>
+  <span class="pill x" style="left:80px;top:470px;transform:rotate(-6deg)">Баня</span>
+  <span class="pill x" style="left:400px;top:440px;transform:rotate(5deg)">Сауна</span>
+  <span class="pill x" style="left:720px;top:500px;transform:rotate(-3deg)">Спорт</span>
+  <span class="pill x" style="left:140px;top:650px;transform:rotate(4deg)">Бассейн</span>
+  <span class="pill x" style="left:540px;top:670px;transform:rotate(-7deg)">Алкоголь</span>
+  <p class="why">Всё это усиливает приток крови к лицу, и <span class="mark">отёк возвращается.</span></p>
+  <p class="note">Шов в это время розовый и немного плотный. Так и должно быть.</p>
+  FOOT
+</div></div>
+
+<!-- 6 -->
+<div class="frame"><div class="slide paper s6" id="s6">
+  <div class="logo">Др. Кудряков<i>пластический хирург</i></div><div class="pager">6/7</div>
+  <h2 class="title" style="top:170px">Звоните хирургу сразу, если</h2>
+  <div class="mascot"></div>
+  <div class="card">
+    <div class="row"><span class="n">1</span>Боль резко усилилась, а не стихает</div>
+    <div class="row"><span class="n">2</span>Отёк быстро растёт с одной стороны</div>
+    <div class="row"><span class="n">3</span>Стало хуже видно</div>
+    <div class="row"><span class="n">4</span>Температура выше 38</div>
+    <div class="row"><span class="n">5</span>Из шва идёт гной</div>
+  </div>
+  <div class="hand">не ждите планового приёма</div>
+  FOOT
+</div></div>
+
+<!-- 7 -->
+<div class="frame"><div class="slide navy s7" id="s7">
+  <div class="logo">Др. Кудряков<i>пластический хирург</i></div><div class="pager">7/7</div>
+  <div class="q"></div>
+  <div class="eyebrow">Окончательный результат</div>
+  <h2 class="title">Примерно через полгода</h2>
+  <p class="txt">К этому времени шов светлеет и прячется в складке века. У всех сроки немного разные, точный план даст ваш хирург.</p>
+  <span class="pill save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M6 3h12v18l-6-4.5L6 21z"/></svg>Сохраните карусель, чтобы открыть её на третий день</span>
+  <span class="pill link">🔗 Пластический хирург Кудряков</span>
+  <div class="mascot"></div>
+  FOOT
+</div></div>
+
+</div>
+<script>
+(function(){
+  if(location.hash==='#export'){document.body.classList.add('export');return}
+  function fit(){document.querySelectorAll('.frame').forEach(function(f){f.firstElementChild.style.transform='scale('+(f.clientWidth/1080)+')'})}
+  fit(); window.addEventListener('resize',fit);
+  if(window.ResizeObserver){new ResizeObserver(fit).observe(document.querySelector('.feed'))}
+})();
+</script>
