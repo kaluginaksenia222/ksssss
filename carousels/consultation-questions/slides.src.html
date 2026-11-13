@@ -1,0 +1,214 @@
+<title>5 вопросов хирургу</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/*FONTS*/
+/* Layout: лента из 7 слайдов 1080×1350, на странице уменьшены под ширину экрана; дизайн-код «Синий доктор» */
+:root{
+  --navy:#00275F; --navy-deep:#001A42; --navy-glass:#33527F; --ice:#9DC0E1; --mist:#DCE7F3;
+  --paper:#F3F5F8; --white:#FFFFFF; --graphite:#1A1D24; --page:#E6ECF4;
+  --display:"Oswald","Arial Narrow",Impact,sans-serif;
+  --heavy:"Montserrat","Arial Black",sans-serif;
+  --body:"Inter",system-ui,sans-serif;
+  --hand:"Caveat",cursive;
+}
+*{box-sizing:border-box}
+body{background:var(--page);color:var(--graphite);font-family:var(--body);margin:0;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 48px}
+.intro{max-width:1100px;margin:0 auto 20px;display:grid;gap:6px}
+.intro h1{margin:0;font:700 34px/1 var(--display);text-transform:uppercase;color:var(--navy)}
+.intro p{margin:0;color:#4A5568;font-size:14px;max-width:70ch}
+.feed{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px}
+.frame{width:100%;aspect-ratio:4/5;max-width:100%;position:relative;overflow:hidden;border-radius:14px;box-shadow:0 16px 30px -20px rgba(0,26,66,.55)}
+.frame>.slide{position:absolute;left:0;top:0;transform-origin:0 0}
+body.export{padding:0;background:var(--navy)}
+body.export .intro{display:none}
+body.export .feed{display:block;max-width:none}
+body.export .frame{width:1080px;height:1350px;border-radius:0;box-shadow:none;aspect-ratio:auto}
+body.export .frame>.slide{transform:none!important}
+
+/* ---- слайд ---- */
+.slide{width:1080px;height:1350px;position:relative;overflow:hidden;font-family:var(--body)}
+.navy{background:linear-gradient(180deg,var(--navy) 0%,var(--navy) 58%,var(--navy-deep) 100%);color:var(--white)}
+.paper{background-color:var(--paper);color:var(--navy);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 .1 0 0 0 0 .25 0 0 0 .06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.logo{position:absolute;top:54px;left:72px;font:800 24px/1 var(--heavy);letter-spacing:.14em;text-transform:uppercase}
+.logo i{display:block;font:500 17px/1.5 var(--body);font-style:normal;letter-spacing:.08em;opacity:.7;text-transform:none}
+.pager{position:absolute;top:58px;right:72px;font:600 24px/1 var(--body);opacity:.65;font-variant-numeric:tabular-nums}
+.foot{position:absolute;left:54px;right:54px;bottom:44px;height:70px;border-radius:999px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;font:600 25px/1 var(--body);z-index:5}
+.navy .foot{background:var(--navy-glass);color:var(--white)}
+.paper .foot{background:var(--navy);color:var(--white)}
+.foot .ic{display:flex;gap:16px}
+.foot svg{width:30px;height:30px}
+.eyebrow{font:800 30px/1 var(--heavy);letter-spacing:.12em;text-transform:uppercase}
+.navy .eyebrow{color:var(--ice)}
+.title{font:700 132px/.9 var(--display);text-transform:uppercase;margin:0}
+.txt{font:400 38px/1.4 var(--body);margin:0}
+.txt b{font-weight:600}
+.mark{background:var(--navy);color:var(--white);padding:0 12px;border-radius:10px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.navy .mark{background:var(--white);color:var(--navy)}
+.pill{display:inline-flex;align-items:center;gap:14px;border-radius:999px;padding:22px 34px;font:800 30px/1 var(--heavy);text-transform:uppercase;letter-spacing:.02em;white-space:nowrap}
+.hand{font:600 64px/1 var(--hand)}
+.mascot{position:absolute;background:url(MASCOT) center top/contain no-repeat;aspect-ratio:760/1017}
+.flip{transform:scaleX(-1)}
+.abs{position:absolute}
+
+/* 1 — обложка */
+.c1 .eyebrow{position:absolute;left:72px;top:150px}
+.c1 .title{position:absolute;left:66px;top:204px;width:940px;font-size:128px}
+.c1 .title em{font-style:normal;color:var(--ice)}
+.c1 .sub{position:absolute;left:72px;top:760px;width:540px;font:400 36px/1.38 var(--body)}
+.c1 .sub b{font-weight:600;color:var(--ice)}
+.c1 .go{position:absolute;left:72px;top:1060px;background:var(--white);color:var(--navy);z-index:4}
+.c1 .go svg{flex:none;width:34px;height:34px}
+.c1 .mascot{right:-80px;bottom:-40px;width:540px}
+.c1 .ring{position:absolute;right:-110px;top:640px;width:520px;height:520px;border-radius:50%;background:var(--navy-glass);opacity:.55}
+
+/* вопросы */
+.qs .num{position:absolute;right:56px;bottom:150px;font:700 560px/.8 var(--display);opacity:.9}
+.rare .num{display:none}
+.navy.qs .num{color:var(--navy-glass)}
+.paper.qs .num{color:var(--mist)}
+.qs .stack{position:absolute;left:72px;right:72px;top:170px;display:flex;flex-direction:column;gap:44px;z-index:2}
+.qs .bubble{border-radius:48px 48px 48px 10px;padding:44px 48px;font:800 58px/1.16 var(--heavy);box-shadow:0 34px 60px -34px rgba(0,26,66,.55)}
+.navy .bubble{background:var(--white);color:var(--navy)}
+.paper .bubble{background:var(--navy);color:var(--white)}
+.qs .why{display:grid;gap:18px;max-width:880px}
+.qs .why .label{font:800 26px/1 var(--heavy);letter-spacing:.12em;text-transform:uppercase}
+.navy .why .label{color:var(--ice)}
+.paper .why .label{color:var(--navy)}
+.qs .why p{margin:0;font:400 40px/1.42 var(--body)}
+.paper .why p{color:var(--graphite)}
+.qs .eyebrow{margin-bottom:-14px}
+
+/* вопрос 4 — редкий */
+.rare .people{display:flex;gap:14px;align-items:flex-end}
+.rare .people svg{width:76px;height:114px}
+.rare .stat{display:flex;align-items:center;gap:22px;font:600 32px/1.25 var(--body)}
+.rare .stat b{font:700 96px/1 var(--display);color:var(--ice);white-space:nowrap}
+
+/* 7 — финал */
+.c7 .eyebrow{position:absolute;left:72px;top:150px}
+.c7 .title{position:absolute;left:66px;top:204px;width:940px;font-size:124px}
+.c7 .list{position:absolute;left:72px;top:560px;width:580px;display:grid;gap:12px;z-index:3}
+.c7 .row{display:flex;align-items:center;gap:22px;background:var(--navy-glass);border-radius:999px;padding:14px 28px 14px 14px;font:600 30px/1.2 var(--body)}
+.c7 .row.hi{background:var(--white);color:var(--navy)}
+.c7 .n{flex:none;width:54px;height:54px;border-radius:50%;background:var(--ice);color:var(--navy);display:grid;place-items:center;font:700 30px/1 var(--display)}
+.c7 .row.hi .n{background:var(--navy);color:var(--white)}
+.c7 .cta{position:absolute;left:72px;top:1080px;background:var(--white);color:var(--navy);z-index:4;font-size:28px}
+.c7 .cta svg{flex:none;width:36px;height:36px}
+.c7 .mascot{right:-120px;bottom:-40px;width:520px}
+.c7 .ring{position:absolute;right:-60px;top:640px;width:560px;height:560px;border-radius:50%;background:var(--ice);opacity:.2}
+</style>
+
+<div class="intro">
+  <h1>5 вопросов хирургу</h1>
+  <p>7 слайдов в стиле «Синий доктор», формат 1080 × 1350. Готовые картинки лежат в проекте, в папке carousels/consultation-questions/slides.</p>
+</div>
+
+<div class="feed">
+
+<!-- 1 -->
+<div class="frame"><div class="slide navy c1" id="s1">
+  <div class="pager">1/7</div>
+  <div class="ring"></div>
+  <div class="eyebrow">Перед консультацией</div>
+  <h2 class="title"><em>5 вопросов</em> хирургу на консультации</h2>
+  <p class="sub"><b>Четвёртый задаёт один пациент из десяти,</b> хотя без ответа на него на операцию лучше не соглашаться</p>
+  <span class="pill go">Листайте<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+  <div class="mascot flip"></div>
+  FOOT
+</div></div>
+
+<!-- 2 -->
+<div class="frame"><div class="slide paper qs" id="s2">
+  <div class="pager">2/7</div><div class="num">1</div>
+  <div class="stack">
+    <div class="eyebrow">Вопрос 1</div>
+    <div class="bubble">Сколько таких операций вы делаете и можно ли посмотреть ваши работы?</div>
+    <div class="why"><span class="label">Зачем спрашивать</span>
+      <p>Общий стаж мало что говорит. Важно, как часто хирург делает <span class="mark">именно вашу операцию.</span></p>
+      <p>Попросите фото до и после пациентов, у которых было похоже на вас.</p></div>
+  </div>
+  FOOT
+</div></div>
+
+<!-- 3 -->
+<div class="frame"><div class="slide navy qs" id="s3">
+  <div class="pager">3/7</div><div class="num">2</div>
+  <div class="stack">
+    <div class="eyebrow">Вопрос 2</div>
+    <div class="bubble">Какой результат реален именно для меня?</div>
+    <div class="why"><span class="label">Зачем спрашивать</span>
+      <p>Результат зависит от вашей кожи, тканей и анатомии. Чужие фото из интернета тут не помогут.</p>
+      <p>Хороший хирург честно скажет, что получится, а что нет. Даже если вы хотели услышать <span class="mark">другое.</span></p></div>
+  </div>
+  FOOT
+</div></div>
+
+<!-- 4 -->
+<div class="frame"><div class="slide paper qs" id="s4">
+  <div class="pager">4/7</div><div class="num">3</div>
+  <div class="stack">
+    <div class="eyebrow">Вопрос 3</div>
+    <div class="bubble">Какой будет наркоз и где пройдёт операция?</div>
+    <div class="why"><span class="label">Зачем спрашивать</span>
+      <p>Узнайте, кто будет анестезиологом, какие анализы нужны и <span class="mark">есть ли в клинике реанимация.</span></p>
+      <p>Это вопросы о вашей безопасности. Задавать их нормально.</p></div>
+  </div>
+  FOOT
+</div></div>
+
+<!-- 5 -->
+<div class="frame"><div class="slide navy qs rare" id="s5">
+  <div class="pager">5/7</div><div class="num">4</div>
+  <div class="stack" style="gap:40px">
+    <div class="eyebrow">Вопрос 4</div>
+    <div class="stat"><b>1 из 10</b><span>пациентов задаёт<br>этот вопрос</span></div>
+    <div class="people">PEOPLE</div>
+    <div class="bubble">Что будет, если понадобится коррекция?</div>
+    <div class="why">
+      <p>Иногда после операции нужна небольшая доработка. Узнайте заранее, кто её делает, в какие сроки и <span class="mark">кто за неё платит.</span> После операции этот разговор вести сложнее.</p></div>
+  </div>
+  FOOT
+</div></div>
+
+<!-- 6 -->
+<div class="frame"><div class="slide paper qs" id="s6">
+  <div class="pager">6/7</div><div class="num">5</div>
+  <div class="stack">
+    <div class="eyebrow">Вопрос 5</div>
+    <div class="bubble">Как пройдёт восстановление и как с вами связаться после операции?</div>
+    <div class="why"><span class="label">Зачем спрашивать</span>
+      <p>Сколько будет осмотров, сколько дней не работать, что делать, если что-то беспокоит ночью или в выходные.</p>
+      <p>Вы должны знать, <span class="mark">кому писать,</span> ещё до операции.</p></div>
+  </div>
+  FOOT
+</div></div>
+
+<!-- 7 -->
+<div class="frame"><div class="slide navy c7" id="s7">
+  <div class="pager">7/7</div>
+  <div class="ring"></div>
+  <div class="eyebrow">Ваша очередь</div>
+  <h2 class="title">Какой вопрос вы бы задали первым?</h2>
+  <div class="list">
+    <div class="row"><span class="n">1</span>Опыт и работы</div>
+    <div class="row"><span class="n">2</span>Реальный результат</div>
+    <div class="row"><span class="n">3</span>Наркоз и клиника</div>
+    <div class="row hi"><span class="n">4</span>Коррекция</div>
+    <div class="row"><span class="n">5</span>Связь после операции</div>
+  </div>
+  <span class="pill cta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M21 12a8.5 8.5 0 0 1-12.6 7.4L3 21l1.6-5.2A8.5 8.5 0 1 1 21 12z"/></svg>Напишите номер в комментариях</span>
+  <div class="mascot"></div>
+  FOOT
+</div></div>
+
+</div>
+<script>
+(function(){
+  if(location.hash==='#export'){document.body.classList.add('export');return}
+  function fit(){document.querySelectorAll('.frame').forEach(function(f){f.firstElementChild.style.transform='scale('+(f.clientWidth/1080)+')'})}
+  fit(); window.addEventListener('resize',fit);
+  if(window.ResizeObserver){new ResizeObserver(fit).observe(document.querySelector('.feed'))}
+})();
+</script>
