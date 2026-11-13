@@ -104,8 +104,14 @@ const SoundEffects: React.FC = () => {
     .fill(0)
     .map((_, i) => SCENES.cosmetics + TYPING.at + i / TYPING.cps)
     .filter((_, i) => i % 2 === 0);
+  const {durationInFrames} = useVideoConfig();
   return (
     <>
+      {/* тихая мелодичная музыка под голосом, затихает в конце */}
+      <Audio
+        src={staticFile('music/warm_keys_90.wav')}
+        volume={(f) => 0.22 * interpolate(f, [durationInFrames - 1.5 * fps, durationInFrames - 1], [1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})}
+      />
       <Sequence name="SFX хук" from={Math.round(HOOK_IN * fps)} durationInFrames={Math.round(1.2 * fps)}>
         <Audio src={staticFile('sfx/whoosh.wav')} volume={0.18} />
         <Audio src={staticFile('sfx/shimmer.wav')} volume={0.6} />
