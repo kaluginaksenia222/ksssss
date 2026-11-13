@@ -10,7 +10,7 @@ import {COLORS, EASE, FONTS} from './design/tokens';
 
 const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
 export const STORY_SECONDS = 23.55;
-const CAPTION_TOP = 960;
+const CAPTION_TOP = 1110; // у края стола; ниже 1067 правая граница рабочей зоны — 866
 
 const Captions: React.FC = () => {
   const frame = useCurrentFrame();
@@ -26,7 +26,7 @@ const Captions: React.FC = () => {
     return null;
   }
   return (
-    <div style={{position: 'absolute', top: CAPTION_TOP, left: 100, right: 100, textAlign: 'center', fontFamily: FONTS.body, fontWeight: 400, fontSize: 40, color: COLORS.white, textShadow: '0 2px 12px rgba(0, 0, 0, 0.75)'}}>
+    <div style={{position: 'absolute', top: CAPTION_TOP, left: 100, right: 1080 - 866, textAlign: 'center', fontFamily: FONTS.body, fontWeight: 400, fontSize: 40, color: COLORS.white, textShadow: '0 2px 12px rgba(0, 0, 0, 0.75)'}}>
       {PAGES[index].words.map((word, wi) => {
         const st = Math.round(word.start * fps);
         const v = interpolate(frame, [st, st + 5], [0, 1], {...clamp, easing: EASE.out});
