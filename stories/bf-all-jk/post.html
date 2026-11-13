@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<style>
+  @font-face { font-family: "Onest S"; font-weight: 500; src: url("assets/onest-cyrillic-500-normal.woff2"); unicode-range: U+0400-04FF; }
+  @font-face { font-family: "Onest S"; font-weight: 500; src: url("assets/onest-latin-500-normal.woff2"); unicode-range: U+0000-00FF, U+2000-206F; }
+  @font-face { font-family: "Onest S"; font-weight: 800; src: url("assets/onest-cyrillic-800-normal.woff2"); unicode-range: U+0400-04FF; }
+  @font-face { font-family: "Onest S"; font-weight: 800; src: url("assets/onest-latin-800-normal.woff2"); unicode-range: U+0000-00FF, U+2000-206F; }
+  :root { --red: #e0212b; --ink: #f4f2ee; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1080px; height: 1080px; overflow: hidden; }
+  /* тёмный бетон, как в сторис */
+  body { position: relative; font-family: "Onest S", sans-serif; color: var(--ink); background: #0b0b0b url("assets/bg.png") 0 -420px / 1080px 1920px no-repeat; }
+  .tape { position: absolute; left: -200px; width: 1480px; height: 58px; background: var(--red); box-shadow: 0 10px 24px rgba(0,0,0,.55);
+          display: flex; align-items: center; gap: 56px; padding-left: 30px; white-space: nowrap; overflow: hidden; }
+  .tape span { font-weight: 800; font-size: 26px; letter-spacing: .04em; color: #fff; }
+  #content { position: absolute; left: 0; right: 0; top: 230px; text-align: center; }
+  #bf { font-weight: 800; font-size: 104px; line-height: .98; letter-spacing: -0.01em; }
+  #all { font-weight: 800; font-size: 50px; letter-spacing: .04em; margin-top: 30px; }
+  #to { font-weight: 500; font-size: 40px; letter-spacing: .08em; margin-top: 54px; color: #d8d6d2; }
+  #date { font-weight: 800; font-size: 190px; line-height: 1; letter-spacing: -0.02em; color: var(--red); margin-top: 4px; }
+  #logo { position: absolute; left: 50%; bottom: 112px; width: 210px; margin-left: -105px; }
+</style>
+</head>
+<body>
+  <div class="tape" style="top: 46px; transform: rotate(-5deg)"></div>
+  <div class="tape" style="top: 110px; transform: rotate(4deg)"></div>
+  <div id="content">
+    <div id="bf">ЧЁРНАЯ<br />ПЯТНИЦА</div>
+    <div id="all">ВО ВСЕХ НАШИХ ЖК</div>
+    <div id="to">ДО</div>
+    <div id="date">15.11</div>
+  </div>
+  <img id="logo" src="assets/logo-white.png" alt="" />
+  <div class="tape" style="top: 1000px; transform: rotate(-4deg)"></div>
+  <script>
+    for (const t of document.querySelectorAll(".tape"))
+      for (let i = 0; i < 14; i++) { const s = document.createElement("span"); s.textContent = "SALE"; t.appendChild(s); }
+  </script>
+</body>
+</html>
