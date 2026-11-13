@@ -1,0 +1,206 @@
+<title>Подтяжка лица: восстановление</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/*FONTS*/
+/* Layout: лента из 7 слайдов 1080×1350, на странице уменьшены под ширину экрана; дизайн-код «Синий доктор» */
+:root{
+  --navy:#00275F; --navy-deep:#001A42; --navy-glass:#33527F; --ice:#9DC0E1; --mist:#DCE7F3;
+  --paper:#F3F5F8; --white:#FFFFFF; --graphite:#1A1D24; --page:#E6ECF4;
+  --display:"Oswald","Arial Narrow",Impact,sans-serif;
+  --heavy:"Montserrat","Arial Black",sans-serif;
+  --body:"Inter",system-ui,sans-serif;
+  --hand:"Caveat",cursive;
+}
+*{box-sizing:border-box}
+body{background:var(--page);color:var(--graphite);font-family:var(--body);margin:0;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 48px}
+.intro{max-width:1100px;margin:0 auto 20px;display:grid;gap:6px}
+.intro h1{margin:0;font:700 34px/1 var(--display);text-transform:uppercase;color:var(--navy)}
+.intro p{margin:0;color:#4A5568;font-size:14px;max-width:70ch}
+.feed{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px}
+.frame{width:100%;aspect-ratio:4/5;max-width:100%;position:relative;overflow:hidden;border-radius:14px;box-shadow:0 16px 30px -20px rgba(0,26,66,.55)}
+.frame>.slide{position:absolute;left:0;top:0;transform-origin:0 0}
+body.export{padding:0;background:var(--navy)}
+body.export .intro{display:none}
+body.export .feed{display:block;max-width:none}
+body.export .frame{width:1080px;height:1350px;border-radius:0;box-shadow:none;aspect-ratio:auto}
+body.export .frame>.slide{transform:none!important}
+
+/* ---- слайд ---- */
+.slide{width:1080px;height:1350px;position:relative;overflow:hidden;font-family:var(--body)}
+.navy{background:linear-gradient(180deg,var(--navy) 0%,var(--navy) 58%,var(--navy-deep) 100%);color:var(--white)}
+.paper{background-color:var(--paper);color:var(--navy);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 .1 0 0 0 0 .25 0 0 0 .06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.logo{position:absolute;top:54px;left:72px;font:800 24px/1 var(--heavy);letter-spacing:.14em;text-transform:uppercase}
+.logo i{display:block;font:500 17px/1.5 var(--body);font-style:normal;letter-spacing:.08em;opacity:.7;text-transform:none}
+.pager{position:absolute;top:58px;right:72px;font:600 24px/1 var(--body);opacity:.65;font-variant-numeric:tabular-nums}
+.foot{position:absolute;left:54px;right:54px;bottom:44px;height:70px;border-radius:999px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;font:600 25px/1 var(--body);z-index:5}
+.navy .foot{background:var(--navy-glass);color:var(--white)}
+.paper .foot{background:var(--navy);color:var(--white)}
+.foot .ic{display:flex;gap:16px}
+.foot svg{width:30px;height:30px}
+.eyebrow{font:800 30px/1 var(--heavy);letter-spacing:.12em;text-transform:uppercase}
+.navy .eyebrow{color:var(--ice)}
+.title{font:700 132px/.9 var(--display);text-transform:uppercase;margin:0}
+.txt{font:400 38px/1.4 var(--body);margin:0}
+.txt b{font-weight:600}
+.mark{background:var(--navy);color:var(--white);padding:0 12px;border-radius:10px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.navy .mark{background:var(--white);color:var(--navy)}
+.pill{display:inline-flex;align-items:center;gap:14px;border-radius:999px;padding:22px 34px;font:800 30px/1 var(--heavy);text-transform:uppercase;letter-spacing:.02em;white-space:nowrap}
+.hand{font:600 64px/1 var(--hand)}
+.mascot{position:absolute;background:url(MASCOT) center top/contain no-repeat;aspect-ratio:760/1017}
+.flip{transform:scaleX(-1)}
+.abs{position:absolute}
+
+
+
+.white{background:var(--white);color:var(--navy)}
+.pano-note{}
+.title{color:inherit}
+.navy .title{color:var(--white)}
+.nick{position:absolute;left:72px;top:1262px;height:52px;display:flex;align-items:center;gap:12px;padding:0 22px;border-radius:999px;background:var(--paper);color:var(--navy);font:600 22px/1 var(--body);z-index:6}
+.navy .nick{background:var(--navy-glass);color:var(--white)}
+.nick svg{width:24px;height:24px}
+.pager{opacity:.55}
+
+/* лист календаря */
+.cal{position:absolute;left:72px;top:150px;width:350px;transform:rotate(-3deg);z-index:3}
+.cal .sh{position:absolute;inset:0;border-radius:30px;background:var(--mist)}
+.cal .sh.s1{transform:translate(14px,14px) rotate(3deg)}
+.cal .sh.s2{transform:translate(26px,26px) rotate(6deg);opacity:.6}
+.cal .sheet{position:relative;border-radius:30px;background:var(--white);overflow:hidden;box-shadow:0 30px 50px -30px rgba(0,26,66,.55);border:3px solid var(--navy)}
+.cal .top{height:92px;background:var(--navy);color:var(--white);display:grid;place-items:center;font:800 30px/1 var(--heavy);letter-spacing:.16em;text-transform:uppercase;position:relative}
+.cal .rings{position:absolute;top:-22px;left:0;right:0;display:flex;justify-content:space-around;padding:0 70px;z-index:2}
+.cal .rings span{width:22px;height:52px;border-radius:12px;background:var(--graphite);border:5px solid var(--paper)}
+.cal .num{font:700 200px/1 var(--display);color:var(--navy);text-align:center;padding:26px 10px 6px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.cal .num.sm{font-size:150px;padding-top:44px;padding-bottom:22px}
+.cal .cap{text-align:center;font:600 26px/1.2 var(--body);color:#4A5568;padding:0 20px 28px}
+.navy .cal .sh{background:var(--navy-glass)}
+.navy .cal .sheet{border-color:var(--white)}
+.navy .cal .top{background:var(--ice);color:var(--navy)}
+
+.ptitle{position:absolute;left:480px;top:190px;width:540px;font:700 98px/.92 var(--display);text-transform:uppercase;margin:0}
+.peye{position:absolute;left:484px;top:150px;font:800 26px/1 var(--heavy);letter-spacing:.12em;text-transform:uppercase;color:#6B7A90}
+.navy .peye{color:var(--ice)}
+
+.pts{position:absolute;left:72px;right:72px;top:650px;display:grid;gap:24px;z-index:3}
+.pt{display:flex;gap:26px;align-items:flex-start;font:400 36px/1.33 var(--body);color:var(--graphite)}
+.pt::before{content:"";flex:none;width:22px;height:22px;border-radius:6px;background:var(--navy);margin-top:12px;transform:rotate(45deg)}
+.pt b{font-weight:600;color:var(--navy)}
+.navy .pt{color:var(--white)}
+.navy .pt::before{background:var(--ice)}
+.navy .pt b{color:var(--ice)}
+
+/* шкала восстановления */
+.track{position:absolute;left:72px;right:72px;top:1165px;z-index:2}
+.track .line{position:absolute;left:14px;right:14px;top:13px;height:6px;border-radius:3px;background:var(--mist)}
+.track .fill{position:absolute;left:14px;top:13px;height:6px;border-radius:3px;background:var(--navy)}
+.track .stops{position:relative;display:flex;justify-content:space-between}
+.track .st{display:grid;justify-items:center;gap:12px;width:28px;font:600 21px/1 var(--body);color:#8A97AA;white-space:nowrap}
+.track .st i{width:32px;height:32px;border-radius:50%;background:var(--white);border:5px solid var(--mist)}
+.track .st.done i{border-color:var(--navy);background:var(--navy)}
+.track .st.now i{border-color:var(--navy);background:var(--ice);width:40px;height:40px;margin-top:-4px}
+.track .st.now{color:var(--navy);font-weight:700}
+.track .st:first-child{justify-items:start}.track .st:last-child{justify-items:end}
+
+/* обложка */
+.cv .eyebrow{position:absolute;left:72px;top:150px;color:#6B7A90}
+.cv .title{position:absolute;left:66px;top:200px;width:960px;font-size:108px;line-height:1.02;color:var(--navy)}
+.cv .title .hl{display:inline-block;line-height:1;margin-top:18px;background:var(--navy);color:var(--white);padding:10px 20px 6px;border-radius:14px}
+.cv .sub{position:absolute;left:72px;top:650px;width:520px;font:400 36px/1.38 var(--body);color:var(--graphite);margin:0}
+.cv .sub b{color:var(--navy);font-weight:600}
+.cv .save{position:absolute;left:72px;top:1040px;background:var(--navy);color:var(--white);font-size:26px;padding:20px 30px;white-space:normal;line-height:1.2;width:460px;border-radius:30px;z-index:4}
+.cv .save svg{flex:none;width:34px;height:34px}
+.cv .cal{left:auto;right:150px;top:600px;width:300px;transform:rotate(6deg);z-index:1}
+.cv .cal .num{font-size:170px}
+.cv .mascot{right:-90px;bottom:-60px;width:520px;z-index:4}
+
+/* пока нельзя */
+.tags{position:absolute;left:72px;right:72px;top:650px;display:flex;flex-wrap:wrap;gap:18px 16px;z-index:3}
+.tg{display:flex;flex-direction:column;gap:6px;border:4px solid var(--navy);border-radius:28px;padding:14px 24px;background:var(--white)}
+.tg b{font:800 30px/1 var(--heavy);text-transform:uppercase;color:var(--navy);text-decoration:line-through;text-decoration-color:var(--ice);text-decoration-thickness:6px}
+.tg span{font:600 24px/1.2 var(--body);color:#4A5568}
+.why{position:absolute;left:72px;top:1010px;width:930px;font:400 34px/1.4 var(--body);color:var(--graphite);margin:0}
+.why .mark{background:var(--navy);color:var(--white)}
+
+/* никотин */
+.nic .big{position:absolute;left:72px;top:690px;width:936px;display:grid;gap:22px}
+.nic .big p{margin:0;font:400 37px/1.4 var(--body)}
+.nic .big .mark{background:var(--white);color:var(--navy)}
+.nic .chips{display:flex;gap:14px;flex-wrap:wrap}
+.nic .chips span{border-radius:999px;padding:14px 24px;background:var(--navy-glass);font:800 26px/1 var(--heavy);text-transform:uppercase;color:var(--white)}
+
+/* тревожные признаки */
+.flags{position:absolute;left:72px;top:680px;width:936px;background:var(--white);border:3px solid var(--mist);border-radius:44px;padding:34px 40px;display:grid;gap:22px;z-index:2;box-shadow:0 30px 60px -40px rgba(0,26,66,.5)}
+.fl{display:flex;gap:24px;align-items:center;font:600 34px/1.25 var(--body);color:var(--graphite)}
+.fl .n{flex:none;width:58px;height:58px;border-radius:50%;background:var(--navy);color:var(--white);display:grid;place-items:center;font:700 32px/1 var(--display)}
+.flags .hand{color:var(--navy);transform:rotate(-2deg);font-size:52px;margin-top:4px}
+
+/* финал */
+.fin .eyebrow{position:absolute;left:72px;top:150px}
+.fin .title{position:absolute;left:66px;top:200px;width:940px;font-size:124px}
+.fin .txt{position:absolute;left:72px;top:600px;width:560px;font-size:35px;opacity:.95}
+.fin .pl{position:absolute;left:72px;display:flex;gap:16px;align-items:center;border-radius:32px;padding:22px 30px;font:800 27px/1.2 var(--heavy);text-transform:uppercase;width:560px;z-index:4}
+.fin .pl svg{flex:none;width:38px;height:38px}
+.fin .p1{top:910px;background:var(--white);color:var(--navy)}
+.fin .p2{top:1060px;background:var(--navy-glass);color:var(--white)}
+.fin .mascot{right:-110px;bottom:-40px;width:530px}
+.fin .ring{position:absolute;right:-70px;top:600px;width:580px;height:580px;border-radius:50%;background:var(--ice);opacity:.2}
+
+</style>
+<div class="intro">
+  <h1>Восстановление после подтяжки лица</h1>
+  <p>9 слайдов в формате «отрывной календарь», 1080 × 1350. Готовые фото для Instagram лежат в проекте, в папке carousels/facelift-recovery/slides/instagram.</p>
+</div>
+<div class="feed">
+<div class="frame"><div class="slide white cv" id="s1"><div class="pager">1/9</div>
+  <div class="eyebrow">Календарь по дням</div>
+  <h2 class="title">Восстановление после подтяжки <span class="hl">лица</span></h2>
+  <p class="sub"><b>Онемение щёк может держаться полгода.</b> Рассказываю, что ещё нормально и когда всё пройдёт</p>
+  <div class="cal"><div class="sh s2"></div><div class="sh s1"></div><div class="sheet"><div class="top">день</div><div class="num">1</div><div class="cap">из 365</div></div><div class="rings"><span></span><span></span></div></div>
+  <span class="pill save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M6 3h12v18l-6-4.5L6 21z"/></svg>Сохраните, чтобы сверяться по дням</span>
+  <div class="mascot flip"></div><div class="nick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>@dr_kudryakov</div></div></div><div class="frame"><div class="slide white" id="s2"><div class="pager">2/9</div><div class="cal"><div class="sh s2"></div><div class="sh s1"></div><div class="sheet"><div class="top">дни</div><div class="num sm">1–3</div><div class="cap">после операции</div></div><div class="rings"><span></span><span></span></div></div>
+  <div class="peye">Первые дни</div><h2 class="ptitle">Самые тяжёлые дни</h2><div class="pts"><div class="pt"><span>Отёк растёт и сильнее всего на <b>2 или 3 день</b></span></div><div class="pt"><span>Лицо стянуто повязкой, щёки и уши онемевшие</span></div><div class="pt"><span>Спите на спине, голова приподнята</span></div><div class="pt"><span>Дренажи, если они есть, убирают на 1 или 2 день</span></div></div><div class="track"><div class="line"></div><div class="fill" style="width:0px"></div><div class="stops"><div class="st now"><i></i>1–3 дня</div><div class="st"><i></i>7 дней</div><div class="st"><i></i>14 дней</div><div class="st"><i></i>1–2 мес</div><div class="st"><i></i>3–6 мес</div><div class="st"><i></i>12 мес</div></div></div><div class="nick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>@dr_kudryakov</div></div></div><div class="frame"><div class="slide white" id="s3"><div class="pager">3/9</div><div class="cal"><div class="sh s2"></div><div class="sh s1"></div><div class="sheet"><div class="top">неделя</div><div class="num">1</div><div class="cap">дни 4–7</div></div><div class="rings"><span></span><span></span></div></div>
+  <div class="peye">Неделя 1</div><h2 class="ptitle">Лицо кажется чужим</h2><div class="pts"><div class="pt"><span>Синяки опускаются на шею. <b>Так и должно быть</b></span></div><div class="pt"><span>Улыбка может быть немного несимметричной из-за отёка</span></div><div class="pt"><span>Голову резко не поворачивайте и не наклоняйте</span></div><div class="pt"><span>Швы перед ухом снимают <b>с 5 по 7 день</b></span></div></div><div class="track"><div class="line"></div><div class="fill" style="width:181px"></div><div class="stops"><div class="st done"><i></i>1–3 дня</div><div class="st now"><i></i>7 дней</div><div class="st"><i></i>14 дней</div><div class="st"><i></i>1–2 мес</div><div class="st"><i></i>3–6 мес</div><div class="st"><i></i>12 мес</div></div></div><div class="nick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>@dr_kudryakov</div></div></div><div class="frame"><div class="slide white" id="s4"><div class="pager">4/9</div><div class="cal"><div class="sh s2"></div><div class="sh s1"></div><div class="sheet"><div class="top">неделя</div><div class="num">2</div><div class="cap">дни 8–14</div></div><div class="rings"><span></span><span></span></div></div>
+  <div class="peye">Неделя 2</div><h2 class="ptitle">Можно к людям</h2><div class="pts"><div class="pt"><span>Швы за ухом и в волосах снимают <b>с 10 по 14 день</b></span></div><div class="pt"><span>Синяки почти ушли, остатки скрывает тональный крем</span></div><div class="pt"><span>Бандаж носят на ночь столько, сколько скажет хирург</span></div><div class="pt"><span>На работу большинство выходят <b>через 2 или 3 недели</b></span></div></div><div class="track"><div class="line"></div><div class="fill" style="width:363px"></div><div class="stops"><div class="st done"><i></i>1–3 дня</div><div class="st done"><i></i>7 дней</div><div class="st now"><i></i>14 дней</div><div class="st"><i></i>1–2 мес</div><div class="st"><i></i>3–6 мес</div><div class="st"><i></i>12 мес</div></div></div><div class="nick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>@dr_kudryakov</div></div></div><div class="frame"><div class="slide white" id="s5"><div class="pager">5/9</div><div class="cal"><div class="sh s2"></div><div class="sh s1"></div><div class="sheet"><div class="top">месяц</div><div class="num sm">1–2</div><div class="cap">после операции</div></div><div class="rings"><span></span><span></span></div></div>
+  <div class="peye">Первые 2 месяца</div><h2 class="ptitle">Пока нельзя</h2>
+  <div class="tags">
+    <div class="tg"><b>Спорт</b><span>около 6 недель</span></div>
+    <div class="tg"><b>Тяжести</b><span>около 6 недель</span></div>
+    <div class="tg"><b>Окрашивание волос</b><span>около 6 недель</span></div>
+    <div class="tg"><b>Баня и сауна</b><span>около 2 месяцев</span></div>
+    <div class="tg"><b>Солярий</b><span>около 2 месяцев</span></div>
+  </div>
+  <p class="why">Жара и нагрузка поднимают давление, и <span class="mark">отёк возвращается.</span></p><div class="track"><div class="line"></div><div class="fill" style="width:544px"></div><div class="stops"><div class="st done"><i></i>1–3 дня</div><div class="st done"><i></i>7 дней</div><div class="st done"><i></i>14 дней</div><div class="st now"><i></i>1–2 мес</div><div class="st"><i></i>3–6 мес</div><div class="st"><i></i>12 мес</div></div></div><div class="nick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>@dr_kudryakov</div></div></div><div class="frame"><div class="slide navy nic" id="s6"><div class="pager">6/9</div><div class="cal"><div class="sh s2"></div><div class="sh s1"></div><div class="sheet"><div class="top">без никотина</div><div class="num sm">4+4</div><div class="cap">недели до и после</div></div><div class="rings"><span></span><span></span></div></div>
+  <div class="peye">Самое важное</div><h2 class="ptitle">Главный запрет: никотин</h2>
+  <div class="big">
+    <p>Никотин сужает сосуды. Коже после подтяжки и так не хватает кровотока, поэтому швы заживают хуже, а <span class="mark">участки кожи могут погибнуть.</span></p>
+    <p>Обычно бросают за 4 недели до операции и не начинают 4 недели после. Точный срок скажет хирург.</p>
+    <div class="chips"><span>Сигареты</span><span>Вейпы</span><span>Айкос</span><span>Пластыри</span></div>
+  </div><div class="nick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>@dr_kudryakov</div></div></div><div class="frame"><div class="slide white" id="s7"><div class="pager">7/9</div><div class="cal"><div class="sh s2"></div><div class="sh s1"></div><div class="sheet"><div class="top">месяцы</div><div class="num sm">3–12</div><div class="cap">после операции</div></div><div class="rings"><span></span><span></span></div></div>
+  <div class="peye">Дальше</div><h2 class="ptitle">Онемение и итог</h2><div class="pts"><div class="pt"><span>Чувствительность щёк и ушей возвращается постепенно, обычно <b>за 3 или 6 месяцев</b></span></div><div class="pt"><span>Небольшой отёк держится до 3 месяцев, иногда дольше</span></div><div class="pt"><span>Швы светлеют и почти не видны к году</span></div><div class="pt"><span>Окончательный результат виден <b>через полгода, иногда к году</b></span></div></div><div class="track"><div class="line"></div><div class="fill" style="width:908px"></div><div class="stops"><div class="st done"><i></i>1–3 дня</div><div class="st done"><i></i>7 дней</div><div class="st done"><i></i>14 дней</div><div class="st done"><i></i>1–2 мес</div><div class="st done"><i></i>3–6 мес</div><div class="st now"><i></i>12 мес</div></div></div><div class="nick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>@dr_kudryakov</div></div></div><div class="frame"><div class="slide white" id="s8"><div class="pager">8/9</div><div class="cal"><div class="sh s2"></div><div class="sh s1"></div><div class="sheet"><div class="top">в любой день</div><div class="num">!</div><div class="cap">звоните сразу</div></div><div class="rings"><span></span><span></span></div></div>
+  <div class="peye">Не ждите приёма</div><h2 class="ptitle">Звоните хирургу, если</h2>
+  <div class="flags">
+    <div class="fl"><span class="n">1</span>Одна сторона лица быстро опухает и болит</div>
+    <div class="fl"><span class="n">2</span>Кожа в одном месте потемнела или посинела</div>
+    <div class="fl"><span class="n">3</span>Температура выше 38</div>
+    <div class="fl"><span class="n">4</span>Из шва идёт гной</div>
+    <div class="fl"><span class="n">5</span>Часть лица перестала двигаться</div>
+    <div class="hand">лучше лишний раз позвонить</div>
+  </div><div class="nick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>@dr_kudryakov</div></div></div><div class="frame"><div class="slide navy fin" id="s9"><div class="pager">9/9</div>
+  <div class="ring"></div>
+  <div class="eyebrow">Итог</div>
+  <h2 class="title">Сроки у всех немного разные</h2>
+  <p class="txt">Точный план восстановления даст ваш хирург на консультации. А этот календарь поможет понять, что нормально, и не паниковать.</p>
+  <span class="pl p1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M6 3h12v18l-6-4.5L6 21z"/></svg>Сохраните, чтобы сверяться по дням</span>
+  <span class="pl p2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M21 3 3 10.5l7 2.5 2.5 7z"/><path d="m10 13 4-4"/></svg>Отправьте тому, кто планирует подтяжку</span>
+  <div class="mascot"></div><div class="nick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>@dr_kudryakov</div></div></div>
+</div>
+<script>
+(function(){
+  if(location.hash==='#export'){document.body.classList.add('export');return}
+  function fit(){document.querySelectorAll('.frame').forEach(function(f){f.firstElementChild.style.transform='scale('+(f.clientWidth/1080)+')'})}
+  fit(); window.addEventListener('resize',fit);
+  if(window.ResizeObserver){new ResizeObserver(fit).observe(document.querySelector('.feed'))}
+})();
+</script>
