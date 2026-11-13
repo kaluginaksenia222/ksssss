@@ -194,7 +194,7 @@ export const Reel: React.FC = () => {
         </Sequence>
       </Panel>
       <Captions />
-      <AbsoluteFill style={{top: 1440, left: 100, right: 1080 - 866, width: 'auto', height: 'auto', alignItems: 'center'}}>
+      <AbsoluteFill style={{top: 1440, height: 'auto', alignItems: 'center'}}>
         <InstagramHandle handle="dr_kudryakov" />
       </AbsoluteFill>
       <SoundEffects />

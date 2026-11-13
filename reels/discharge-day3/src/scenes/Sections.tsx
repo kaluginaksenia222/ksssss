@@ -46,7 +46,7 @@ export const Hook: React.FC<{until: number}> = ({until}) => {
       <div
         style={{
           position: 'absolute',
-          top: 930,
+          top: 1080,
           left: LAYOUT.sidePadding,
           right: LAYOUT.sidePadding,
           display: 'flex',
@@ -368,7 +368,7 @@ const Week: React.FC<{at: number}> = ({at}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   return (
-    <div style={{display: 'flex', gap: 10}}>
+    <div style={{display: 'flex', gap: 10, justifyContent: 'center'}}>
       {[1, 2, 3, 4, 5, 6, 7].map((d, i) => {
         const s = Math.round((at + i * 0.08) * fps);
         const v = interpolate(frame, [s, s + 5], [0, 1], clamp);
@@ -403,7 +403,7 @@ const Week: React.FC<{at: number}> = ({at}) => {
 export const Load: React.FC<{until: number}> = ({until}) => (
   <PanelScene label="01 / 08" until={until}>
     <Window title="Нагрузки">
-      <Pop at={2.5} style={{display: 'flex', gap: 14, marginBottom: 22}}>
+      <Pop at={2.5} style={{display: 'flex', gap: 14, marginBottom: 22, justifyContent: 'center'}}>
         <Tab active={1}>2 недели</Tab>
       </Pop>
       <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', columnGap: 30, marginBottom: 22}}>
@@ -432,7 +432,7 @@ export const Drive: React.FC<{until: number}> = ({until}) => (
   <PanelScene label="03 / 08" until={until}>
     <Window title="За руль — нельзя" icon={<Wheel />}>
       <Week at={1.3} />
-      <Pop at={1.3} style={{marginTop: 10, fontFamily: FONTS.mono, fontWeight: 500, fontSize: 22, color: COLORS.navy}}>
+      <Pop at={1.3} style={{marginTop: 10, textAlign: 'center', fontFamily: FONTS.mono, fontWeight: 500, fontSize: 22, color: COLORS.navy}}>
         7 дней
       </Pop>
       <div style={{marginTop: 18}}>
@@ -480,7 +480,7 @@ export const Heat: React.FC<{until: number}> = ({until}) => (
 export const Cosmetics: React.FC<{until: number}> = ({until}) => (
   <PanelScene label="05 / 08" until={until}>
     <Window title="Косметика" icon={<Jar />}>
-      <Pop at={0.6} style={{display: 'flex', gap: 14, marginBottom: 20}}>
+      <Pop at={0.6} style={{display: 'flex', gap: 14, marginBottom: 20, justifyContent: 'center'}}>
         <Tab active={1}>с 10-х суток</Tab>
       </Pop>
       <div style={{display: 'flex', flexDirection: 'column', gap: 16}}>
@@ -514,8 +514,8 @@ const Alternate: React.FC<{at: number; a: string; b: string; secondAt: number}> 
   // после второй фразы чипы переключаются по очереди: носим ↔ снимаем
   const flip = t < secondAt ? 0 : Math.floor((t - secondAt) / 0.9) % 2 === 0 ? 1 : 0;
   return (
-    <Pop at={at} style={{display: 'flex', gap: 14, alignItems: 'center'}}>
-      <div style={{fontFamily: FONTS.mono, fontWeight: 500, fontSize: 22, color: COLORS.navy, width: 90}}>ДЕНЬ</div>
+    <Pop at={at} style={{display: 'flex', gap: 14, alignItems: 'center', justifyContent: 'center'}}>
+      <div style={{fontFamily: FONTS.mono, fontWeight: 500, fontSize: 22, color: COLORS.navy}}>ДЕНЬ</div>
       <Tab active={1 - flip}>{a}</Tab>
       <Pop at={secondAt}>
         <Tab active={flip}>{b}</Tab>
@@ -531,8 +531,8 @@ export const Bandage: React.FC<{until: number}> = ({until}) => (
       <div style={{marginTop: 18}}>
         <Row at={3.1} icon={<Moon />} title="Ночью — в бандаже" skeleton={false} mark={<div style={{fontFamily: FONTS.mono, fontWeight: 500, fontSize: 24, color: COLORS.navy}}>1 мес</div>} />
       </div>
-      <Pop at={5.4} style={{display: 'flex', gap: 14, alignItems: 'center', marginTop: 18}}>
-        <div style={{fontFamily: FONTS.mono, fontWeight: 500, fontSize: 22, color: COLORS.navy, width: 90, whiteSpace: 'nowrap'}}>10+ ДН</div>
+      <Pop at={5.4} style={{display: 'flex', gap: 14, alignItems: 'center', marginTop: 18, justifyContent: 'center'}}>
+        <div style={{fontFamily: FONTS.mono, fontWeight: 500, fontSize: 22, color: COLORS.navy, whiteSpace: 'nowrap'}}>10+ ДН</div>
         <Tab active={1}>только ночью</Tab>
       </Pop>
     </Window>
@@ -552,7 +552,7 @@ const Month: React.FC<{at: number}> = ({at}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   return (
-    <div style={{display: 'grid', gridTemplateColumns: 'repeat(15, 1fr)', gap: 8}}>
+    <div style={{display: 'grid', gridTemplateColumns: 'repeat(15, 30px)', gap: 8, justifyContent: 'center'}}>
       {Array.from({length: 30}, (_, i) => {
         const s = Math.round((at + i * 0.03) * fps);
         const v = interpolate(frame, [s, s + 4], [0, 1], clamp);
@@ -567,7 +567,7 @@ const Month: React.FC<{at: number}> = ({at}) => {
 export const Detralex: React.FC<{until: number}> = ({until}) => (
   <PanelScene label="07 / 08" until={until}>
     <Window title="Детралекс" icon={<Pill2 />}>
-      <Pop at={1.8} style={{display: 'flex', gap: 14, marginBottom: 22}}>
+      <Pop at={1.8} style={{display: 'flex', gap: 14, marginBottom: 22, justifyContent: 'center'}}>
         <Tab active={1}>1 таблетка</Tab>
         <Pop at={2.3}>
           <Tab active={1}>1 раз в день</Tab>
@@ -575,7 +575,7 @@ export const Detralex: React.FC<{until: number}> = ({until}) => (
       </Pop>
       <Pop at={3.0}>
         <Month at={3.0} />
-        <div style={{marginTop: 12, fontFamily: FONTS.mono, fontWeight: 500, fontSize: 22, color: COLORS.navy}}>30 дней</div>
+        <div style={{marginTop: 12, textAlign: 'center', fontFamily: FONTS.mono, fontWeight: 500, fontSize: 22, color: COLORS.navy}}>30 дней</div>
       </Pop>
     </Window>
   </PanelScene>
@@ -642,7 +642,7 @@ const CalIcon: React.FC = () => (
 export const Visit: React.FC<{until: number}> = ({until}) => (
   <PanelScene label="Приём" until={until}>
     <Window title="Приём в понедельник" icon={<CalIcon />}>
-      <Pop at={0.2} style={{display: 'flex', gap: 14, marginBottom: 20}}>
+      <Pop at={0.2} style={{display: 'flex', gap: 14, marginBottom: 20, justifyContent: 'center'}}>
         <Tab active={1}>понедельник</Tab>
       </Pop>
       <div style={{display: 'flex', flexDirection: 'column', gap: 14}}>

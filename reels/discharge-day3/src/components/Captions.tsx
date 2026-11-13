@@ -1,14 +1,14 @@
 import React from 'react';
 import {interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
 import {PAGES, Word} from '../data/transcript';
-import {COLORS, DUR, EASE, FONTS, LAYOUT, PANEL_HEIGHT, TYPE} from '../design/tokens';
+import {COLORS, DUR, EASE, FONTS, LAYOUT, PANEL_HEIGHT} from '../design/tokens';
 import {useSplit} from '../timeline';
 
 // Пословные субтитры: белые, тонкие, без плашек и фона, не больше двух слов.
 // На обычном кадре — белые, чуть ниже середины; при сплите — синие, на бежевой панели под окном.
 
-const CAPTION_TOP = 1170;
-const CAPTION_TOP_SPLIT = PANEL_HEIGHT - 130;
+const CAPTION_TOP = 1300; // ниже заголовка хука, по центру кадра
+const CAPTION_TOP_SPLIT = PANEL_HEIGHT - 100;
 const PAGE_TAIL = 0.6; // сколько держим страницу после последнего слова, если дальше пауза
 
 const WordView: React.FC<{word: Word}> = ({word}) => {
@@ -62,7 +62,7 @@ export const Captions: React.FC = () => {
         textAlign: 'center',
         fontFamily: FONTS.body,
         fontWeight: 400,
-        fontSize: TYPE.caption,
+        fontSize: 38,
         lineHeight: 1.2,
         color: onPanel ? COLORS.navy : COLORS.white,
         textShadow: onPanel ? 'none' : '0 2px 14px rgba(0, 0, 0, 0.45)',
@@ -76,8 +76,8 @@ export const Captions: React.FC = () => {
         ),
       }}
     >
-      {page.words.map((word) => (
-        <WordView key={`${index}-${word.start}`} word={word} />
+      {page.words.map((word, wi) => (
+        <WordView key={`${index}-${wi}`} word={word} />
       ))}
     </div>
   );
