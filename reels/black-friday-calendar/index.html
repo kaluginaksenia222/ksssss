@@ -29,7 +29,7 @@
       #msg { position: absolute; left: 0; right: 0; top: 0; bottom: 0; text-align: center; }
       #logo { position: absolute; left: 50%; top: 72px; width: 130px; margin-left: -65px; opacity: 0; }
       #bf { position: absolute; left: 0; right: 0; top: 262px; font-weight: 800; font-size: 72px; line-height: 1; letter-spacing: 0.02em; opacity: 0; }
-      #accent { position: absolute; left: 50%; top: 366px; width: 56px; height: 3px; margin-left: -28px; background: var(--red); transform: scaleX(0); }
+      #accent { position: absolute; left: 50%; top: 366px; width: 56px; height: 3px; margin-left: -28px; background: var(--red); }
       #sub { position: absolute; left: 0; right: 0; top: 400px; font-weight: 500; font-size: 20px; letter-spacing: 0.28em; color: var(--ink-2); opacity: 0; }
       #until { position: absolute; left: 0; right: 0; top: 452px; font-weight: 800; font-size: 34px; letter-spacing: 0.06em; opacity: 0; }
       #jk { position: absolute; left: 150px; right: 150px; top: 590px; display: grid; grid-template-columns: 1fr 1fr 1fr; }
@@ -118,7 +118,7 @@
       // текст акции
       tl.fromTo("#logo", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power1.out" }, T.logo);
       tl.fromTo("#bf", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, T.bf);
-      tl.to("#accent", { scaleX: 1, duration: 0.5, ease: "power2.out" }, T.bf + 0.45);
+      tl.fromTo("#accent", { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "power2.out" }, T.bf + 0.45);
       tl.fromTo("#sub", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power1.out" }, T.bf + 0.6);
       tl.fromTo("#until", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, T.until);
       tl.fromTo(".c", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out", stagger: 0.25 }, T.jk);
