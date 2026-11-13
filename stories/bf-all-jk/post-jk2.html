@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<style>
+  @font-face { font-family: "Onest S"; font-weight: 500; src: url("assets/onest-cyrillic-500-normal.woff2"); unicode-range: U+0400-04FF; }
+  @font-face { font-family: "Onest S"; font-weight: 500; src: url("assets/onest-latin-500-normal.woff2"); unicode-range: U+0000-00FF, U+2000-206F; }
+  @font-face { font-family: "Onest S"; font-weight: 800; src: url("assets/onest-cyrillic-800-normal.woff2"); unicode-range: U+0400-04FF; }
+  @font-face { font-family: "Onest S"; font-weight: 800; src: url("assets/onest-latin-800-normal.woff2"); unicode-range: U+0000-00FF, U+2000-206F; }
+  :root { --red: #e0212b; --ink: #f4f2ee; --ink2: #8f8d89; --line: rgba(244, 242, 238, 0.22); }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1080px; height: 1080px; overflow: hidden; }
+  body { position: relative; font-family: "Onest S", sans-serif; color: var(--ink); background: #070707 url("assets/bg.png") -200px -300px / 1500px 2667px no-repeat; }
+  /* косой луч света из угла */
+  #beam { position: absolute; left: -300px; top: -400px; width: 1100px; height: 1900px; transform: rotate(-32deg);
+          background: linear-gradient(90deg, transparent 0%, rgba(255, 236, 210, 0.05) 40%, rgba(255, 236, 210, 0.10) 50%, rgba(255, 236, 210, 0.05) 60%, transparent 100%); }
+  #pad { position: absolute; left: 80px; right: 80px; top: 76px; bottom: 76px; }
+  #brand { display: flex; align-items: center; gap: 22px; }
+  #brand img { height: 96px; }
+  #brand span { font-weight: 500; font-size: 20px; letter-spacing: 0.34em; color: var(--ink2); }
+  #title { margin-top: 118px; position: relative; }
+  #bar { position: absolute; left: 0; top: 16px; width: 14px; height: 350px; background: var(--red); }
+  .big { font-weight: 800; font-size: 178px; line-height: 0.9; letter-spacing: -0.035em; margin-left: 46px; }
+  .outline { color: transparent; -webkit-text-stroke: 3px var(--ink); }
+  #sub { margin: 44px 0 0 46px; font-weight: 500; font-size: 40px; letter-spacing: 0.06em; color: #d9d7d2; }
+  #jk { position: absolute; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: 1fr 1fr 1fr; border-top: 1px solid var(--line); }
+  .c { padding: 30px 0 0 0; }
+  .c + .c { border-left: 1px solid var(--line); padding-left: 30px; }
+  .c small { display: block; font-weight: 500; font-size: 18px; letter-spacing: 0.3em; color: var(--ink2); }
+  .c b { display: block; margin-top: 12px; font-weight: 800; font-size: 30px; line-height: 1.08; letter-spacing: 0.01em; }
+</style>
+</head>
+<body>
+  <div id="beam"></div>
+  <div id="pad">
+    <div id="brand"><img src="assets/logo-white.png" alt="" /></div>
+    <div id="title">
+      <div id="bar"></div>
+      <div class="big outline">ЧЁРНАЯ</div>
+      <div class="big">ПЯТНИЦА</div>
+      <div id="sub">во всех наших жилых комплексах</div>
+    </div>
+    <div id="jk">
+      <div class="c"><small>ЖК</small><b>ЛУВР<br />&nbsp;</b></div>
+      <div class="c"><small>ЖК</small><b>9<br />КОСМОНАВТОВ</b></div>
+      <div class="c"><small>ЖК</small><b>БОЛЬШОЙ<br />КАРЕТНЫЙ</b></div>
+    </div>
+  </div>
+</body>
+</html>
