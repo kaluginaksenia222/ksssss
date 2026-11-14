@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {Audio, Video} from '@remotion/media';
-import {AbsoluteFill, continueRender, delayRender, interpolate, Sequence, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
+import {AbsoluteFill, continueRender, delayRender, Freeze, interpolate, Sequence, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
 import {fontsLoaded} from '../design/fonts';
 import {COLORS, EASE, FONTS} from '../design/tokens';
-import {Shutter, Silhouette, StrikeHook, ThreeTypes} from './lipo';
+import {FinalTitle, Shutter, Silhouette, StrikeHook, ThreeTypes} from './lipo';
 import {PAGES} from './transcript';
 import {InstagramHandle} from './ui';
 
@@ -16,7 +16,9 @@ const FACE = {cx: 490, cy: 650};
 const ALL_CUTS = [0.17, 1.81, 1.9, 3.0, 3.39, 7.6, 9.58, 11.69, 12.77, 15.6, 18.43, 18.78, 20.0, 25.08, 29.9, 32.0, 34.42, 35.84, 36.66, 39.21, 41.88, 43.08, 44.69, 46.24, 46.42, 47.02, 49.36, 52.68, 55.0];
 const CUTS = ALL_CUTS.filter((c) => c > 2.5).reduce<number[]>((acc, c) => (c - (acc[acc.length - 1] ?? 0) >= 2.8 ? [...acc, c] : acc), []);
 const HOOK_END = 3.0;
-export const LIPO_SECONDS = 55.6;
+export const LIPO_SECONDS = 58.5;
+const FINAL_AT = 56.4; // после «будем его убирать»
+const VIDEO_END = 57.3; // дальше — стоп-кадр под финальный заголовок
 const ANIM_TOP = 1080;
 const CAPTION_TOP = 950;
 
@@ -43,6 +45,18 @@ const Footage: React.FC = () => {
   );
 };
 
+// После конца видео держим последний кадр (стоп-кадр), пока виден финальный заголовок
+const FootageWithHold: React.FC = () => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const last = Math.round(VIDEO_END * fps) - 1;
+  return (
+    <Freeze frame={last} active={frame >= last}>
+      <Footage />
+    </Freeze>
+  );
+};
+
 const Flash: React.FC<{at: number; strength: number}> = ({at, strength}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
@@ -60,7 +74,7 @@ const Captions: React.FC = () => {
   const index = PAGES.findIndex((page, i) => {
     const next = PAGES[i + 1];
     const from = page.words[0].start - 0.05;
-    const to = next ? Math.min(next.words[0].start - 0.05, page.words[page.words.length - 1].end + 0.6) : Infinity;
+    const to = next ? Math.min(next.words[0].start - 0.05, page.words[page.words.length - 1].end + 0.6) : page.words[page.words.length - 1].end + 0.5;
     return t >= from && t < to;
   });
   if (index === -1) {
@@ -91,13 +105,14 @@ const SoundTrack: React.FC = () => {
   return (
     <>
       <Audio src={staticFile('source.mp4')} />
-      <Audio src={staticFile('music/warm_keys_90.wav')} volume={(f) => 0.22 * interpolate(f, [durationInFrames - 1.5 * fps, durationInFrames - 1], [1, 0], clamp)} />
+      <Audio src={staticFile('music/warm_keys_90.wav')} volume={(f) => 0.22 * interpolate(f, [durationInFrames - 1.2 * fps, durationInFrames - 1], [1, 0], clamp) * interpolate(f, [FINAL_AT * fps, (FINAL_AT + 0.4) * fps], [1, 1.5], clamp)} />
       {sfx('whoosh', 0.05, 0.16, 0.6)}
       {sfx('impact', 2.46, 0.24, 1.0)}
       {sfx('pop', 9.8, 0.05, 0.2)}
       {sfx('pop', 14.1, 0.04, 0.2)}
       {[21.16, 29.34, 39.8].map((at) => sfx('pop', at, 0.05, 0.2))}
       {sfx('shimmer', 49.04, 0.16, 1.1)}
+      {sfx('shimmer', FINAL_AT, 0.18, 1.1)}
     </>
   );
 };
@@ -109,7 +124,7 @@ export const LipoReel: React.FC = () => {
   }, [handle]);
   return (
     <AbsoluteFill style={{backgroundColor: '#0A0F1E'}}>
-      <Footage />
+      <FootageWithHold />
       <Flash at={0.3} strength={0.3} />
       <Flash at={2.46} strength={0.25} />
       <Shutter />
@@ -126,9 +141,10 @@ export const LipoReel: React.FC = () => {
         ]}
         activeUntil={[28.18, 37.42, 47.5]}
         todayAt={49.04}
-        until={LIPO_SECONDS}
+        until={FINAL_AT}
         top={ANIM_TOP + 10}
       />
+      <FinalTitle at={FINAL_AT} top={ANIM_TOP + 30} />
 
       <Captions />
       <AbsoluteFill style={{top: 1440, height: 'auto', alignItems: 'center'}}>

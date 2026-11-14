@@ -207,3 +207,21 @@ export const ThreeTypes: React.FC<{slotsAt: number; items: {title: string; at: n
     </div>
   );
 };
+
+// ── Финал: итоговый заголовок со светлым бликом ─────────────────────────────
+export const FinalTitle: React.FC<{at: number; top: number}> = ({at, top}) => {
+  const {frame, fps} = useT();
+  const a = ramp(frame, fps, at, at + 0.5);
+  const b = ramp(frame, fps, at + 0.35, at + 0.85);
+  const sweep = interpolate(frame, [(at + 0.5) * fps, (at + 1.4) * fps], [-30, 130], clamp);
+  const line: React.CSSProperties = {fontFamily: FONTS.heading, fontWeight: 900, fontSize: 60, lineHeight: '68px', textTransform: 'uppercase', ...metal};
+  return (
+    <div style={{position: 'absolute', top, left: CX - HALF, width: HALF * 2, display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+      <div style={{position: 'relative', opacity: a, translate: `0px ${(1 - a) * 18}px`, filter: `blur(${(1 - a) * 8}px)`}}>
+        <div style={line}>коррекция фигуры</div>
+        <div style={{position: 'absolute', inset: 0, ...line, backgroundImage: `linear-gradient(100deg, rgba(255,255,255,0) ${sweep - 12}%, rgba(255,255,255,0.95) ${sweep}%, rgba(255,255,255,0) ${sweep + 12}%)`, filter: 'none'}}>коррекция фигуры</div>
+      </div>
+      <div style={{...darkGlass, borderRadius: 999, padding: '8px 22px', marginTop: 12, fontFamily: FONTS.body, fontWeight: 500, fontSize: 30, color: COLORS.white, opacity: b, scale: String(0.85 + b * 0.15)}}>а не похудение</div>
+    </div>
+  );
+};
