@@ -66,6 +66,29 @@ const FootageWithHold: React.FC = () => {
   );
 };
 
+// Вставки видео робота (заказчик снял отдельно, 7,8 с): куски идут по порядку, голос врача продолжается.
+// Мягкое появление и уход (0,2 с) и медленный наезд — без звуков.
+const INSERTS = [
+  {at: 2.95, from: 0.0, dur: 3.3}, // «сзади меня стоит этот робот да Винчи»
+  {at: 11.1, from: 3.3, dur: 2.3}, // «этот робот оперирует урологические операции»
+  {at: 20.6, from: 5.6, dur: 2.2}, // «увидеть его… хотя бы просто на него посмотреть»
+];
+
+const Insert: React.FC<{from: number; dur: number}> = ({from, dur}) => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const v = Math.min(
+    interpolate(frame, [0, 0.2 * fps], [0, 1], clamp),
+    interpolate(frame, [(dur - 0.2) * fps, dur * fps], [1, 0], clamp),
+  );
+  const zoom = interpolate(frame, [0, dur * fps], [1.0, 1.06], clamp);
+  return (
+    <AbsoluteFill style={{opacity: v}}>
+      <Video src={staticFile('broll_robot.mp4')} muted trimBefore={Math.round(from * fps)} style={{position: 'absolute', width: 1080, height: 1920, scale: String(zoom)}} />
+    </AbsoluteFill>
+  );
+};
+
 const Flash: React.FC<{at: number; strength: number}> = ({at, strength}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
@@ -131,6 +154,11 @@ export const DavinciReel: React.FC = () => {
   return (
     <AbsoluteFill style={{backgroundColor: '#0A0F1E'}}>
       <FootageWithHold />
+      {INSERTS.map((ins) => (
+        <Sequence key={ins.at} name={`Вставка робота ${ins.at}`} from={Math.round(ins.at * 30)} durationInFrames={Math.round(ins.dur * 30)}>
+          <Insert from={ins.from} dur={ins.dur} />
+        </Sequence>
+      ))}
       <Flash at={0.4} strength={0.35} />
 
       {/* все анимации — в одном месте, по центру кадра */}
