@@ -14,3 +14,6 @@ out/
 public/*.mp4
 public/*.webm
 out/
+public/source2.mp4
+# Шрифт Stolzl платный — в публичный репозиторий не кладём
+public/stolzl/
