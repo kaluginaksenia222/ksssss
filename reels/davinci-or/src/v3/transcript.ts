@@ -6,7 +6,7 @@ export const PAGES: Page[] = [
   {words: [{text: "и", start: 0.00, end: 0.12}, {text: "пока", start: 0.12, end: 0.36}]},
   {words: [{text: "мы", start: 0.36, end: 0.66}, {text: "ещё", start: 0.66, end: 1.06}]},
   {words: [{text: "также", start: 1.06, end: 1.38}, {text: "продолжаем", start: 1.38, end: 1.88}]},
-  {words: [{text: "подготовку к", start: 1.88, end: 2.34}, {text: "операции", start: 2.34, end: 2.74}]},
+  {words: [{text: "готовиться к", start: 1.88, end: 2.34}, {text: "операции", start: 2.34, end: 2.74}]},
   {words: [{text: "сзади", start: 2.92, end: 3.06}, {text: "меня", start: 3.06, end: 3.34}]},
   {words: [{text: "стоит", start: 3.34, end: 3.68}, {text: "этот", start: 3.68, end: 4.38}]},
   {words: [{text: "робот", start: 4.38, end: 5.54}]},

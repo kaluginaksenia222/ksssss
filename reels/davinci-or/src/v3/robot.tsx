@@ -64,15 +64,10 @@ export const RobotHook: React.FC<{until: number; top: number}> = ({until, top}) 
   const {frame, fps} = useT();
   const out = 1 - ramp(frame, fps, until - 0.35, until, EASE.inOut);
   const a = spring({frame: frame - 0.3 * fps, fps, config: {damping: 13, stiffness: 160}});
-  const b = ramp(frame, fps, 0.75, 1.1);
-  const q = frame > 1.1 * fps ? Math.sin((frame / fps - 1.1) * 7) * 10 * Math.exp(-(frame / fps - 1.1) * 1.8) : 0;
   return (
     <Box top={top} show={out}>
       <div style={{...txt(30), letterSpacing: '0.2em', ...metal, opacity: Math.min(1, a * 2)}}>РОБОТ</div>
       <div style={{fontFamily: STOLZL, fontWeight: 700, fontSize: 80, lineHeight: '88px', ...metal, scale: String(0.6 + a * 0.4), opacity: Math.min(1, a * 2)}}>DA VINCI</div>
-      <div style={{...glass, borderRadius: 999, padding: '8px 22px', marginTop: 10, ...txt(32), opacity: b, scale: String(0.85 + b * 0.15)}}>
-        ЗАМЕНИТ ХИРУРГА<span style={{display: 'inline-block', color: COLORS.beige, rotate: `${q}deg`, transformOrigin: '50% 0%'}}>?</span>
-      </div>
     </Box>
   );
 };

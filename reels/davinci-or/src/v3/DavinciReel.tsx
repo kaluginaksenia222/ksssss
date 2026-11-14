@@ -4,7 +4,7 @@ import {loadFont} from '@remotion/fonts';
 import {AbsoluteFill, continueRender, delayRender, Freeze, interpolate, Sequence, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
 import {fontsLoaded} from '../design/fonts';
 import {COLORS, EASE} from '../design/tokens';
-import {Control, Final, Future, RobotCard, RobotHook, STOLZL, Week, WhatItDoes} from './robot';
+import {Control, Final, Future, RobotCard, RobotHook, STOLZL, WhatItDoes} from './robot';
 import {PAGES} from './transcript';
 import {InstagramHandle} from './ui';
 
@@ -22,7 +22,7 @@ const FINAL_AT = 40.4; // после «каждое движение»
 const VIDEO_END = 40.9;
 export const DAVINCI_SECONDS = 42.6;
 const ANIM_TOP = 1080;
-const CAPTION_TOP = 950;
+const CAPTION_TOP = 1010; // чуть ниже — по просьбе заказчика
 
 const Footage: React.FC = () => {
   const frame = useCurrentFrame();
@@ -165,7 +165,6 @@ export const DavinciReel: React.FC = () => {
       <RobotHook until={HOOK_END} top={ANIM_TOP} />
       <RobotCard at={2.95} until={6.7} top={ANIM_TOP + 20} />
       <WhatItDoes at={7.8} noAt={8.36} yesAt={11.88} until={13.45} top={ANIM_TOP + 10} />
-      <Week at={13.6} sunAt={15.16} until={16.7} top={ANIM_TOP} />
       <Future at={26.0} moveAt={29.16} qAt={30.26} until={31.7} top={ANIM_TOP} />
       <Control at={33.0} surgeonAt={35.66} linkAt={37.46} everyAt={39.54} until={FINAL_AT} top={ANIM_TOP} />
       <Final at={FINAL_AT} top={ANIM_TOP + 30} />
