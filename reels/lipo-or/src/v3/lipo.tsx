@@ -65,7 +65,7 @@ export const StrikeHook: React.FC<{until: number; top: number; strikeAt: number}
       <div style={{fontFamily: FONTS.heading, fontWeight: 900, fontSize: 76, lineHeight: '84px', textTransform: 'uppercase', ...metal, scale: String(0.6 + a * 0.4), opacity: Math.min(1, a * 2)}}>
         липосакция
       </div>
-      <div style={{fontFamily: FONTS.mono, fontSize: 26, letterSpacing: '0.24em', color: COLORS.white, textShadow: '0 2px 10px rgba(0,0,0,0.7)', marginTop: 6, opacity: ne}}>НЕ МЕТОД</div>
+      <div style={{...darkGlass, borderRadius: 999, padding: '6px 18px', fontFamily: FONTS.mono, fontSize: 26, letterSpacing: '0.24em', color: COLORS.white, marginTop: 8, opacity: ne, scale: String(0.8 + ne * 0.2)}}>НЕ МЕТОД</div>
       <div style={{position: 'relative', marginTop: 6, opacity: b, translate: `0px ${(1 - b) * 16}px`}}>
         <div style={{fontFamily: FONTS.heading, fontWeight: 900, fontSize: 64, lineHeight: '72px', textTransform: 'uppercase', color: COLORS.white, textShadow: '0 3px 14px rgba(0,0,0,0.65)'}}>похудения</div>
         <svg width={420} height={72} viewBox="0 0 420 72" style={{position: 'absolute', left: '50%', top: 0, translate: '-50% 0px', overflow: 'visible'}}>
