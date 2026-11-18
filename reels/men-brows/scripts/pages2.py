@@ -15,7 +15,7 @@ FIX = {'умоложение': 'омоложение', 'умоложение,': 
 out, i = [], 0
 while i < len(ws):
     w = ws[i]; nxt = ws[i + 1]['t'] if i + 1 < len(ws) else ''
-    w['t'] = re.sub(r'^([Лл])[еи]посакц', lambda m: m.group(1) + 'ипосакц', FIX.get(w['t'], w['t']))
+    w['t'] = re.sub(r'^(у|)моложени', 'омоложени', FIX.get(w['t'], w['t']))
     if w['t'] == 'не' and nxt == 'очень' and i + 2 < len(ws) and ws[i + 2]['t'].startswith('редко'):
         i += 1; continue
     # «на отсленнике УГНК.» → «но в клинике УГМК»
@@ -24,6 +24,18 @@ while i < len(ws):
     if w['t'].startswith('УГ') and len(w['t']) <= 5:
         out.append(dict(t='УГМК', s=w['s'], e=w['e'])); i += 1; continue
     out.append(w); i += 1
+# слова, которые общее распознавание пропустило (время — по распознаванию куска 27–31,8 с)
+EXTRA = [('по', 29.08, 29.10), ('крайней', 29.10, 29.44), ('мере,', 29.44, 29.76)]
+have = {w['t'].rstrip(',.') for w in out if 28.8 < w['s'] < 30}
+for t, a, b in EXTRA:
+    if t.rstrip(',') not in have:
+        out.append(dict(t=t, s=a, e=b))
+for w in out:
+    if w['t'].startswith('Ну') and 28.8 < w['s'] < 30.2:
+        w['s'], w['e'] = 28.92, 28.96
+    if w['t'] == 'я' and 29.6 < w['s'] < 30.2:
+        w['s'], w['e'] = 29.84, 30.1
+out.sort(key=lambda w: w['s'])
 phrases, cur = [], []
 for w in out:
     cur.append(w)
