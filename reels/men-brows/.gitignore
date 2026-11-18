@@ -1,0 +1,20 @@
+node_modules
+dist
+.DS_Store
+.env
+
+# Ignore the output video from Git but not videos you import into src/.
+out
+
+# Видео не храним в репозитории
+public/source.mp4
+out/
+
+# Видео не храним в репозитории
+public/*.mp4
+public/*.webm
+out/
+public/source2.mp4
+# Шрифт Stolzl платный — в публичный репозиторий не кладём
+public/stolzl/
+public/source.mp4
