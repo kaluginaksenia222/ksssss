@@ -9,7 +9,7 @@ import {COLORS, EASE, FONTS} from './design/tokens';
 // Только видео и субтитры: маленькие, белые, по 2 слова, по центру чуть ниже голов (рабочая зона Reels/Stories).
 
 const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
-export const STORY_SECONDS = 23.55;
+export const STORY_SECONDS = 23.2;
 const CAPTION_TOP = 1110; // у края стола; ниже 1067 правая граница рабочей зоны — 866
 
 const Captions: React.FC = () => {

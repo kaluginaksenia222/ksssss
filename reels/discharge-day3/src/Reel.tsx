@@ -17,7 +17,7 @@ import {COLORS, LAYOUT, PANEL_HEIGHT, SPLIT_SOURCE_Y} from './design/tokens';
 import {Bandage, Cosmetics, Detralex, Drive, Heat, Hook, IntroBar, Load, POP_TIMES, Sleep, Sutures, TYPING, Visit} from './scenes/Sections';
 import {SCENES, SECTIONS, TRANSITIONS, useSplit} from './timeline';
 
-const HOOK_UNTIL = 6.76;
+const HOOK_UNTIL = 6.65;
 const HOOK_IN = 0.5;
 
 // Видео: на весь кадр или съезжает в нижнюю половину; на каждом разделе — резкая
@@ -36,7 +36,7 @@ const Footage: React.FC = () => {
     <AbsoluteFill style={{translate: `0px ${split * (PANEL_HEIGHT - SPLIT_SOURCE_Y)}px`}}>
       <Video
         src={staticFile('source.mp4')}
-        volume={(f) => interpolate(f, [71.1 * fps, 71.5 * fps], [1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})}
+        volume={(f) => interpolate(f, [70.11 * fps, 70.51 * fps], [1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})}
         style={{
           width: LAYOUT.width,
           height: LAYOUT.height,

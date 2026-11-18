@@ -3,16 +3,16 @@ import {DUR, EASE} from './design/tokens';
 
 // Разделы ролика (секунды нарезки) — по расшифровке голоса: хук, 8 правил, финал
 export const SCENES = {
-  load: 6.76,
-  sleep: 13.45,
-  drive: 17.75,
-  heat: 24.35,
-  cosmetics: 29.2,
-  bandage: 34.1,
-  detralex: 43.5,
-  sutures: 47.4,
-  visit: 63.4,
-  end: 73.3,
+  load: 6.65,
+  sleep: 13.29,
+  drive: 17.49,
+  heat: 24.06,
+  cosmetics: 28.89,
+  bandage: 33.67,
+  detralex: 42.92,
+  sutures: 46.78,
+  visit: 62.49,
+  end: 72.80,
 };
 
 export const SECTIONS = [
@@ -29,7 +29,7 @@ export const SECTIONS = [
 ];
 
 // После хука панель со вставками держится до конца
-export const SPLITS = [{in: 6.55, out: Infinity}];
+export const SPLITS = [{in: 6.44, out: Infinity}];
 
 // Моменты переходов — для свушей
 export const TRANSITIONS = [SCENES.load, SCENES.sleep, SCENES.drive, SCENES.heat, SCENES.cosmetics, SCENES.bandage, SCENES.detralex, SCENES.sutures, SCENES.visit];
