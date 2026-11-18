@@ -151,7 +151,7 @@ export const Rarely: React.FC<{at: number; rareAt: number; until: number; top: n
       <div style={{position: 'relative', width: W, height: 14, borderRadius: 7, background: 'linear-gradient(90deg, rgba(248,240,229,0.9), rgba(255,255,255,0.25))'}}>
         <div style={{position: 'absolute', top: -9, left: pos * W - 16, width: 32, height: 32, borderRadius: 16, backgroundColor: COLORS.white, boxShadow: '0 2px 10px rgba(0,0,0,0.4)'}} />
       </div>
-      <div style={{...glass, borderRadius: 999, padding: '6px 18px', ...txt(24), opacity: Math.min(1, pop * 2), scale: String(0.7 + pop * 0.3), borderColor: COLORS.beige}}>мужчинам — очень редко</div>
+      <div style={{...glass, borderRadius: 999, padding: '6px 18px', ...txt(24), opacity: Math.min(1, pop * 2), scale: String(0.7 + pop * 0.3), borderColor: COLORS.beige}}>мужчинам — редко</div>
     </div>
   );
 };

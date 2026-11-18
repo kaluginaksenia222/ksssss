@@ -16,12 +16,12 @@ const stolzlLoaded = loadFont({family: 'Stolzl', url: staticFile('stolzl/Stolzl-
 const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
 const FACE = {cx: 530, cy: 680};
 const EYES = {cx: 530, cy: 640}; // зум-хук начинается с крупного плана глаз
-const ALL_CUTS = [8.77, 10.63, 13.33, 13.5, 17.97, 19.83, 24.63, 25.1, 25.27, 25.67, 26.27, 29.83];
+const ALL_CUTS = [8.77, 10.63, 13.33, 13.5, 17.97, 19.83, 24.63, 25.1, 25.27, 25.67, 26.27, 29.27];
 const CUTS = ALL_CUTS.reduce<number[]>((acc, c) => (c - (acc[acc.length - 1] ?? 0) >= 2.5 ? [...acc, c] : acc), []);
 const HOOK_END = 5.9;
-const FINAL_AT = 31.1; // после «в своей практике»
-const VIDEO_END = 31.83;
-export const BROWS_SECONDS = 33.6;
+const FINAL_AT = 30.55; // после «в своей практике»
+const VIDEO_END = 31.27;
+export const BROWS_SECONDS = 33.05;
 const ANIM_TOP = 1080;
 const CAPTION_TOP = 1010;
 
@@ -138,7 +138,7 @@ export const BrowsReel: React.FC = () => {
       {/* все анимации — в одном месте, по центру кадра */}
       <LineHook until={HOOK_END} top={ANIM_TOP} lines={['ПОЧЕМУ МУЖЧИНАМ', 'НЕ ПОДНИМАЮТ', 'БРОВИ']} />
       <BrowStory at={6.0} lowAt={8.76} skinAt={12.85} blephAt={16.86} liftAt={18.68} openAt={21.42} maleAt={23.78} until={25.2} top={ANIM_TOP - 20} />
-      <Rarely at={25.3} rareAt={26.4} until={FINAL_AT} top={ANIM_TOP} />
+      <Rarely at={25.3} rareAt={26.3} until={FINAL_AT} top={ANIM_TOP} />
       <Final at={FINAL_AT} top={ANIM_TOP + 30} line="МУЖСКОЙ ВЗГЛЯД" sub="сохраняем, а не меняем" />
 
       <Captions />
