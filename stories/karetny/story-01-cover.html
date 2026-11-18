@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8">
+<style>
+@font-face{font-family:Oswald;font-weight:600;src:url(fonts/oswald-cyrillic-600-normal.woff2) format("woff2");unicode-range:U+0400-04FF}
+@font-face{font-family:Oswald;font-weight:600;src:url(fonts/oswald-latin-600-normal.woff2) format("woff2")}
+@font-face{font-family:Inter;font-weight:400;src:url(fonts/inter-cyrillic-400-normal.woff2) format("woff2");unicode-range:U+0400-04FF}
+@font-face{font-family:Inter;font-weight:400;src:url(fonts/inter-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:Inter;font-weight:500;src:url(fonts/inter-cyrillic-500-normal.woff2) format("woff2");unicode-range:U+0400-04FF}
+@font-face{font-family:Inter;font-weight:500;src:url(fonts/inter-latin-500-normal.woff2) format("woff2")}
+:root{--paper:#f5f3f0;--ink:#231f1e;--brand:#a41827;--band:#93282a}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1920px;overflow:hidden;background:var(--paper)}
+.story{position:relative;width:1080px;height:1920px;background:var(--paper);font-family:Inter,sans-serif;color:var(--ink)}
+.logo{position:absolute;top:140px;left:50%;transform:translateX(-50%);width:430px}
+h1{position:absolute;top:440px;left:0;right:0;text-align:center;font-family:Oswald,sans-serif;font-weight:600;
+   font-size:104px;line-height:1.02;letter-spacing:-1px;text-transform:uppercase;color:var(--ink)}
+.photo{position:absolute;top:860px;left:0;width:1080px;height:1060px;background:url(assets/IMG_9942.png) 40% 50%/auto 100% no-repeat}
+.photo::before{content:"";position:absolute;inset:0 0 auto;height:120px;background:linear-gradient(var(--paper),rgba(245,243,240,0))}
+.band{position:absolute;top:700px;left:50%;transform:translateX(-50%);background:var(--band);color:#fff;padding:18px 40px;border-radius:6px;white-space:nowrap;text-align:center}
+.band b{font-family:Oswald,sans-serif;font-weight:600;font-size:46px;line-height:1.1;text-transform:uppercase;letter-spacing:.5px}
+.band span{font-family:Oswald,sans-serif;font-weight:600;font-size:46px;text-transform:uppercase;opacity:.75}
+</style></head>
+<body><div class="story">
+  <img class="logo" src="assets/logo-red.png" alt="">
+  <h1>Уютная квартира<br>на берегу пруда</h1>
+  <div class="photo"></div>
+  <div class="band"><b>Старт продаж от 3 млн&nbsp;₽</b><span>&nbsp;·&nbsp;2 очередь</span></div>
+</div></body></html>
