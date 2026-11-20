@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><link rel="stylesheet" href="story.css">
+<style>
+/* картинка для новости в Яндекс Картах: 1080×1080. Сверху рендер, снизу светлая панель с логотипом и заголовком */
+html,body{width:1080px;height:1080px}
+.news{position:relative;width:1080px;height:1080px;overflow:hidden;background:var(--paper);font-family:Inter,sans-serif;color:var(--ink)}
+.photo{top:0;height:700px;background:url(assets/IMG_9939.png) 55% 50%/auto 100% no-repeat}
+.bottom{position:absolute;left:70px;right:70px;top:660px;bottom:64px;display:flex;justify-content:space-between;align-items:flex-end;gap:40px}
+.copy{display:flex;flex-direction:column}
+.copy h1{font-family:Oswald,sans-serif;font-weight:600;font-size:76px;line-height:1.04;letter-spacing:-.4px;text-transform:uppercase}
+.plate{margin-top:24px;align-self:flex-start;background:var(--band);color:#fff;font-family:Oswald,sans-serif;font-weight:600;font-size:42px;text-transform:uppercase;letter-spacing:.5px;padding:10px 28px;border-radius:6px}
+.bottom img{width:250px;margin-bottom:6px}
+</style></head>
+<body><div class="news">
+  <div class="photo"></div>
+  <div class="bottom">
+    <div class="copy">
+      <h1>Старт продаж<br>второй очереди</h1>
+      <span class="plate">Квартиры от 3 млн&nbsp;₽</span>
+    </div>
+    <img src="assets/logo-red.png" alt="">
+  </div>
+</div></body></html>
