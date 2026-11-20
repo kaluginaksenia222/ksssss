@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><link rel="stylesheet" href="story.css">
+<style>
+.mark{position:absolute;left:50%;transform:translateX(-50%);opacity:.08;width:900px;height:auto}
+.card{background:var(--band);color:#fff;border-radius:10px;padding:34px 40px;display:flex;gap:26px;align-items:flex-start;font-size:36px;line-height:1.35}
+.card svg{flex:none;width:44px;height:56px;margin-top:4px}
+.small{font-size:30px;color:var(--muted);line-height:1.4}
+.rows{margin-top:40px;display:flex;flex-direction:column}
+.row{display:flex;justify-content:space-between;align-items:baseline;padding:34px 0;border-top:2px solid #e2dbd6;font-size:40px}
+.row:last-child{border-bottom:2px solid #e2dbd6}
+.row b{font-weight:500}
+.row span{font-family:Oswald,sans-serif;font-weight:600;font-size:46px;font-variant-numeric:tabular-nums}
+.phone{margin-top:22px;align-self:flex-start;background:var(--band);color:#fff;font-family:Oswald,sans-serif;font-weight:600;font-size:52px;padding:12px 32px;border-radius:8px;letter-spacing:.5px}
+.steps{margin-top:40px;display:flex;flex-direction:column;gap:40px}
+.step{display:grid;grid-template-columns:64px 1fr;gap:24px;align-items:start;font-size:38px;line-height:1.35}
+.num{width:64px;height:64px;border-radius:50%;background:var(--band);color:#fff;font-family:Oswald,sans-serif;font-weight:600;font-size:36px;display:flex;align-items:center;justify-content:center}
+</style></head><body><div class="story">
+  <img class="logo" src="assets/logo-red.png" alt="">
+  <svg viewBox="0 0 900 760" style="position:absolute;top:280px;left:60px;width:960px;height:811px">
+  <rect width="900" height="760" rx="18" fill="#ebe6e1"/>
+  <path d="M0 640 C220 600 300 560 900 600 L900 700 C320 660 230 690 0 740Z" fill="#fff"/>
+  <path d="M60 0 L120 0 L120 760 L60 760Z" fill="#fff"/>
+  <rect x="640" y="150" width="200" height="300" rx="6" fill="#d9d2cc"/>
+  <text x="740" y="310" text-anchor="middle" font-family="Inter" font-size="28" fill="#6f6461">«Антей»</text>
+  <path d="M290 120 Q290 60 360 60 L500 60 Q570 60 570 120 L570 520 L290 520Z" fill="#231f1e"/>
+  <text x="430" y="290" text-anchor="middle" font-family="Oswald" font-weight="600" font-size="34" fill="#fff">БЦ «ВЫСОЦКИЙ»</text>
+  <text x="430" y="330" text-anchor="middle" font-family="Inter" font-size="24" fill="#cfc6c2">офис продаж, 1 этаж</text>
+  <g font-family="Oswald" font-weight="600" font-size="36" fill="#93282a">
+    <text x="190" y="620" text-anchor="middle">P</text><text x="470" y="700" text-anchor="middle">P</text><text x="740" y="540" text-anchor="middle">P</text></g>
+  <text x="740" y="580" text-anchor="middle" font-family="Inter" font-size="22" fill="#6f6461">парковка отеля</text>
+  <path d="M300 545 L300 590 L600 590 L600 545" fill="none" stroke="#93282a" stroke-width="5" stroke-dasharray="14 10"/>
+  <g font-family="Oswald" font-weight="600" font-size="34" fill="#fff" text-anchor="middle">
+    <circle cx="300" cy="530" r="30" fill="#93282a"/><text x="300" y="542">1</text>
+    <circle cx="600" cy="530" r="30" fill="#93282a"/><text x="600" y="542">2</text></g>
+  <text x="306" y="482" font-family="Inter" font-size="24" fill="#cfc6c2">кофейня DUO</text>
+</svg>
+  <div class="text" style="top:1170px">
+    <h2 style="font-size:72px">Как нас найти</h2>
+    <div class="steps">
+      <div class="step"><span class="num">1</span><span>Главный вход БЦ&nbsp;«Высоцкий», пройти через кофейню «DUO»</span></div>
+      <div class="step"><span class="num">2</span><span>Вход со&nbsp;стороны парковки отеля, между зданиями «Высоцкий» и&nbsp;«Антей»</span></div>
+    </div>
+  </div>
+</div></body></html>
