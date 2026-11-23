@@ -1,0 +1,58 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8">
+<style>
+@font-face{font-family:Inter;font-weight:400;src:url(../../library/fonts/inter-cyrillic-400-normal.woff2)}
+@font-face{font-family:Inter;font-weight:400;src:url(../../library/fonts/inter-latin-400-normal.woff2);unicode-range:U+0000-00FF}
+@font-face{font-family:Inter;font-weight:500;src:url(../../library/fonts/inter-cyrillic-500-normal.woff2)}
+@font-face{font-family:Inter;font-weight:500;src:url(../../library/fonts/inter-latin-500-normal.woff2);unicode-range:U+0000-00FF}
+@font-face{font-family:Inter;font-weight:700;src:url(../../library/fonts/inter-cyrillic-700-normal.woff2)}
+@font-face{font-family:Inter;font-weight:700;src:url(../../library/fonts/inter-latin-700-normal.woff2);unicode-range:U+0000-00FF}
+@font-face{font-family:Tight;font-weight:800;src:url(../../library/fonts/inter-tight-cyrillic-800-normal.woff2)}
+@font-face{font-family:Tight;font-weight:800;src:url(../../library/fonts/inter-tight-latin-800-normal.woff2);unicode-range:U+0000-00FF}
+:root{--wine:#7F3F3F;--wine-d:#5E2C2C;--bg:#F4EFEA;--card:#FFFFFF;--ink:#2B2424;--muted:#8E8380;--line:#E4DAD3}
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:1080px;height:1920px;background:var(--bg);font-family:Inter;color:var(--ink);position:relative;overflow:hidden}
+.glow{position:absolute;width:900px;height:900px;border-radius:50%;background:radial-gradient(circle,#E9DDD3 0%,transparent 65%);top:380px;left:90px}
+.top{position:absolute;top:96px;left:90px;right:90px;display:flex;justify-content:space-between;align-items:center}
+.top img{height:118px}
+.badge{border:2px solid var(--wine);color:var(--wine);font-weight:700;font-size:26px;letter-spacing:3px;padding:14px 26px;border-radius:60px}
+.head{position:absolute;top:270px;left:90px;right:90px}
+.kicker{font-size:30px;font-weight:500;letter-spacing:6px;color:var(--muted);text-transform:uppercase}
+.title{display:flex;align-items:baseline;gap:22px;margin-top:14px}
+.area{white-space:nowrap;font-family:Tight;font-weight:800;font-size:190px;line-height:.9;color:var(--wine);letter-spacing:-6px}
+.area small{font-size:80px;letter-spacing:0;margin-left:10px}
+.rooms{font-family:Tight;font-weight:800;font-size:50px;line-height:1.05;color:var(--ink);white-space:nowrap}
+.chips{display:flex;gap:14px;margin-top:34px}
+.chip{background:var(--card);border-radius:20px;padding:18px 26px;font-size:28px;font-weight:500;box-shadow:0 2px 0 var(--line)}
+.chip b{color:var(--wine);font-weight:700}
+.plan{position:absolute;top:705px;left:60px;right:60px;height:740px;background:var(--card);border-radius:44px;box-shadow:0 30px 60px -30px rgba(94,44,44,.25);display:flex;align-items:center;justify-content:center}
+.plan img{max-width:900px;max-height:640px}
+.price{position:absolute;left:60px;right:60px;bottom:110px;height:290px;background:var(--wine);border-radius:44px;color:#fff;padding:44px 56px;overflow:hidden}
+.price:after{content:"";position:absolute;right:-120px;top:-120px;width:360px;height:360px;border-radius:50%;border:2px solid rgba(255,255,255,.15)}
+.old{font-size:40px;font-weight:500;opacity:.65;text-decoration:line-through;text-decoration-thickness:3px}
+.new{font-family:Tight;font-weight:800;font-size:120px;letter-spacing:-3px;line-height:1.05;margin-top:6px}
+.off{position:absolute;right:56px;top:52px;background:#fff;color:var(--wine);font-family:Tight;font-weight:800;font-size:40px;padding:12px 24px;border-radius:20px}
+.cta{position:absolute;bottom:44px;left:0;right:0;text-align:center;font-size:26px;letter-spacing:4px;color:var(--muted);font-weight:500}
+</style></head><body>
+<div class="glow"></div>
+<div class="top"><img src="assets/logo.png"><div class="badge" id="finish"></div></div>
+<div class="head">
+ <div class="kicker" id="kicker"></div>
+ <div class="title"><div class="area" id="area"></div><div class="rooms" id="rooms"></div></div>
+ <div class="chips" id="chips"></div>
+</div>
+<div class="plan"><img id="plan"></div>
+<div class="price"><div class="old" id="old"></div><div class="new" id="new"></div><div class="off" id="off"></div></div>
+<div class="cta">ПОДРОБНОСТИ — В ДИРЕКТ</div>
+<script>
+const d=JSON.parse(decodeURIComponent(location.hash.slice(1)));
+const rub=n=>n.toLocaleString('ru-RU').replace(/ /g,' ')+' ₽';
+const $=id=>document.getElementById(id);
+$('finish').textContent=d.finish;
+$('kicker').textContent='Квартира №'+d.number+(d.floor?' · '+d.floor+' этаж':'');
+$('area').innerHTML=String(d.area).replace('.',',')+'<small>м²</small>';
+$('rooms').innerHTML=d.roomsLabel.replace(/ /g,'<br>');
+$('chips').innerHTML=d.chips.map(c=>`<div class="chip">${c[0]} <b>${c[1]}</b></div>`).join('');
+$('plan').src=d.plan;
+if(d.oldPrice){$('old').textContent=rub(d.oldPrice);$('off').textContent='−'+Math.round((1-d.price/d.oldPrice)*100)+'%'}else{$('old').remove();$('off').remove()}
+$('new').textContent=rub(d.price);
+</script></body></html>
