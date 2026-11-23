@@ -12,7 +12,7 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{width:1080px;height:1920px;background:var(--bg);font-family:Inter;color:var(--ink);position:relative;overflow:hidden}
 .top{position:absolute;top:110px;left:0;right:0;text-align:center}
-.top img{height:96px}
+.top img{height:110px}
 .head{position:absolute;top:300px;left:0;right:0;text-align:center}
 .kicker{font-size:24px;font-weight:500;letter-spacing:6px;color:var(--muted);text-transform:uppercase}
 .title{margin-top:22px;font-family:Inter;font-weight:700;font-size:52px;letter-spacing:1px;color:var(--wine);text-transform:uppercase}
@@ -29,6 +29,7 @@ body{width:1080px;height:1920px;background:var(--bg);font-family:Inter;color:var
 .old{font-size:28px;color:var(--muted);text-decoration:line-through;text-decoration-thickness:2px}
 .old em{font-style:normal;text-decoration:none;display:inline-block;margin-left:14px;background:var(--wine);color:#fff;font-size:22px;font-weight:700;padding:5px 12px;border-radius:8px;vertical-align:3px}
 .new{font-family:Inter;font-weight:700;font-size:68px;letter-spacing:-1px;color:var(--wine);margin-top:6px}
+.note{margin-top:10px;font-size:24px;color:var(--muted);letter-spacing:1px}
 .cta{position:absolute;bottom:90px;left:0;right:0;text-align:center;font-size:22px;letter-spacing:5px;color:var(--muted);font-weight:500}
 .cta b{color:var(--wine);font-weight:700;letter-spacing:3px}
 </style></head><body>
@@ -36,7 +37,7 @@ body{width:1080px;height:1920px;background:var(--bg);font-family:Inter;color:var
 <div class="head"><div class="kicker" id="kicker"></div><div class="title" id="title"></div><div class="sub" id="sub"></div></div>
 <div class="plan"><img id="plan"></div>
 <div class="rooms" id="chips"></div>
-<div class="price"><div class="old" id="old"></div><div class="new" id="new"></div></div>
+<div class="price"><div class="old" id="old"></div><div class="new" id="new"></div><div class="note" id="note"></div></div>
 <div class="cta">ПОДРОБНОСТИ: <b>303-99-99</b></div>
 <script>
 const d=JSON.parse(decodeURIComponent(location.hash.slice(1)));
@@ -44,9 +45,10 @@ const rub=n=>n.toLocaleString('ru-RU').replace(/\u00a0/g,'\u2009')+' ₽';
 const $=id=>document.getElementById(id);
 $('kicker').textContent='Квартира №'+d.number;
 $('title').textContent=d.roomsLabel.split(' ')[0]+' · '+String(d.area).replace('.',',')+' м²';
-$('sub').innerHTML=[d.floor+' этаж',d.finish].join('<i></i>');
+$('sub').innerHTML=(d.sub||[d.floor+' этаж',d.finish]).join('<i></i>');
 $('chips').innerHTML=d.chips.map(c=>`<div><span>${c[0]}</span><b>${c[1]}</b></div>`).join('');
 $('plan').src=d.plan;
 if(d.oldPrice){$('old').innerHTML=rub(d.oldPrice)+'<em>−'+Math.round((1-d.price/d.oldPrice)*100)+'%</em>'}else{$('old').remove()}
 $('new').textContent=rub(d.price);
+if(d.note){$('note').textContent=d.note}else{$('note').remove()}
 </script></body></html>
