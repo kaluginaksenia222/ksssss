@@ -30,13 +30,14 @@ body{width:1080px;height:1920px;background:var(--bg);font-family:Inter;color:var
 .old em{font-style:normal;text-decoration:none;display:inline-block;margin-left:14px;background:var(--wine);color:#fff;font-size:22px;font-weight:700;padding:5px 12px;border-radius:8px;vertical-align:3px}
 .new{font-family:Inter;font-weight:700;font-size:68px;letter-spacing:-1px;color:var(--wine);margin-top:6px}
 .cta{position:absolute;bottom:90px;left:0;right:0;text-align:center;font-size:22px;letter-spacing:5px;color:var(--muted);font-weight:500}
+.cta b{color:var(--wine);font-weight:700;letter-spacing:3px}
 </style></head><body>
 <div class="top"><img src="assets/logo.png"></div>
 <div class="head"><div class="kicker" id="kicker"></div><div class="title" id="title"></div><div class="sub" id="sub"></div></div>
 <div class="plan"><img id="plan"></div>
 <div class="rooms" id="chips"></div>
 <div class="price"><div class="old" id="old"></div><div class="new" id="new"></div></div>
-<div class="cta">ПОДРОБНОСТИ — В ДИРЕКТ</div>
+<div class="cta">ПОДРОБНОСТИ: <b>303-99-99</b></div>
 <script>
 const d=JSON.parse(decodeURIComponent(location.hash.slice(1)));
 const rub=n=>n.toLocaleString('ru-RU').replace(/\u00a0/g,'\u2009')+' ₽';
