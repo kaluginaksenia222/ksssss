@@ -14,7 +14,7 @@ body{width:1080px;height:1920px;background:var(--bg);font-family:Inter;color:var
 .top{position:absolute;top:110px;left:0;right:0;text-align:center}
 .top img{height:110px}
 .head{position:absolute;top:300px;left:0;right:0;text-align:center}
-.kicker{font-size:24px;font-weight:500;letter-spacing:6px;color:var(--muted);text-transform:uppercase}
+.kicker{font-size:24px;font-weight:600;letter-spacing:6px;color:var(--ink);text-transform:uppercase}
 .title{margin-top:22px;font-family:Inter;font-weight:700;font-size:52px;letter-spacing:1px;color:var(--wine);text-transform:uppercase}
 .sub{margin-top:14px;font-size:28px;font-weight:400;letter-spacing:2px;color:var(--ink)}
 .sub i{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--wine);vertical-align:middle;margin:0 18px;font-style:normal}
@@ -55,7 +55,7 @@ $('title').textContent=d.roomsLabel.split(' ')[0]+' · '+String(d.area).replace(
 $('sub').innerHTML=(d.sub||[d.floor+' этаж',d.finish]).join('<i></i>');
 $('chips').innerHTML=d.chips.map(c=>`<div><span>${c[0]}</span><b>${c[1]}</b></div>`).join('');
 $('plan').src=d.plan;
-if(d.accent)document.body.classList.add('acc-'+d.accent);
+document.body.classList.add("acc-"+(d.accent||"a"));
 $('ribbon').textContent=d.ribbon||'';
 if(d.oldPrice){$('old').innerHTML=rub(d.oldPrice)+'<em>−'+Math.round((1-d.price/d.oldPrice)*100)+'%</em>'}else{$('old').remove()}
 $('new').textContent=rub(d.price);
