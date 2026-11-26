@@ -1,0 +1,51 @@
+/*FONTS*/
+/* Layout: лента из 7 слайдов 1080×1350, на странице уменьшены под ширину экрана; дизайн-код «Синий доктор» */
+:root{
+  --navy:#00275F; --navy-deep:#001A42; --navy-glass:#33527F; --ice:#9DC0E1; --mist:#DCE7F3;
+  --paper:#F3F5F8; --white:#FFFFFF; --graphite:#1A1D24; --page:#E6ECF4;
+  --display:"Oswald","Arial Narrow",Impact,sans-serif;
+  --heavy:"Montserrat","Arial Black",sans-serif;
+  --body:"Inter",system-ui,sans-serif;
+  --hand:"Caveat",cursive;
+}
+*{box-sizing:border-box}
+body{background:var(--page);color:var(--graphite);font-family:var(--body);margin:0;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 48px}
+.intro{max-width:1100px;margin:0 auto 20px;display:grid;gap:6px}
+.intro h1{margin:0;font:700 34px/1 var(--display);text-transform:uppercase;color:var(--navy)}
+.intro p{margin:0;color:#4A5568;font-size:14px;max-width:70ch}
+.feed{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px}
+.frame{width:100%;aspect-ratio:4/5;max-width:100%;position:relative;overflow:hidden;border-radius:14px;box-shadow:0 16px 30px -20px rgba(0,26,66,.55)}
+.frame>.slide{position:absolute;left:0;top:0;transform-origin:0 0}
+body.export{padding:0;background:var(--navy)}
+body.export .intro{display:none}
+body.export .feed{display:block;max-width:none}
+body.export .frame{width:1080px;height:1350px;border-radius:0;box-shadow:none;aspect-ratio:auto}
+body.export .frame>.slide{transform:none!important}
+
+/* ---- слайд ---- */
+.slide{width:1080px;height:1350px;position:relative;overflow:hidden;font-family:var(--body)}
+.navy{background:linear-gradient(180deg,var(--navy) 0%,var(--navy) 58%,var(--navy-deep) 100%);color:var(--white)}
+.paper{background-color:var(--paper);color:var(--navy);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 .1 0 0 0 0 .25 0 0 0 .06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.logo{position:absolute;top:54px;left:72px;font:800 24px/1 var(--heavy);letter-spacing:.14em;text-transform:uppercase}
+.logo i{display:block;font:500 17px/1.5 var(--body);font-style:normal;letter-spacing:.08em;opacity:.7;text-transform:none}
+.pager{position:absolute;top:58px;right:72px;font:600 24px/1 var(--body);opacity:.65;font-variant-numeric:tabular-nums}
+.foot{position:absolute;left:54px;right:54px;bottom:44px;height:70px;border-radius:999px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;font:600 25px/1 var(--body);z-index:5}
+.navy .foot{background:var(--navy-glass);color:var(--white)}
+.paper .foot{background:var(--navy);color:var(--white)}
+.foot .ic{display:flex;gap:16px}
+.foot svg{width:30px;height:30px}
+.eyebrow{font:800 30px/1 var(--heavy);letter-spacing:.12em;text-transform:uppercase}
+.navy .eyebrow{color:var(--ice)}
+.title{font:700 132px/.9 var(--display);text-transform:uppercase;margin:0}
+.txt{font:400 38px/1.4 var(--body);margin:0}
+.txt b{font-weight:600}
+.mark{background:var(--navy);color:var(--white);padding:0 12px;border-radius:10px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.navy .mark{background:var(--white);color:var(--navy)}
+.pill{display:inline-flex;align-items:center;gap:14px;border-radius:999px;padding:22px 34px;font:800 30px/1 var(--heavy);text-transform:uppercase;letter-spacing:.02em;white-space:nowrap}
+.hand{font:600 64px/1 var(--hand)}
+.mascot{position:absolute;background:url(MASCOT) center top/contain no-repeat;aspect-ratio:760/1017}
+.flip{transform:scaleX(-1)}
+.abs{position:absolute}
+

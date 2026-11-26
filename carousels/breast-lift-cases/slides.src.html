@@ -1,0 +1,226 @@
+<title>Подтяжка груди: когда делать</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/*FONTS*/
+/* Layout: лента из 7 слайдов 1080×1350, на странице уменьшены под ширину экрана; дизайн-код «Синий доктор» */
+:root{
+  --navy:#00275F; --navy-deep:#001A42; --navy-glass:#33527F; --ice:#9DC0E1; --mist:#DCE7F3;
+  --paper:#F3F5F8; --white:#FFFFFF; --graphite:#1A1D24; --page:#E6ECF4;
+  --display:"Oswald","Arial Narrow",Impact,sans-serif;
+  --heavy:"Montserrat","Arial Black",sans-serif;
+  --body:"Inter",system-ui,sans-serif;
+  --hand:"Caveat",cursive;
+}
+*{box-sizing:border-box}
+body{background:var(--page);color:var(--graphite);font-family:var(--body);margin:0;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 48px}
+.intro{max-width:1100px;margin:0 auto 20px;display:grid;gap:6px}
+.intro h1{margin:0;font:700 34px/1 var(--display);text-transform:uppercase;color:var(--navy)}
+.intro p{margin:0;color:#4A5568;font-size:14px;max-width:70ch}
+.feed{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px}
+.frame{width:100%;aspect-ratio:4/5;max-width:100%;position:relative;overflow:hidden;border-radius:14px;box-shadow:0 16px 30px -20px rgba(0,26,66,.55)}
+.frame>.slide{position:absolute;left:0;top:0;transform-origin:0 0}
+body.export{padding:0;background:var(--navy)}
+body.export .intro{display:none}
+body.export .feed{display:block;max-width:none}
+body.export .frame{width:1080px;height:1350px;border-radius:0;box-shadow:none;aspect-ratio:auto}
+body.export .frame>.slide{transform:none!important}
+
+/* ---- слайд ---- */
+.slide{width:1080px;height:1350px;position:relative;overflow:hidden;font-family:var(--body)}
+.navy{background:linear-gradient(180deg,var(--navy) 0%,var(--navy) 58%,var(--navy-deep) 100%);color:var(--white)}
+.paper{background-color:var(--paper);color:var(--navy);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 .1 0 0 0 0 .25 0 0 0 .06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.logo{position:absolute;top:54px;left:72px;font:800 24px/1 var(--heavy);letter-spacing:.14em;text-transform:uppercase}
+.logo i{display:block;font:500 17px/1.5 var(--body);font-style:normal;letter-spacing:.08em;opacity:.7;text-transform:none}
+.pager{position:absolute;top:58px;right:72px;font:600 24px/1 var(--body);opacity:.65;font-variant-numeric:tabular-nums}
+.foot{position:absolute;left:54px;right:54px;bottom:44px;height:70px;border-radius:999px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;font:600 25px/1 var(--body);z-index:5}
+.navy .foot{background:var(--navy-glass);color:var(--white)}
+.paper .foot{background:var(--navy);color:var(--white)}
+.foot .ic{display:flex;gap:16px}
+.foot svg{width:30px;height:30px}
+.eyebrow{font:800 30px/1 var(--heavy);letter-spacing:.12em;text-transform:uppercase}
+.navy .eyebrow{color:var(--ice)}
+.title{font:700 132px/.9 var(--display);text-transform:uppercase;margin:0}
+.txt{font:400 38px/1.4 var(--body);margin:0}
+.txt b{font-weight:600}
+.mark{background:var(--navy);color:var(--white);padding:0 12px;border-radius:10px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.navy .mark{background:var(--white);color:var(--navy)}
+.pill{display:inline-flex;align-items:center;gap:14px;border-radius:999px;padding:22px 34px;font:800 30px/1 var(--heavy);text-transform:uppercase;letter-spacing:.02em;white-space:nowrap}
+.hand{font:600 64px/1 var(--hand)}
+.mascot{position:absolute;background:url(MASCOT) center top/contain no-repeat;aspect-ratio:760/1017}
+.flip{transform:scaleX(-1)}
+.abs{position:absolute}
+
+
+
+.ruled{background-color:var(--paper);color:var(--navy);
+  background-image:repeating-linear-gradient(180deg,transparent 0 63px,rgba(0,39,95,.07) 63px 65px)}
+.ruled::before{content:"";position:absolute;left:52px;top:0;bottom:0;width:3px;background:rgba(157,192,225,.7)}
+.white{background:var(--white);color:var(--navy)}
+.navy .title{color:var(--white)}
+.nick{position:absolute;left:72px;top:1262px;height:52px;display:flex;align-items:center;gap:12px;padding:0 22px;border-radius:999px;background:var(--white);color:var(--navy);font:600 22px/1 var(--body);z-index:6;border:2px solid var(--mist)}
+.navy .nick{background:var(--navy-glass);color:var(--white);border:0}
+.nick svg{width:24px;height:24px}
+.pager{opacity:.55}
+.eyebrow{position:absolute;left:84px;top:150px;color:#6B7A90}
+.navy .eyebrow{color:var(--ice)}
+
+/* печать */
+.stamp{position:absolute;width:300px;height:300px;border-radius:50%;border:9px double var(--navy);color:var(--navy);display:grid;place-items:center;text-align:center;transform:rotate(-13deg);z-index:5;background:rgba(243,245,248,.55)}
+.stamp div{display:grid;gap:8px;justify-items:center}
+.stamp small{font:800 17px/1 var(--heavy);letter-spacing:.18em;text-transform:uppercase}
+.stamp b{font:700 66px/.95 var(--display);text-transform:uppercase}
+.stamp i{font:600 21px/1.2 var(--body);font-style:normal;max-width:200px}
+.stamp::after{content:"";position:absolute;inset:16px;border-radius:50%;border:2px solid currentColor;opacity:.5}
+.navy .stamp{border-color:var(--white);color:var(--white);background:rgba(0,39,95,.4)}
+
+/* обложка */
+.cv .title{position:absolute;left:78px;top:200px;width:940px;font-size:104px;line-height:.98;color:var(--navy)}
+.cv .title .hl{display:inline-block;line-height:1;margin-top:14px;background:var(--navy);color:var(--white);padding:10px 20px 6px;border-radius:14px}
+.cv .sub{position:absolute;left:84px;top:560px;width:500px;font:400 36px/1.38 var(--body);color:var(--graphite);margin:0}
+.cv .sub b{color:var(--navy);font-weight:600}
+.cv .go{position:absolute;left:84px;top:1110px;background:var(--navy);color:var(--white);z-index:4}
+.cv .go svg{flex:none;width:34px;height:34px}
+.cv .mascot{right:-80px;bottom:-50px;width:520px;z-index:4}
+
+/* степени птоза */
+.deg .title{position:absolute;left:78px;top:200px;width:940px;font-size:104px}
+.deg .lead{position:absolute;left:84px;top:430px;width:900px;font:400 36px/1.4 var(--body);color:var(--graphite);margin:0}
+.deg .lead b{color:var(--navy);font-weight:600}
+.deg .grid{position:absolute;left:72px;right:56px;top:640px;display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.deg .cell{background:var(--white);border:2px solid var(--mist);border-radius:28px;padding:14px 10px 18px;display:grid;justify-items:center;gap:8px;text-align:center}
+.deg .cell.hot{border-color:var(--navy);border-width:3px}
+.deg .cell svg{width:100%;height:auto}
+.deg .cell b{font:800 24px/1.1 var(--heavy);text-transform:uppercase;color:var(--navy)}
+.deg .cell span{font:500 20px/1.25 var(--body);color:#4A5568}
+.deg .note{position:absolute;left:84px;top:1110px;width:900px;font:600 33px/1.3 var(--body);color:var(--navy)}
+.deg .note .mark{background:var(--navy);color:var(--white)}
+
+/* случай */
+.case .title{position:absolute;left:78px;top:200px;width:930px;font-size:92px}
+.form{position:absolute;left:72px;top:450px;width:936px;background:var(--white);border-radius:40px;padding:38px 44px;display:grid;gap:26px;box-shadow:0 30px 60px -40px rgba(0,26,66,.5);border:2px solid var(--mist);z-index:2}
+.form .f{display:grid;gap:10px}
+.form .f+.f{border-top:3px dashed var(--mist);padding-top:24px}
+.form .lab{font:800 22px/1 var(--heavy);letter-spacing:.14em;text-transform:uppercase;color:#6B7A90}
+.form p{margin:0;font:400 38px/1.38 var(--body);color:var(--graphite)}
+.form p b{font-weight:600;color:var(--navy)}
+.case .stamp{right:46px;top:900px}
+
+/* подождём */
+.wait .title{position:absolute;left:78px;top:200px;width:700px;font-size:96px}
+.wait .stamp{right:40px;top:990px;width:270px;height:270px}
+.wait .stamp b{font-size:42px}
+.wl{position:absolute;left:72px;right:72px;top:470px;display:grid;gap:20px}
+.wr{display:flex;gap:24px;align-items:flex-start;background:var(--navy-glass);border-radius:30px;padding:24px 30px}
+.wr .n{flex:none;width:54px;height:54px;border-radius:50%;background:var(--ice);color:var(--navy);display:grid;place-items:center;font:700 30px/1 var(--display)}
+.wr div{display:grid;gap:6px}
+.wr b{font:600 33px/1.25 var(--body);color:var(--white)}
+.wr span{font:400 28px/1.35 var(--body);color:var(--mist)}
+
+/* шрамы */
+.scar .title{position:absolute;left:78px;top:200px;width:940px;font-size:104px}
+.scar .row{position:absolute;left:72px;right:56px;top:440px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.scar .cell{background:var(--white);border:2px solid var(--mist);border-radius:28px;padding:18px 14px 20px;display:grid;justify-items:center;gap:10px;text-align:center}
+.scar .cell svg{width:78%;height:auto}
+.scar .cell b{font:800 23px/1.15 var(--heavy);text-transform:uppercase;color:var(--navy)}
+.scar .pts{position:absolute;left:84px;right:72px;top:860px;display:grid;gap:20px}
+.scar .pt{display:flex;gap:24px;font:400 34px/1.35 var(--body);color:var(--graphite)}
+.scar .pt::before{content:"";flex:none;width:20px;height:20px;border-radius:5px;background:var(--navy);margin-top:12px;transform:rotate(45deg)}
+.scar .pt b{font-weight:600;color:var(--navy)}
+
+/* финал */
+.fin .title{position:absolute;left:66px;top:200px;width:940px;font-size:130px}
+.fin .txt{position:absolute;left:72px;top:470px;width:580px;font-size:35px;opacity:.95}
+.fin .pl{position:absolute;left:72px;display:flex;gap:16px;align-items:center;border-radius:32px;padding:22px 30px;font:800 27px/1.2 var(--heavy);text-transform:uppercase;width:580px;z-index:4}
+.fin .pl svg{flex:none;width:38px;height:38px}
+.fin .p1{top:900px;background:var(--white);color:var(--navy)}
+.fin .p2{top:1060px;background:var(--navy-glass);color:var(--white)}
+.fin .eyebrow{left:72px}
+.fin .mascot{right:-110px;bottom:-40px;width:530px}
+.fin .ring{position:absolute;right:-70px;top:600px;width:580px;height:580px;border-radius:50%;background:var(--ice);opacity:.2}
+
+</style>
+<div class="intro">
+  <h1>Когда я бы делал подтяжку груди</h1>
+  <p>9 слайдов в формате «заключение хирурга», 1080 × 1350. Фото для Instagram лежат в проекте, в папке carousels/breast-lift-cases/slides/instagram.</p>
+</div>
+<div class="feed">
+<div class="frame"><div class="slide white cv" id="s1"><div class="pager">1/9</div>
+  <div class="eyebrow">Честно от хирурга</div>
+  <h2 class="title">Когда я бы делал <span class="hl">подтяжку груди</span></h2>
+  <p class="sub"><b>4 случая, когда операция поможет,</b> и 4, когда я скажу подождать</p>
+  <div class="stamp" style="left:84px;top:780px;width:250px;height:250px;transform:rotate(-14deg)"><div><small>Решение</small><b style="font-size:54px">Делаю</b></div></div>
+  <div class="stamp" style="left:330px;top:830px;width:210px;height:210px;transform:rotate(9deg);opacity:.5"><div><small>Решение</small><b style="font-size:40px">Подождём</b></div></div>
+  <span class="pill go">Листайте<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+  <div class="mascot flip"></div><div class="nick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>@dr_kudryakov</div></div></div><div class="frame"><div class="slide ruled deg" id="s2"><div class="pager">2/9</div>
+  <div class="eyebrow">Сначала проверим</div>
+  <h2 class="title">Опустилась ли грудь</h2>
+  <p class="lead">Главный ориентир для меня: <b>где сосок относительно складки под грудью.</b> Встаньте боком к зеркалу и сравните.</p>
+  <div class="grid"><div class="cell"><svg viewBox="0 0 200 300" fill="none"><line x1="30" y1="14" x2="30" y2="290" stroke="#9DC0E1" stroke-width="6" stroke-linecap="round"/><path d="M30 50 C 95 62, 168 110, 168 150 C 168 192, 112 206, 30 200" fill="#DCE7F3" stroke="#00275F" stroke-width="6" stroke-linejoin="round"/><line x1="14" y1="200" x2="190" y2="200" stroke="#00275F" stroke-width="3" stroke-dasharray="7 8"/><circle cx="166" cy="146" r="9" fill="#00275F"/></svg><b>Норма</b><span>сосок выше складки</span></div><div class="cell"><svg viewBox="0 0 200 300" fill="none"><line x1="30" y1="14" x2="30" y2="290" stroke="#9DC0E1" stroke-width="6" stroke-linecap="round"/><path d="M30 50 C 85 75, 166 140, 163 192 C 160 230, 100 236, 30 200" fill="#DCE7F3" stroke="#00275F" stroke-width="6" stroke-linejoin="round"/><line x1="14" y1="200" x2="190" y2="200" stroke="#00275F" stroke-width="3" stroke-dasharray="7 8"/><circle cx="161" cy="198" r="9" fill="#00275F"/></svg><b>1 степень</b><span>сосок на уровне складки</span></div><div class="cell hot"><svg viewBox="0 0 200 300" fill="none"><line x1="30" y1="14" x2="30" y2="290" stroke="#9DC0E1" stroke-width="6" stroke-linecap="round"/><path d="M30 50 C 80 90, 160 168, 154 224 C 149 262, 92 264, 30 200" fill="#DCE7F3" stroke="#00275F" stroke-width="6" stroke-linejoin="round"/><line x1="14" y1="200" x2="190" y2="200" stroke="#00275F" stroke-width="3" stroke-dasharray="7 8"/><circle cx="152" cy="226" r="9" fill="#00275F"/></svg><b>2 степень</b><span>сосок ниже складки</span></div><div class="cell hot"><svg viewBox="0 0 200 300" fill="none"><line x1="30" y1="14" x2="30" y2="290" stroke="#9DC0E1" stroke-width="6" stroke-linecap="round"/><path d="M30 50 C 72 102, 146 204, 132 254 C 122 290, 72 284, 30 200" fill="#DCE7F3" stroke="#00275F" stroke-width="6" stroke-linejoin="round"/><line x1="14" y1="200" x2="190" y2="200" stroke="#00275F" stroke-width="3" stroke-dasharray="7 8"/><circle cx="124" cy="268" r="9" fill="#00275F"/></svg><b>3 степень</b><span>ниже складки и смотрит вниз</span></div></div>
+  <p class="note">Со 2 степени без подтяжки <span class="mark">обычно не обойтись.</span></p><div class="nick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>@dr_kudryakov</div></div></div><div class="frame"><div class="slide ruled case" id="s3"><div class="pager">3/9</div>
+  <div class="eyebrow">Случай 1 из 4</div>
+  <h2 class="title">После беременности и кормления</h2>
+  <div class="form">
+    <div class="f"><span class="lab">Что вижу</span><p>Грудь стала мягче и ниже, кожа растянулась, ареолы стали шире.</p></div>
+    <div class="f"><span class="lab">Что делаю</span><p>Подтягиваю, <b>если детей больше не планируете.</b> Это самый частый повод для подтяжки.</p></div>
+  </div>
+  <div class="stamp"><div><small>Решение хирурга</small><b>Делаю</b></div></div><div class="nick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>@dr_kudryakov</div></div></div><div class="frame"><div class="slide ruled case" id="s4"><div class="pager">4/9</div>
+  <div class="eyebrow">Случай 2 из 4</div>
+  <h2 class="title">После сильного похудения</h2>
+  <div class="form">
+    <div class="f"><span class="lab">Что вижу</span><p>Объём ушёл, а кожа осталась. Грудь опустилась, даже если раньше была упругой.</p></div>
+    <div class="f"><span class="lab">Что делаю</span><p>Подтягиваю, когда <b>вес держится стабильно хотя бы полгода.</b></p></div>
+  </div>
+  <div class="stamp"><div><small>Решение хирурга</small><b>Делаю</b><i>если вес стабилен</i></div></div><div class="nick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>@dr_kudryakov</div></div></div><div class="frame"><div class="slide ruled case" id="s5"><div class="pager">5/9</div>
+  <div class="eyebrow">Случай 3 из 4</div>
+  <h2 class="title">Грудь опустилась и пустая сверху</h2>
+  <div class="form">
+    <div class="f"><span class="lab">Что вижу</span><p>Сосок ниже складки, а в верхней части груди почти нет объёма.</p></div>
+    <div class="f"><span class="lab">Что делаю</span><p>Подтяжку вместе с имплантом. <b>Одна подтяжка поднимет грудь, но объём сверху не вернёт.</b></p></div>
+  </div>
+  <div class="stamp"><div><small>Решение хирурга</small><b>Делаю</b><i>+ имплант</i></div></div><div class="nick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>@dr_kudryakov</div></div></div><div class="frame"><div class="slide ruled case" id="s6"><div class="pager">6/9</div>
+  <div class="eyebrow">Случай 4 из 4</div>
+  <h2 class="title">Одна грудь ниже другой</h2>
+  <div class="form">
+    <div class="f"><span class="lab">Что вижу</span><p>Соски на разной высоте, разница в форме заметна даже в одежде.</p></div>
+    <div class="f"><span class="lab">Что делаю</span><p>Подтягиваю одну или обе, <b>чтобы выровнять.</b> Иногда добавляю имплант с одной стороны.</p></div>
+  </div>
+  <div class="stamp"><div><small>Решение хирурга</small><b>Делаю</b></div></div><div class="nick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>@dr_kudryakov</div></div></div><div class="frame"><div class="slide navy wait" id="s7"><div class="pager">7/9</div>
+  <div class="eyebrow">А теперь честно</div>
+  <h2 class="title">Когда я скажу подождать</h2>
+  <div class="stamp"><div><small>Решение хирурга</small><b>Подождём</b></div></div>
+  <div class="wl">
+    <div class="wr"><span class="n">1</span><div><b>Планируете беременность в ближайшие годы</b><span>После кормления грудь может опуститься снова</span></div></div>
+    <div class="wr"><span class="n">2</span><div><b>Вес ещё меняется</b><span>Результат поплывёт вместе с ним</span></div></div>
+    <div class="wr"><span class="n">3</span><div><b>Сосок выше складки, а хочется объёма</b><span>Тут может хватить импланта без подтяжки</span></div></div>
+    <div class="wr"><span class="n">4</span><div><b>Курите и не готовы бросить</b><span>Швы на груди будут заживать хуже</span></div></div>
+  </div><div class="nick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>@dr_kudryakov</div></div></div><div class="frame"><div class="slide ruled scar" id="s8"><div class="pager">8/9</div>
+  <div class="eyebrow">До решения</div>
+  <h2 class="title">Что важно знать</h2>
+  <div class="row">
+    <div class="cell"><svg viewBox="0 0 200 200" fill="none"><path d="M22 70 C 22 150, 60 186, 100 186 C 140 186, 178 150, 178 70" stroke="#9DC0E1" stroke-width="6" stroke-linecap="round"/><circle cx="100" cy="112" r="26" fill="#DCE7F3"/><circle cx="100" cy="112" r="30" stroke="#00275F" stroke-width="5" stroke-dasharray="6 6"/></svg><b>Вокруг ареолы</b></div>
+    <div class="cell"><svg viewBox="0 0 200 200" fill="none"><path d="M22 70 C 22 150, 60 186, 100 186 C 140 186, 178 150, 178 70" stroke="#9DC0E1" stroke-width="6" stroke-linecap="round"/><circle cx="100" cy="112" r="26" fill="#DCE7F3"/><circle cx="100" cy="112" r="30" stroke="#00275F" stroke-width="5" stroke-dasharray="6 6"/><line x1="100" y1="142" x2="100" y2="186" stroke="#00275F" stroke-width="5" stroke-dasharray="6 6"/></svg><b>Ареола и вниз</b></div>
+    <div class="cell"><svg viewBox="0 0 200 200" fill="none"><path d="M22 70 C 22 150, 60 186, 100 186 C 140 186, 178 150, 178 70" stroke="#9DC0E1" stroke-width="6" stroke-linecap="round"/><circle cx="100" cy="112" r="26" fill="#DCE7F3"/><circle cx="100" cy="112" r="30" stroke="#00275F" stroke-width="5" stroke-dasharray="6 6"/><line x1="100" y1="142" x2="100" y2="186" stroke="#00275F" stroke-width="5" stroke-dasharray="6 6"/><path d="M48 176 C 70 186, 130 186, 152 176" stroke="#00275F" stroke-width="5" stroke-dasharray="6 6"/></svg><b>Якорь</b></div>
+  </div>
+  <div class="pts">
+    <div class="pt"><span><b>Шрамы будут.</b> Какой вариант, зависит от степени опущения. За год они светлеют.</span></div>
+    <div class="pt"><span>Результат держится годами, но грудь продолжает меняться с возрастом.</span></div>
+    <div class="pt"><span>Кормить после подтяжки часто можно, но <b>гарантировать это нельзя.</b></span></div>
+  </div><div class="nick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>@dr_kudryakov</div></div></div><div class="frame"><div class="slide navy fin" id="s9"><div class="pager">9/9</div>
+  <div class="ring"></div>
+  <div class="eyebrow">Ваш случай</div>
+  <h2 class="title">Узнали себя?</h2>
+  <p class="txt">На консультации я посмотрю степень опущения и скажу, что подойдёт именно вам: подтяжка, имплант или оба сразу.</p>
+  <span class="pl p1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M21 12a8.5 8.5 0 0 1-12.6 7.4L3 21l1.6-5.2A8.5 8.5 0 1 1 21 12z"/></svg>Напишите номер своего случая: 1, 2, 3 или 4</span>
+  <span class="pl p2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>Записаться через ПроДокторов</span>
+  <div class="mascot"></div><div class="nick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>@dr_kudryakov</div></div></div>
+</div>
+<script>
+(function(){
+  if(location.hash==='#export'){document.body.classList.add('export');return}
+  function fit(){document.querySelectorAll('.frame').forEach(function(f){f.firstElementChild.style.transform='scale('+(f.clientWidth/1080)+')'})}
+  fit(); window.addEventListener('resize',fit);
+  if(window.ResizeObserver){new ResizeObserver(fit).observe(document.querySelector('.feed'))}
+})();
+</script>
